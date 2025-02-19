@@ -1,0 +1,67 @@
+{
+  "events": [
+    {
+      "coordinates": [1136, 571],
+      "id": "8b89a165-c192-4e55-87a2-71b231aa9d3a",
+      "timestamp": 1739726356024,
+      "type": "click",
+      "view": {
+        "innerHeight": 856,
+        "innerWidth": 1680
+      }
+    },
+    {
+      "coordinates": [1136, 571],
+      "id": "1cd9f26b-d42d-4c28-a741-4c598403fafd",
+      "timestamp": 1739726356964,
+      "type": "click",
+      "view": {
+        "innerHeight": 856,
+        "innerWidth": 1680
+      }
+    },
+    {
+      "coordinates": [492, 469],
+      "id": "c5b25078-6d9e-4556-aef0-9e33b3e65a70",
+      "timestamp": 1739726358894,
+      "type": "click",
+      "view": {
+        "innerHeight": 856,
+        "innerWidth": 1680
+      }
+    },
+    {
+      "coordinates": [381, 24],
+      "id": "75a29bcc-22dd-4c37-9756-9d2bff834c5c",
+      "timestamp": 1739726364239,
+      "type": "click",
+      "view": {
+        "innerHeight": 771,
+        "innerWidth": 1512
+      }
+    },
+    {
+      "coordinates": [734, 22],
+      "id": "6fe4240b-3ba1-4092-a33c-c3c1cd338396",
+      "timestamp": 1739726372946,
+      "type": "click",
+      "view": {
+        "innerHeight": 771,
+        "innerWidth": 1512
+      }
+    },
+    {
+      "coordinates": [361, 23],
+      "id": "9eebd1a6-af16-4516-a7b3-342035f5f16b",
+      "timestamp": 1739726375287,
+      "type": "click",
+      "view": {
+        "innerHeight": 771,
+        "innerWidth": 1512
+      }
+    }
+  ],
+  "id": "d3b3dd73-875a-4997-9a83-9d5892057b36",
+  "startTime": 1739726350876,
+  "stopTime": 1739726380877
+}
