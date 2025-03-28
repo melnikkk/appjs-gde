@@ -1,67 +1,66 @@
 {
   "events": [
     {
-      "coordinates": [1136, 571],
-      "id": "8b89a165-c192-4e55-87a2-71b231aa9d3a",
-      "timestamp": 1739726356024,
+      "coordinates": [118, 288],
+      "id": "96c11716-1a1b-41b8-a6ba-f8988c60a289",
+      "timestamp": 1739996262587,
       "type": "click",
       "view": {
-        "innerHeight": 856,
-        "innerWidth": 1680
+        "innerHeight": 1406,
+        "innerWidth": 2844
       }
     },
     {
-      "coordinates": [1136, 571],
-      "id": "1cd9f26b-d42d-4c28-a741-4c598403fafd",
-      "timestamp": 1739726356964,
+      "coordinates": [173, 143],
+      "id": "14437a7d-ad08-480c-810d-c7dcb6340ab4",
+      "timestamp": 1739996265101,
       "type": "click",
       "view": {
-        "innerHeight": 856,
-        "innerWidth": 1680
+        "innerHeight": 1406,
+        "innerWidth": 2844
       }
     },
     {
-      "coordinates": [492, 469],
-      "id": "c5b25078-6d9e-4556-aef0-9e33b3e65a70",
-      "timestamp": 1739726358894,
+      "coordinates": [1199, 948],
+      "id": "a9bd9ce5-7643-4df2-8da3-1459fa661b2c",
+      "timestamp": 1739996267537,
       "type": "click",
       "view": {
-        "innerHeight": 856,
-        "innerWidth": 1680
+        "innerHeight": 1406,
+        "innerWidth": 2844
       }
     },
     {
-      "coordinates": [381, 24],
-      "id": "75a29bcc-22dd-4c37-9756-9d2bff834c5c",
-      "timestamp": 1739726364239,
+      "coordinates": [1111, 593],
+      "id": "ff799610-b670-4ae0-93df-4bc9d0315f4b",
+      "timestamp": 1739996274903,
       "type": "click",
       "view": {
-        "innerHeight": 771,
-        "innerWidth": 1512
+        "innerHeight": 1406,
+        "innerWidth": 2844
       }
     },
     {
-      "coordinates": [734, 22],
-      "id": "6fe4240b-3ba1-4092-a33c-c3c1cd338396",
-      "timestamp": 1739726372946,
+      "coordinates": [1134, 637],
+      "id": "a3404d18-a2cc-4900-a658-dd58a206e173",
+      "timestamp": 1739996276469,
       "type": "click",
       "view": {
-        "innerHeight": 771,
-        "innerWidth": 1512
+        "innerHeight": 1406,
+        "innerWidth": 2844
       }
     },
     {
-      "coordinates": [361, 23],
-      "id": "9eebd1a6-af16-4516-a7b3-342035f5f16b",
-      "timestamp": 1739726375287,
+      "coordinates": [1781, 628],
+      "id": "8b92c40d-9f38-4d53-8615-115002c23cea",
+      "timestamp": 1739996278102,
       "type": "click",
       "view": {
-        "innerHeight": 771,
-        "innerWidth": 1512
+        "innerHeight": 1406,
+        "innerWidth": 2844
       }
     }
   ],
-  "id": "d3b3dd73-875a-4997-9a83-9d5892057b36",
-  "startTime": 1739726350876,
-  "stopTime": 1739726380877
+  "id": "ed38a51f-c270-4379-b973-0434fb84f27f",
+  "startTime": 1739996259305
 }

@@ -8,8 +8,11 @@ import { RecordingContext } from './recordingContext';
 import { withProviders } from './withProviders';
 import { VIDEO_WIDTH, VIDEO_HEIGHT } from './constants';
 import { exportStageToJson, prepareEvent } from './utils';
+import { useWebSocketConnection } from './hooks';
 
 function App() {
+  useWebSocketConnection();
+
   const stageRef = useRef<Konva.Stage>(null);
 
   const { events, startTime } = useContext(RecordingContext);
