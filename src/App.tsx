@@ -3,22 +3,29 @@ import Konva from 'konva';
 import './App.css';
 import { VideoPlayer } from './VideoPlayer';
 import { CanvasOverlay } from './CanvasOverlay';
-import screenCaptureVideo from './assets/app-mocks/screen-capture.webm';
 import { RecordingContext } from './recordingContext';
-import { withProviders } from './withProviders';
+import { withProviders } from './hocs/withProviders';
 import { VIDEO_WIDTH, VIDEO_HEIGHT } from './constants';
 import { exportStageToJson, prepareEvent } from './utils';
-import { useWebSocketConnection } from './hooks';
+import {
+  useGetRecordingQuery,
+} from './infrastructure/slices/recordings/api';
+
+const id = 'RECORDING_ID';
 
 function App() {
-  useWebSocketConnection();
+  // useWebSocketConnection();
 
+  const { data: recordingData = {} } = useGetRecordingQuery({
+    id,
+  });
+  
   const stageRef = useRef<Konva.Stage>(null);
 
   const { events, startTime } = useContext(RecordingContext);
 
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
-  const [currentEvent, setCurrentEvent] = useState(events[0]);
+  const [currentEvent, setCurrentEvent] = useState(prepareEvent(events[0], startTime));
 
   const onExportClick = useCallback(() => {
     exportStageToJson(stageRef.current);
@@ -43,13 +50,16 @@ function App() {
   return (
     <>
       <div style={{ position: 'relative' }}>
-        <VideoPlayer
-          width={VIDEO_WIDTH}
-          height={VIDEO_HEIGHT}
-          videoUrl={screenCaptureVideo}
-          pauseTime={currentEvent.timeFromStart}
-        />
+        {recordingData.sourceUrl ? (
+          <VideoPlayer
+            width={VIDEO_WIDTH}
+            height={VIDEO_HEIGHT}
+            source={recordingData.sourceUrl}
+            pauseTime={currentEvent.timeFromStart}
+          />
+        ) : null}
         <CanvasOverlay
+          // @ts-expect-error: will be refactored in the future
           event={currentEvent}
           width={VIDEO_WIDTH}
           height={VIDEO_HEIGHT}
