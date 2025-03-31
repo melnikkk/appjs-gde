@@ -5,9 +5,10 @@ interface Props {
   width: number;
   height: number;
   pauseTime: number;
+  source: string;
 }
 
-export const VideoPlayer: FC<Props> = ({ videoUrl, width, height, pauseTime }) => {
+export const VideoPlayer: FC<Props> = ({ source, width, height, pauseTime }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -17,7 +18,8 @@ export const VideoPlayer: FC<Props> = ({ videoUrl, width, height, pauseTime }) =
   }, [pauseTime]);
 
   return (
-    <video width={width} height={height} src={videoUrl} ref={videoRef}>
+    <video width={width} height={height} ref={videoRef}>
+      {source && <source src={source}/>}
       Your browser does not support the video tag.
     </video>
   );
