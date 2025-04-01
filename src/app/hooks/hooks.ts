@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WebSocketApi } from './websocketApi';
+import { WebSocketApi } from '../../infrastructure/websocket/websocketApi';
 
 export const useWebSocketConnection = () => {
   const [state, setState] = useState({})

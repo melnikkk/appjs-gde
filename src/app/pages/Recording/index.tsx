@@ -1,20 +1,16 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import Konva from 'konva';
-import './App.css';
-import { VideoPlayer } from './VideoPlayer';
-import { CanvasOverlay } from './CanvasOverlay';
-import { RecordingContext } from './recordingContext';
-import { withProviders } from './hocs/withProviders';
-import { VIDEO_WIDTH, VIDEO_HEIGHT } from './constants';
-import { exportStageToJson, prepareEvent } from './utils';
-import {
-  useGetRecordingQuery,
-} from './infrastructure/slices/recordings/api';
+import { useRef, useContext, useEffect, useCallback, useState } from "react";
+import { useGetRecordingQuery } from "../../../infrastructure/slices/recordings/api";
+import { RecordingContext } from "../../contexts/recordingContext";
+import { Konva } from "konva";
+import { VideoPlayer } from "./VideoPlayer";
+import { CanvasOverlay } from "./CanvasOverlay";
+import { exportStageToJson, prepareEvent } from "./utils";
+import { VIDEO_HEIGHT, VIDEO_WIDTH } from "./constants";
 
 const id = 'RECORDING_ID';
 
-function App() {
-  // useWebSocketConnection();
+export const RecordingPage = () => {
+    // useWebSocketConnection();
 
   const { data: recordingData = {} } = useGetRecordingQuery({
     id,
@@ -83,5 +79,3 @@ function App() {
     </>
   );
 }
-
-export default withProviders(App);

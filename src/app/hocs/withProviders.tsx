@@ -1,8 +1,8 @@
 import { ComponentType, PropsWithChildren } from 'react';
-import recordingData from '../assets/app-mocks/recording-data.json';
-import { RecordingContext, RecordingContextProps } from '../recordingContext';
 import { Provider } from 'react-redux';
-import { store } from '../infrastructure/store';
+import recordingData from '../../assets/app-mocks/recording-data.json';
+import { RecordingContext, RecordingContextProps } from '../contexts/recordingContext';
+import { store } from '../../infrastructure/store';
 
 type WithProvidersProps = PropsWithChildren<object>;
 
