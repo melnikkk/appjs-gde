@@ -4,5 +4,12 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), TanStackRouterVite({ target: 'react', autoCodeSplitting: true })],
+  plugins: [
+    react(),
+    TanStackRouterVite({
+      target: 'react',
+      autoCodeSplitting: true,
+      routesDirectory: 'src/app',
+    }),
+  ],
 });

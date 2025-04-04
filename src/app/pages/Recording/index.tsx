@@ -1,21 +1,27 @@
-import { useRef, useContext, useEffect, useCallback, useState } from "react";
-import { useGetRecordingQuery } from "../../../infrastructure/slices/recordings/api";
-import { RecordingContext } from "../../contexts/recordingContext";
-import { Konva } from "konva";
-import { VideoPlayer } from "./VideoPlayer";
-import { CanvasOverlay } from "./CanvasOverlay";
-import { exportStageToJson, prepareEvent } from "./utils";
-import { VIDEO_HEIGHT, VIDEO_WIDTH } from "./constants";
-
-const id = 'RECORDING_ID';
+import { useRef, useContext, useEffect, useCallback, useState } from 'react';
+import { Konva } from 'konva';
+import { useGetRecordingQuery } from '../../../infrastructure/slices/recordings/api';
+import { RecordingContext } from '../../contexts/recordingContext';
+import { VideoPlayer } from './VideoPlayer';
+import { CanvasOverlay } from './CanvasOverlay';
+import { exportStageToJson, prepareEvent } from './utils';
+import { VIDEO_HEIGHT, VIDEO_WIDTH } from './constants';
+import { useParams } from '@tanstack/react-router';
 
 export const RecordingPage = () => {
-    // useWebSocketConnection();
+  // useWebSocketConnection();
 
-  const { data: recordingData = {} } = useGetRecordingQuery({
-    id,
-  });
-  
+  const { id } = useParams({ strict: false });
+
+  const { data: recording } = useGetRecordingQuery(
+    {
+      id: id as string,
+    },
+    {
+      skip: !id,
+    },
+  );
+
   const stageRef = useRef<Konva.Stage>(null);
 
   const { events, startTime } = useContext(RecordingContext);
@@ -43,19 +49,20 @@ export const RecordingPage = () => {
     }
   }, [currentEventIndex, events, startTime]);
 
+  const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
+
   return (
     <>
       <div style={{ position: 'relative' }}>
-        {recordingData.sourceUrl ? (
+        {recording?.sourceUrl ? (
           <VideoPlayer
             width={VIDEO_WIDTH}
             height={VIDEO_HEIGHT}
-            source={recordingData.sourceUrl}
+            source={recordingSourceUrl}
             pauseTime={currentEvent.timeFromStart}
           />
         ) : null}
         <CanvasOverlay
-          // @ts-expect-error: will be refactored in the future
           event={currentEvent}
           width={VIDEO_WIDTH}
           height={VIDEO_HEIGHT}
@@ -78,4 +85,4 @@ export const RecordingPage = () => {
       </div>
     </>
   );
-}
+};
