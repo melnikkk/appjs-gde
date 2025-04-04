@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Tag } from './constants';
+import { TAG_TYPES } from './constants';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
-  tagTypes: [Tag.RECORDINGS],
+  tagTypes: TAG_TYPES,
   endpoints: () => ({}),
 });

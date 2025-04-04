@@ -1,25 +1,27 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import Konva from 'konva';
-import './App.css';
+import { useRef, useContext, useEffect, useCallback, useState } from 'react';
+import { Konva } from 'konva';
+import { useGetRecordingQuery } from '../../../infrastructure/slices/recordings/api';
+import { RecordingContext } from '../../contexts/recordingContext';
 import { VideoPlayer } from './VideoPlayer';
 import { CanvasOverlay } from './CanvasOverlay';
-import { RecordingContext } from './recordingContext';
-import { withProviders } from './hocs/withProviders';
-import { VIDEO_WIDTH, VIDEO_HEIGHT } from './constants';
 import { exportStageToJson, prepareEvent } from './utils';
-import {
-  useGetRecordingQuery,
-} from './infrastructure/slices/recordings/api';
+import { VIDEO_HEIGHT, VIDEO_WIDTH } from './constants';
+import { useParams } from '@tanstack/react-router';
 
-const id = 'RECORDING_ID';
-
-function App() {
+export const RecordingPage = () => {
   // useWebSocketConnection();
 
-  const { data: recordingData = {} } = useGetRecordingQuery({
-    id,
-  });
-  
+  const { id } = useParams({ strict: false });
+
+  const { data: recording } = useGetRecordingQuery(
+    {
+      id: id as string,
+    },
+    {
+      skip: !id,
+    },
+  );
+
   const stageRef = useRef<Konva.Stage>(null);
 
   const { events, startTime } = useContext(RecordingContext);
@@ -47,19 +49,20 @@ function App() {
     }
   }, [currentEventIndex, events, startTime]);
 
+  const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
+
   return (
     <>
       <div style={{ position: 'relative' }}>
-        {recordingData.sourceUrl ? (
+        {recording?.sourceUrl ? (
           <VideoPlayer
             width={VIDEO_WIDTH}
             height={VIDEO_HEIGHT}
-            source={recordingData.sourceUrl}
+            source={recordingSourceUrl}
             pauseTime={currentEvent.timeFromStart}
           />
         ) : null}
         <CanvasOverlay
-          // @ts-expect-error: will be refactored in the future
           event={currentEvent}
           width={VIDEO_WIDTH}
           height={VIDEO_HEIGHT}
@@ -82,6 +85,4 @@ function App() {
       </div>
     </>
   );
-}
-
-export default withProviders(App);
+};
