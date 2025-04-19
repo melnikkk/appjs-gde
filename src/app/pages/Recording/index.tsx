@@ -1,17 +1,19 @@
-import { useRef, useContext, useEffect, useCallback, useState } from 'react';
-import { Konva } from 'konva';
-import { useGetRecordingQuery } from '../../../infrastructure/slices/recordings/api';
-import { RecordingContext } from '../../contexts/recordingContext';
-import { VideoPlayer } from './VideoPlayer';
-import { CanvasOverlay } from './CanvasOverlay';
-import { exportStageToJson, prepareEvent } from './utils';
-import { VIDEO_HEIGHT, VIDEO_WIDTH } from './constants';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from '@tanstack/react-router';
+import { useGetRecordingQuery } from '../../../infrastructure/store/slices/recordings/api';
+import { setNextEventIndex, setPreviousEventIndex } from '../../../infrastructure/store/slices/editor/slice';
+import { selectCurrentEventIndex } from '../../../infrastructure/store/slices/editor/selectors';
+import { RecordingPlayer } from './RecordingPlayer';
+import { RecordingEventsPresenter } from './RecordingEventsPresenter';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
+  const dispatch = useDispatch();
 
   const { id } = useParams({ strict: false });
+
+  const currentEventIndex = useSelector(selectCurrentEventIndex);
 
   const { data: recording } = useGetRecordingQuery(
     {
@@ -22,65 +24,32 @@ export const RecordingPage = () => {
     },
   );
 
-  const stageRef = useRef<Konva.Stage>(null);
-
-  const { events, startTime } = useContext(RecordingContext);
-
-  const [currentEventIndex, setCurrentEventIndex] = useState(0);
-  const [currentEvent, setCurrentEvent] = useState(prepareEvent(events[0], startTime));
-
-  const onExportClick = useCallback(() => {
-    exportStageToJson(stageRef.current);
-  }, [stageRef]);
+  const isPreviousButtonDisabled = currentEventIndex === 0;
 
   const onPreviousClick = useCallback(() => {
-    setCurrentEventIndex(currentEventIndex - 1);
-  }, [currentEventIndex]);
+    dispatch(setPreviousEventIndex());
+  }, [dispatch]);
 
   const onNextClick = useCallback(() => {
-    setCurrentEventIndex(currentEventIndex + 1);
-  }, [currentEventIndex]);
+    dispatch(setNextEventIndex());
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (events[currentEventIndex]) {
-      const preparedEvent = prepareEvent(events[currentEventIndex], startTime);
-
-      setCurrentEvent(preparedEvent);
-    }
-  }, [currentEventIndex, events, startTime]);
-
-  const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
+  if (!recording) {
+    return null;
+  }
 
   return (
     <>
       <div style={{ position: 'relative' }}>
-        {recording?.sourceUrl ? (
-          <VideoPlayer
-            width={VIDEO_WIDTH}
-            height={VIDEO_HEIGHT}
-            source={recordingSourceUrl}
-            pauseTime={currentEvent.timeFromStart}
-          />
-        ) : null}
-        <CanvasOverlay
-          event={currentEvent}
-          width={VIDEO_WIDTH}
-          height={VIDEO_HEIGHT}
-          stageRef={stageRef}
-        />
+        <RecordingPlayer recording={recording} />
+        <RecordingEventsPresenter recording={recording} />
       </div>
       <div>
-        <button disabled={currentEventIndex === 0} onClick={onPreviousClick}>
+        <button disabled={isPreviousButtonDisabled} onClick={onPreviousClick}>
           Previous
         </button>
-        <button disabled={currentEventIndex === events.length - 1} onClick={onNextClick}>
+        <button onClick={onNextClick}>
           Next
-        </button>
-        <button
-          onClick={onExportClick}
-          style={{ position: 'absolute', top: 10, right: 10, zIndex: 1000 }}
-        >
-          Export Canvas
         </button>
       </div>
     </>

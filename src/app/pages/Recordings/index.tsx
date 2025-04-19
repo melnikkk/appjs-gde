@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { useGetRecordingsQuery } from '../../../infrastructure/slices/recordings/api';
+import { useGetRecordingsQuery } from '../../../infrastructure/store/slices/recordings/api';
 
 export const RecordingsPage = () => {
   const { data: recordingsList } = useGetRecordingsQuery();

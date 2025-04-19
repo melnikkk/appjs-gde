@@ -1,7 +1,7 @@
 import { FC, useRef, useEffect } from 'react';
+import { millesecondsToSeconds } from '../../shared/utils';
 
 interface Props {
-  videoUrl?: string;
   width: number;
   height: number;
   pauseTime: number;
@@ -13,13 +13,13 @@ export const VideoPlayer: FC<Props> = ({ source, width, height, pauseTime }) => 
 
   useEffect(() => {
     if (videoRef.current && isFinite(pauseTime) && pauseTime >= 0) {
-      videoRef.current.currentTime = pauseTime;
+      videoRef.current.currentTime = millesecondsToSeconds(pauseTime);
     }
   }, [pauseTime]);
 
   return (
     <video width={width} height={height} ref={videoRef}>
-      {source && <source src={source}/>}
+      {source && <source src={source} />}
       Your browser does not support the video tag.
     </video>
   );

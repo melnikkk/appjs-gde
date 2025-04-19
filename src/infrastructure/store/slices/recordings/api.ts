@@ -1,6 +1,6 @@
-import { Recording, Recordings } from '../../../domain/Recordings';
-import { apiSlice } from '../../store/api';
-import { Tag } from '../../store/constants';
+import { Recording, Recordings } from '../../../../domain/Recordings';
+import { apiSlice } from '../../api';
+import { Tag } from '../../constants';
 import { RequestRecordingDto } from './types';
 
 export const recordingsApiSlice = apiSlice.injectEndpoints({
