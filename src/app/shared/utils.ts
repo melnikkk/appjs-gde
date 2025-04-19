@@ -1,0 +1,1 @@
+export const millesecondsToSeconds = (msValue: number) => Number(Math.floor(msValue / 1000).toFixed(2));

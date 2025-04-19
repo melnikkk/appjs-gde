@@ -13,14 +13,12 @@
 import { Route as rootRoute } from './app/__root'
 import { Route as AppImport } from './app/App'
 import { Route as RoutesIndexImport } from './app/routes/index'
+import { Route as SharedUtilsImport } from './app/shared/utils'
 import { Route as HooksHooksImport } from './app/hooks/hooks'
 import { Route as HocsWithProvidersImport } from './app/hocs/withProviders'
-import { Route as ContextsRecordingContextImport } from './app/contexts/recordingContext'
 import { Route as PagesRecordingsIndexImport } from './app/pages/Recordings/index'
 import { Route as PagesRecordingIndexImport } from './app/pages/Recording/index'
 import { Route as PagesRecordingUtilsImport } from './app/pages/Recording/utils'
-import { Route as PagesRecordingTypesImport } from './app/pages/Recording/types'
-import { Route as PagesRecordingConstantsImport } from './app/pages/Recording/constants'
 import { Route as PagesRecordingVideoPlayerImport } from './app/pages/Recording/VideoPlayer'
 import { Route as PagesRecordingCanvasOverlayImport } from './app/pages/Recording/CanvasOverlay'
 
@@ -38,6 +36,12 @@ const RoutesIndexRoute = RoutesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const SharedUtilsRoute = SharedUtilsImport.update({
+  id: '/shared/utils',
+  path: '/shared/utils',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const HooksHooksRoute = HooksHooksImport.update({
   id: '/hooks/hooks',
   path: '/hooks/hooks',
@@ -47,12 +51,6 @@ const HooksHooksRoute = HooksHooksImport.update({
 const HocsWithProvidersRoute = HocsWithProvidersImport.update({
   id: '/hocs/withProviders',
   path: '/hocs/withProviders',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ContextsRecordingContextRoute = ContextsRecordingContextImport.update({
-  id: '/contexts/recordingContext',
-  path: '/contexts/recordingContext',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -71,18 +69,6 @@ const PagesRecordingIndexRoute = PagesRecordingIndexImport.update({
 const PagesRecordingUtilsRoute = PagesRecordingUtilsImport.update({
   id: '/pages/Recording/utils',
   path: '/pages/Recording/utils',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PagesRecordingTypesRoute = PagesRecordingTypesImport.update({
-  id: '/pages/Recording/types',
-  path: '/pages/Recording/types',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PagesRecordingConstantsRoute = PagesRecordingConstantsImport.update({
-  id: '/pages/Recording/constants',
-  path: '/pages/Recording/constants',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -110,13 +96,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
     }
-    '/contexts/recordingContext': {
-      id: '/contexts/recordingContext'
-      path: '/contexts/recordingContext'
-      fullPath: '/contexts/recordingContext'
-      preLoaderRoute: typeof ContextsRecordingContextImport
-      parentRoute: typeof rootRoute
-    }
     '/hocs/withProviders': {
       id: '/hocs/withProviders'
       path: '/hocs/withProviders'
@@ -129,6 +108,13 @@ declare module '@tanstack/react-router' {
       path: '/hooks/hooks'
       fullPath: '/hooks/hooks'
       preLoaderRoute: typeof HooksHooksImport
+      parentRoute: typeof rootRoute
+    }
+    '/shared/utils': {
+      id: '/shared/utils'
+      path: '/shared/utils'
+      fullPath: '/shared/utils'
+      preLoaderRoute: typeof SharedUtilsImport
       parentRoute: typeof rootRoute
     }
     '/routes/': {
@@ -150,20 +136,6 @@ declare module '@tanstack/react-router' {
       path: '/pages/Recording/VideoPlayer'
       fullPath: '/pages/Recording/VideoPlayer'
       preLoaderRoute: typeof PagesRecordingVideoPlayerImport
-      parentRoute: typeof rootRoute
-    }
-    '/pages/Recording/constants': {
-      id: '/pages/Recording/constants'
-      path: '/pages/Recording/constants'
-      fullPath: '/pages/Recording/constants'
-      preLoaderRoute: typeof PagesRecordingConstantsImport
-      parentRoute: typeof rootRoute
-    }
-    '/pages/Recording/types': {
-      id: '/pages/Recording/types'
-      path: '/pages/Recording/types'
-      fullPath: '/pages/Recording/types'
-      preLoaderRoute: typeof PagesRecordingTypesImport
       parentRoute: typeof rootRoute
     }
     '/pages/Recording/utils': {
@@ -194,14 +166,12 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/App': typeof AppRoute
-  '/contexts/recordingContext': typeof ContextsRecordingContextRoute
   '/hocs/withProviders': typeof HocsWithProvidersRoute
   '/hooks/hooks': typeof HooksHooksRoute
+  '/shared/utils': typeof SharedUtilsRoute
   '/routes': typeof RoutesIndexRoute
   '/pages/Recording/CanvasOverlay': typeof PagesRecordingCanvasOverlayRoute
   '/pages/Recording/VideoPlayer': typeof PagesRecordingVideoPlayerRoute
-  '/pages/Recording/constants': typeof PagesRecordingConstantsRoute
-  '/pages/Recording/types': typeof PagesRecordingTypesRoute
   '/pages/Recording/utils': typeof PagesRecordingUtilsRoute
   '/pages/Recording': typeof PagesRecordingIndexRoute
   '/pages/Recordings': typeof PagesRecordingsIndexRoute
@@ -209,14 +179,12 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/App': typeof AppRoute
-  '/contexts/recordingContext': typeof ContextsRecordingContextRoute
   '/hocs/withProviders': typeof HocsWithProvidersRoute
   '/hooks/hooks': typeof HooksHooksRoute
+  '/shared/utils': typeof SharedUtilsRoute
   '/routes': typeof RoutesIndexRoute
   '/pages/Recording/CanvasOverlay': typeof PagesRecordingCanvasOverlayRoute
   '/pages/Recording/VideoPlayer': typeof PagesRecordingVideoPlayerRoute
-  '/pages/Recording/constants': typeof PagesRecordingConstantsRoute
-  '/pages/Recording/types': typeof PagesRecordingTypesRoute
   '/pages/Recording/utils': typeof PagesRecordingUtilsRoute
   '/pages/Recording': typeof PagesRecordingIndexRoute
   '/pages/Recordings': typeof PagesRecordingsIndexRoute
@@ -225,14 +193,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/App': typeof AppRoute
-  '/contexts/recordingContext': typeof ContextsRecordingContextRoute
   '/hocs/withProviders': typeof HocsWithProvidersRoute
   '/hooks/hooks': typeof HooksHooksRoute
+  '/shared/utils': typeof SharedUtilsRoute
   '/routes/': typeof RoutesIndexRoute
   '/pages/Recording/CanvasOverlay': typeof PagesRecordingCanvasOverlayRoute
   '/pages/Recording/VideoPlayer': typeof PagesRecordingVideoPlayerRoute
-  '/pages/Recording/constants': typeof PagesRecordingConstantsRoute
-  '/pages/Recording/types': typeof PagesRecordingTypesRoute
   '/pages/Recording/utils': typeof PagesRecordingUtilsRoute
   '/pages/Recording/': typeof PagesRecordingIndexRoute
   '/pages/Recordings/': typeof PagesRecordingsIndexRoute
@@ -242,42 +208,36 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/App'
-    | '/contexts/recordingContext'
     | '/hocs/withProviders'
     | '/hooks/hooks'
+    | '/shared/utils'
     | '/routes'
     | '/pages/Recording/CanvasOverlay'
     | '/pages/Recording/VideoPlayer'
-    | '/pages/Recording/constants'
-    | '/pages/Recording/types'
     | '/pages/Recording/utils'
     | '/pages/Recording'
     | '/pages/Recordings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/App'
-    | '/contexts/recordingContext'
     | '/hocs/withProviders'
     | '/hooks/hooks'
+    | '/shared/utils'
     | '/routes'
     | '/pages/Recording/CanvasOverlay'
     | '/pages/Recording/VideoPlayer'
-    | '/pages/Recording/constants'
-    | '/pages/Recording/types'
     | '/pages/Recording/utils'
     | '/pages/Recording'
     | '/pages/Recordings'
   id:
     | '__root__'
     | '/App'
-    | '/contexts/recordingContext'
     | '/hocs/withProviders'
     | '/hooks/hooks'
+    | '/shared/utils'
     | '/routes/'
     | '/pages/Recording/CanvasOverlay'
     | '/pages/Recording/VideoPlayer'
-    | '/pages/Recording/constants'
-    | '/pages/Recording/types'
     | '/pages/Recording/utils'
     | '/pages/Recording/'
     | '/pages/Recordings/'
@@ -286,14 +246,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AppRoute: typeof AppRoute
-  ContextsRecordingContextRoute: typeof ContextsRecordingContextRoute
   HocsWithProvidersRoute: typeof HocsWithProvidersRoute
   HooksHooksRoute: typeof HooksHooksRoute
+  SharedUtilsRoute: typeof SharedUtilsRoute
   RoutesIndexRoute: typeof RoutesIndexRoute
   PagesRecordingCanvasOverlayRoute: typeof PagesRecordingCanvasOverlayRoute
   PagesRecordingVideoPlayerRoute: typeof PagesRecordingVideoPlayerRoute
-  PagesRecordingConstantsRoute: typeof PagesRecordingConstantsRoute
-  PagesRecordingTypesRoute: typeof PagesRecordingTypesRoute
   PagesRecordingUtilsRoute: typeof PagesRecordingUtilsRoute
   PagesRecordingIndexRoute: typeof PagesRecordingIndexRoute
   PagesRecordingsIndexRoute: typeof PagesRecordingsIndexRoute
@@ -301,14 +259,12 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
-  ContextsRecordingContextRoute: ContextsRecordingContextRoute,
   HocsWithProvidersRoute: HocsWithProvidersRoute,
   HooksHooksRoute: HooksHooksRoute,
+  SharedUtilsRoute: SharedUtilsRoute,
   RoutesIndexRoute: RoutesIndexRoute,
   PagesRecordingCanvasOverlayRoute: PagesRecordingCanvasOverlayRoute,
   PagesRecordingVideoPlayerRoute: PagesRecordingVideoPlayerRoute,
-  PagesRecordingConstantsRoute: PagesRecordingConstantsRoute,
-  PagesRecordingTypesRoute: PagesRecordingTypesRoute,
   PagesRecordingUtilsRoute: PagesRecordingUtilsRoute,
   PagesRecordingIndexRoute: PagesRecordingIndexRoute,
   PagesRecordingsIndexRoute: PagesRecordingsIndexRoute,
@@ -325,14 +281,12 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/App",
-        "/contexts/recordingContext",
         "/hocs/withProviders",
         "/hooks/hooks",
+        "/shared/utils",
         "/routes/",
         "/pages/Recording/CanvasOverlay",
         "/pages/Recording/VideoPlayer",
-        "/pages/Recording/constants",
-        "/pages/Recording/types",
         "/pages/Recording/utils",
         "/pages/Recording/",
         "/pages/Recordings/"
@@ -341,14 +295,14 @@ export const routeTree = rootRoute
     "/App": {
       "filePath": "App.tsx"
     },
-    "/contexts/recordingContext": {
-      "filePath": "contexts/recordingContext.tsx"
-    },
     "/hocs/withProviders": {
       "filePath": "hocs/withProviders.tsx"
     },
     "/hooks/hooks": {
       "filePath": "hooks/hooks.ts"
+    },
+    "/shared/utils": {
+      "filePath": "shared/utils.ts"
     },
     "/routes/": {
       "filePath": "routes/index.tsx"
@@ -358,12 +312,6 @@ export const routeTree = rootRoute
     },
     "/pages/Recording/VideoPlayer": {
       "filePath": "pages/Recording/VideoPlayer.tsx"
-    },
-    "/pages/Recording/constants": {
-      "filePath": "pages/Recording/constants.ts"
-    },
-    "/pages/Recording/types": {
-      "filePath": "pages/Recording/types.ts"
     },
     "/pages/Recording/utils": {
       "filePath": "pages/Recording/utils.ts"

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Stage, Layer, Circle } from 'react-konva';
 import Konva from 'konva';
-import { RecordingEvent } from './types';
+import { RecordingEvent } from '../../../domain/RecordingEvents';
 
 interface Props {
   width: number;
@@ -11,6 +11,10 @@ interface Props {
 }
 
 export const CanvasOverlay: FC<Props> = ({ width, height, event, stageRef }) => {
+  const radius = 20;
+  const x = event.data.coordinates.x;
+  const y = event.data.coordinates.y + radius;
+  
   return (
     <>
       <Stage
@@ -22,10 +26,12 @@ export const CanvasOverlay: FC<Props> = ({ width, height, event, stageRef }) => 
         <Layer>
           <Circle
             key={event.id}
-            radius={20}
+            radius={radius}
             fill="green"
-            x={event.coordinates[0]}
-            y={event.coordinates[1]}
+            stroke="black"
+            strokeWidth={2}
+            x={x}
+            y={y}
           />
         </Layer>
       </Stage>
