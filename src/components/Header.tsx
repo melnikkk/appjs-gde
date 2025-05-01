@@ -1,33 +1,22 @@
-import { Link } from '@tanstack/react-router';
-import { ChevronLeft, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface HeaderProps {
+interface Props {
   title: string;
-  showBackButton?: boolean;
   onSave?: () => void;
   onExport?: () => void;
 }
 
-export function Header({ 
-  title, 
-  showBackButton = true, 
-  onSave, 
-  onExport 
-}: HeaderProps) {
+export const Header: React.FC<Props> = ({
+  title,
+  onSave,
+  onExport
+}) => {
   return (
-    <header className="flex h-14 items-center border-b px-2 bg-white">
+    <header className="flex h-13 items-center border-b px-4 bg-white">
       <div className="flex items-center gap-4 flex-1">
         <div className="flex items-center">
-          <Link to="/" className="flex items-center">
-            {showBackButton && (
-              <Button variant="ghost" size="icon" className="mr-2">
-                <ChevronLeft className="h-5 w-5" />
-                <span className="sr-only">Back</span>
-              </Button>
-            )}
-            <div className="font-semibold">{title}</div>
-          </Link>
+          <div className="font-semibold">{title}</div>
         </div>
       </div>
       <div className="flex items-center gap-2">
