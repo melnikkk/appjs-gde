@@ -1,7 +1,8 @@
-import { RouterProvider } from '@tanstack/react-router';
-import './App.css';
-import { withProviders } from './hocs/withProviders';
-import { router } from './routes';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { withProviders } from './shared/hocs/withProviders';
+import { routeTree } from './routeTree.gen';
+
+const router = createRouter({ routeTree });
 
 function App() {
   return (

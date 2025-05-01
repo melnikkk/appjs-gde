@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '../../../infrastructure/store/slices/recordings/api';
@@ -6,10 +6,13 @@ import { setNextEventIndex, setPreviousEventIndex } from '../../../infrastructur
 import { selectCurrentEventIndex } from '../../../infrastructure/store/slices/editor/selectors';
 import { RecordingPlayer } from './RecordingPlayer';
 import { RecordingEventsPresenter } from './RecordingEventsPresenter';
+import { Button } from '@/components/ui/button';
+import { Layout } from '@/components/Layout';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
   const dispatch = useDispatch();
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const { id } = useParams({ strict: false });
 
@@ -34,6 +37,18 @@ export const RecordingPage = () => {
     dispatch(setNextEventIndex());
   }, [dispatch]);
 
+  const handleResize = useCallback((newDimensions: { width: number; height: number }) => {
+    setDimensions(newDimensions);
+  }, []);
+
+  const handleExport = useCallback(() => {
+    console.log('Exporting guide');
+  }, []);
+
+  const handleSave = useCallback(() => {
+    console.log('Saving guide');
+  }, []);
+  
   if (!recording) {
     return null;
   }
@@ -41,16 +56,16 @@ export const RecordingPage = () => {
   return (
     <>
       <div style={{ position: 'relative' }}>
-        <RecordingPlayer recording={recording} />
-        <RecordingEventsPresenter recording={recording} />
+        <RecordingPlayer recording={recording} onResize={handleResize} />
+        <RecordingEventsPresenter recording={recording} dimensions={dimensions} />
       </div>
-      <div>
-        <button disabled={isPreviousButtonDisabled} onClick={onPreviousClick}>
+      <div className="mt-4 flex space-x-2">
+        <Button disabled={isPreviousButtonDisabled} onClick={onPreviousClick}>
           Previous
-        </button>
-        <button onClick={onNextClick}>
+        </Button>
+        <Button onClick={onNextClick}>
           Next
-        </button>
+        </Button>
       </div>
     </>
   );

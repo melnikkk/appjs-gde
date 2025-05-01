@@ -1,15 +1,16 @@
 import { FC, useRef } from "react";
 import { useSelector } from "react-redux";
 import Konva from "konva";
-import { Recording } from "../../../domain/Recordings";
+import { Recording } from "@/domain/Recordings";
+import { selectCurrentEventIndex } from "@/infrastructure/store/slices/editor/selectors";
 import { CanvasOverlay } from "./CanvasOverlay";
-import { selectCurrentEventIndex } from "../../../infrastructure/store/slices/editor/selectors";
 
 interface Props {
-	recording: Recording
+	recording: Recording;
+	dimensions?: { width: number; height: number };
 }
 
-export const RecordingEventsPresenter: FC<Props> = ({ recording }) => {
+export const RecordingEventsPresenter: FC<Props> = ({ recording, dimensions }) => {
 	const stageRef = useRef<Konva.Stage>(null);
 
 	const currentEventIndex = useSelector(selectCurrentEventIndex);
@@ -18,11 +19,18 @@ export const RecordingEventsPresenter: FC<Props> = ({ recording }) => {
 	if (!currentEvent) {
 		return null;
 	}
+	
+	const width = dimensions?.width || currentEvent.data.view.innerWidth;
+	const height = dimensions?.height || currentEvent.data.view.innerHeight;
+	
+	if (!currentEvent) {
+		return null;
+	}
 
 	return <CanvasOverlay
 		event={currentEvent}
-		width={currentEvent.data.view.innerWidth}
-		height={currentEvent.data.view.innerHeight}
+		width={width}
+		height={height}
 		stageRef={stageRef}
 	/>
 }

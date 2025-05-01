@@ -5,11 +5,13 @@ import { selectCurrentEventIndex } from "../../../infrastructure/store/slices/ed
 import { Recording } from "../../../domain/Recordings";
 
 interface Props {
-	recording: Recording
+	recording: Recording;
+	onResize?: (dimensions: { width: number; height: number }) => void;
 }
 
-export const RecordingPlayer: FC<Props> = ({ recording }) => {
+export const RecordingPlayer: FC<Props> = ({ recording, onResize }) => {
 	const currentEventIndex = useSelector(selectCurrentEventIndex);
+
 	const currentEvent = recording?.events[currentEventIndex];
 
 	if (!currentEvent) {
@@ -25,5 +27,6 @@ export const RecordingPlayer: FC<Props> = ({ recording }) => {
 		height={currentEvent.data.view.innerHeight}
 		source={recordingSourceUrl}
 		pauseTime={pauseTime}
+		onResize={onResize}
 	/>
 }
