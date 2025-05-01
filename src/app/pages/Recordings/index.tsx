@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { useGetRecordingsQuery } from '../../../infrastructure/store/slices/recordings/api';
+import { useGetRecordingsQuery } from '@/infrastructure/store/slices/recordings/api';
 
 export const RecordingsPage = () => {
   const { data: recordingsList } = useGetRecordingsQuery();
@@ -10,7 +10,7 @@ export const RecordingsPage = () => {
       <ul>
         {recordingsList?.map((recording) => (
           <li key={recording.id}>
-            <Link to={'/recordings/$id'} params={{ id: recording.id }}>
+            <Link to="/recordings/$id" params={{ id: recording.id }}>
               {recording.name}
             </Link>
           </li>
