@@ -1,10 +1,10 @@
+import { BookOpen, Film, LayoutDashboard, Settings, User } from "lucide-react"
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
-	SidebarGroupLabel,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
@@ -15,8 +15,6 @@ import {
 import { cn } from "@/lib/utils";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Film, LayoutDashboard, Settings, User } from "lucide-react"
-import { use } from "react";
 
 const menuItems = [
 	{

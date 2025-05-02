@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { SidebarProvider } from "./ui/sidebar"
-import { AppSidebar } from "./AppSidebar"
+import { SidebarProvider } from "../../../components/ui/sidebar"
+import { AppSidebar } from "./components/LeftSidebar"
 import { useRouterState } from "@tanstack/react-router";
-import { Header } from "./Header";
+import { Header } from "./components/Header";
 
 
 interface Props {
