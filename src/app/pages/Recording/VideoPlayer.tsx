@@ -10,7 +10,14 @@ interface Props {
   onResize?: (dimensions: { width: number; height: number }) => void;
 }
 
-export const VideoPlayer: FC<Props> = ({ source, width, height, pauseTime, ref, onResize }) => {
+export const VideoPlayer: FC<Props> = ({
+  source,
+  width,
+  height,
+  pauseTime,
+  ref,
+  onResize,
+}) => {
   const videoRef = useRef<HTMLVideoElement>(ref?.current ? ref.current : null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -28,9 +35,9 @@ export const VideoPlayer: FC<Props> = ({ source, width, height, pauseTime, ref, 
         const { clientWidth, clientHeight } = containerRef.current;
         const newDimensions = {
           width: clientWidth,
-          height: clientHeight
+          height: clientHeight,
         };
-        
+
         setDimensions(newDimensions);
 
         if (onResize) {
@@ -40,7 +47,7 @@ export const VideoPlayer: FC<Props> = ({ source, width, height, pauseTime, ref, 
     };
 
     updateDimensions();
-  
+
     window.addEventListener('resize', updateDimensions);
 
     // Clean up
@@ -48,19 +55,19 @@ export const VideoPlayer: FC<Props> = ({ source, width, height, pauseTime, ref, 
   }, [onResize]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
-      style={{ 
-        width: '100%', 
+      style={{
+        width: '100%',
         height: '100%',
-        maxWidth: width, 
+        maxWidth: width,
         maxHeight: height,
-        position: 'relative'
+        position: 'relative',
       }}
     >
-      <video 
-        width={dimensions.width} 
-        height={dimensions.height} 
+      <video
+        width={dimensions.width}
+        height={dimensions.height}
         ref={videoRef}
         style={{ display: 'block', width: '100%', height: 'auto' }}
       >

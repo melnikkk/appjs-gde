@@ -14,7 +14,7 @@ export const CanvasOverlay: FC<Props> = ({ width, height, event, stageRef }) => 
   const radius = 20;
   const x = event.data.coordinates.x;
   const y = event.data.coordinates.y + radius;
-  
+
   return (
     <>
       <Stage

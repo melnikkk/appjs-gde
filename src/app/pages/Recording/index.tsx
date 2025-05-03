@@ -2,12 +2,14 @@ import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '../../../infrastructure/store/slices/recordings/api';
-import { setNextEventIndex, setPreviousEventIndex } from '../../../infrastructure/store/slices/editor/slice';
+import {
+  setNextEventIndex,
+  setPreviousEventIndex,
+} from '../../../infrastructure/store/slices/editor/slice';
 import { selectCurrentEventIndex } from '../../../infrastructure/store/slices/editor/selectors';
 import { RecordingPlayer } from './RecordingPlayer';
 import { RecordingEventsPresenter } from './RecordingEventsPresenter';
 import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/Layout';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
@@ -48,7 +50,7 @@ export const RecordingPage = () => {
   const handleSave = useCallback(() => {
     console.log('Saving guide');
   }, []);
-  
+
   if (!recording) {
     return null;
   }
@@ -63,9 +65,7 @@ export const RecordingPage = () => {
         <Button disabled={isPreviousButtonDisabled} onClick={onPreviousClick}>
           Previous
         </Button>
-        <Button onClick={onNextClick}>
-          Next
-        </Button>
+        <Button onClick={onNextClick}>Next</Button>
       </div>
     </>
   );

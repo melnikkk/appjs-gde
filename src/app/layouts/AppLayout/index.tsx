@@ -1,9 +1,9 @@
-import { useCallback } from "react";
-import { SidebarProvider } from "../../../components/ui/sidebar"
-import { AppSidebar } from "./components/LeftSidebar"
-import { useRouterState } from "@tanstack/react-router";
-import { Header } from "./components/Header";
-
+import { useCallback } from 'react';
+import { SidebarProvider } from '../../../components/ui/sidebar';
+import { AppSidebar } from './components/LeftSidebar';
+import { useRouterState } from '@tanstack/react-router';
+import { Header } from './components/Header';
+import { useHeaderTitle } from '@/app/shared/hooks/useHeaderTitle';
 
 interface Props {
   children: React.ReactNode;
@@ -11,7 +11,8 @@ interface Props {
 
 export const AppLayout: React.FC<Props> = ({ children }) => {
   const routerState = useRouterState();
-  
+  const headerTitle = useHeaderTitle();
+
   const routePath = routerState.location.pathname;
 
   const handleSave = useCallback(() => {
@@ -28,15 +29,12 @@ export const AppLayout: React.FC<Props> = ({ children }) => {
 
       <main className="flex-1 overflow-y-auto">
         <Header
-          title='Guide Creator'
+          title={headerTitle}
           onSave={routePath.includes('/recordings/') ? handleSave : undefined}
           onExport={routePath.includes('/recordings/') ? handleExport : undefined}
         />
-        <div className="p-6">
-          {children}
-        </div>
+        <div className="mt-13 p-6">{children}</div>
       </main>
     </SidebarProvider>
-
-  )
-}
+  );
+};

@@ -1,5 +1,6 @@
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface Props {
   title: string;
@@ -7,14 +8,14 @@ interface Props {
   onExport?: () => void;
 }
 
-export const Header: React.FC<Props> = ({
-  title,
-  onSave,
-  onExport
-}) => {
+export const Header: React.FC<Props> = ({ title, onSave, onExport }) => {
+  const { open } = useSidebar();
+
   return (
-    <header className="flex h-13 items-center border-b px-4 bg-white">
-      <div className="flex items-center gap-4 flex-1">
+    <header
+      className={`fixed top-0 right-0 z-10 flex h-13 items-center border-b bg-white px-4 transition-all duration-200 ease-linear ${open ? 'md:left-[var(--sidebar-width)]' : 'md:left-[var(--sidebar-width-icon)]'} left-0`}
+    >
+      <div className="flex flex-1 items-center gap-4">
         <div className="flex items-center">
           <div className="font-semibold">{title}</div>
         </div>
@@ -26,12 +27,8 @@ export const Header: React.FC<Props> = ({
             <span className="sr-only">Export</span>
           </Button>
         )}
-        {onSave && (
-          <Button onClick={onSave}>
-            Save Guide
-          </Button>
-        )}
+        {onSave && <Button onClick={onSave}>Save Guide</Button>}
       </div>
     </header>
   );
-}
+};
