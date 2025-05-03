@@ -17,7 +17,14 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: [Tag.RECORDING],
     }),
+    deleteRecording: builder.mutation<void, RequestRecordingDto>({
+      query: ({ id }) => ({
+        url: `/recordings/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [Tag.RECORDINGS],
+    }),
   }),
 });
 
-export const { useGetRecordingsQuery, useGetRecordingQuery } = recordingsApiSlice;
+export const { useGetRecordingsQuery, useGetRecordingQuery, useDeleteRecordingMutation } = recordingsApiSlice;

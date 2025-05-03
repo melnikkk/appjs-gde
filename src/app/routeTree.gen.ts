@@ -10,13 +10,13 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings.route'
-import { Route as ProfileRouteImport } from './routes/profile.route'
-import { Route as GuidesRouteImport } from './routes/guides.route'
-import { Route as IndexRouteImport } from './routes/index.route'
-import { Route as RecordingsIndexRouteImport } from './routes/recordings/index.route'
-import { Route as RecordingsIdRouteImport } from './routes/recordings/$id.route'
+import { Route as rootRoute } from './routes/__root';
+import { Route as SettingsRouteImport } from './routes/settings.route';
+import { Route as ProfileRouteImport } from './routes/profile.route';
+import { Route as GuidesRouteImport } from './routes/guides.route';
+import { Route as IndexRouteImport } from './routes/index.route';
+import { Route as RecordingsIndexRouteImport } from './routes/recordings/index.route';
+import { Route as RecordingsIdRouteImport } from './routes/recordings/$id.route';
 
 // Create/Update Routes
 
@@ -24,134 +24,128 @@ const SettingsRouteRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const ProfileRouteRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const GuidesRouteRoute = GuidesRouteImport.update({
   id: '/guides',
   path: '/guides',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRouteRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const RecordingsIndexRouteRoute = RecordingsIndexRouteImport.update({
   id: '/recordings/',
   path: '/recordings/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const RecordingsIdRouteRoute = RecordingsIdRouteImport.update({
   id: '/recordings/$id',
   path: '/recordings/$id',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     '/guides': {
-      id: '/guides'
-      path: '/guides'
-      fullPath: '/guides'
-      preLoaderRoute: typeof GuidesRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/guides';
+      path: '/guides';
+      fullPath: '/guides';
+      preLoaderRoute: typeof GuidesRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/profile';
+      path: '/profile';
+      fullPath: '/profile';
+      preLoaderRoute: typeof ProfileRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/settings';
+      path: '/settings';
+      fullPath: '/settings';
+      preLoaderRoute: typeof SettingsRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     '/recordings/$id': {
-      id: '/recordings/$id'
-      path: '/recordings/$id'
-      fullPath: '/recordings/$id'
-      preLoaderRoute: typeof RecordingsIdRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/recordings/$id';
+      path: '/recordings/$id';
+      fullPath: '/recordings/$id';
+      preLoaderRoute: typeof RecordingsIdRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     '/recordings/': {
-      id: '/recordings/'
-      path: '/recordings'
-      fullPath: '/recordings'
-      preLoaderRoute: typeof RecordingsIndexRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/recordings/';
+      path: '/recordings';
+      fullPath: '/recordings';
+      preLoaderRoute: typeof RecordingsIndexRouteImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRouteRoute
-  '/guides': typeof GuidesRouteRoute
-  '/profile': typeof ProfileRouteRoute
-  '/settings': typeof SettingsRouteRoute
-  '/recordings/$id': typeof RecordingsIdRouteRoute
-  '/recordings': typeof RecordingsIndexRouteRoute
+  '/': typeof IndexRouteRoute;
+  '/guides': typeof GuidesRouteRoute;
+  '/profile': typeof ProfileRouteRoute;
+  '/settings': typeof SettingsRouteRoute;
+  '/recordings/$id': typeof RecordingsIdRouteRoute;
+  '/recordings': typeof RecordingsIndexRouteRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRouteRoute
-  '/guides': typeof GuidesRouteRoute
-  '/profile': typeof ProfileRouteRoute
-  '/settings': typeof SettingsRouteRoute
-  '/recordings/$id': typeof RecordingsIdRouteRoute
-  '/recordings': typeof RecordingsIndexRouteRoute
+  '/': typeof IndexRouteRoute;
+  '/guides': typeof GuidesRouteRoute;
+  '/profile': typeof ProfileRouteRoute;
+  '/settings': typeof SettingsRouteRoute;
+  '/recordings/$id': typeof RecordingsIdRouteRoute;
+  '/recordings': typeof RecordingsIndexRouteRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRouteRoute
-  '/guides': typeof GuidesRouteRoute
-  '/profile': typeof ProfileRouteRoute
-  '/settings': typeof SettingsRouteRoute
-  '/recordings/$id': typeof RecordingsIdRouteRoute
-  '/recordings/': typeof RecordingsIndexRouteRoute
+  __root__: typeof rootRoute;
+  '/': typeof IndexRouteRoute;
+  '/guides': typeof GuidesRouteRoute;
+  '/profile': typeof ProfileRouteRoute;
+  '/settings': typeof SettingsRouteRoute;
+  '/recordings/$id': typeof RecordingsIdRouteRoute;
+  '/recordings/': typeof RecordingsIndexRouteRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
     | '/guides'
     | '/profile'
     | '/settings'
     | '/recordings/$id'
-    | '/recordings'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/guides'
-    | '/profile'
-    | '/settings'
-    | '/recordings/$id'
-    | '/recordings'
+    | '/recordings';
+  fileRoutesByTo: FileRoutesByTo;
+  to: '/' | '/guides' | '/profile' | '/settings' | '/recordings/$id' | '/recordings';
   id:
     | '__root__'
     | '/'
@@ -159,17 +153,17 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/recordings/$id'
-    | '/recordings/'
-  fileRoutesById: FileRoutesById
+    | '/recordings/';
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRouteRoute: typeof IndexRouteRoute
-  GuidesRouteRoute: typeof GuidesRouteRoute
-  ProfileRouteRoute: typeof ProfileRouteRoute
-  SettingsRouteRoute: typeof SettingsRouteRoute
-  RecordingsIdRouteRoute: typeof RecordingsIdRouteRoute
-  RecordingsIndexRouteRoute: typeof RecordingsIndexRouteRoute
+  IndexRouteRoute: typeof IndexRouteRoute;
+  GuidesRouteRoute: typeof GuidesRouteRoute;
+  ProfileRouteRoute: typeof ProfileRouteRoute;
+  SettingsRouteRoute: typeof SettingsRouteRoute;
+  RecordingsIdRouteRoute: typeof RecordingsIdRouteRoute;
+  RecordingsIndexRouteRoute: typeof RecordingsIndexRouteRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -179,11 +173,11 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRouteRoute: SettingsRouteRoute,
   RecordingsIdRouteRoute: RecordingsIdRouteRoute,
   RecordingsIndexRouteRoute: RecordingsIndexRouteRoute,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {

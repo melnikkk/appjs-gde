@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import { WebSocketApi } from '../../../infrastructure/websocket/websocketApi';
 
 export const useWebSocketConnection = () => {
-  const [state, setState] = useState({})
+  const [state, setState] = useState({});
 
   const connectWebSocket = () => {
-    WebSocketApi.createConnection()
+    WebSocketApi.createConnection();
 
-    WebSocketApi.socket?.on("path", (data) => {
-      setState(data)
-    })
-  }
+    WebSocketApi.socket?.on('path', (data) => {
+      setState(data);
+    });
+  };
 
   useEffect(() => {
-    console.log(state)
+    console.log(state);
   }, [state]);
 
   useEffect(() => {
-    connectWebSocket()
+    connectWebSocket();
   }, []);
-}
+};

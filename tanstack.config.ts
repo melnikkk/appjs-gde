@@ -4,5 +4,5 @@ export default {
   generatedRouteTree: 'src/app/routeTree.gen.ts',
   routeFileIgnorePatterns: ['**/*.spec.*'],
   disableTypes: false,
-  target: 'react'
-}
+  target: 'react',
+};

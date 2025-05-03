@@ -1,9 +1,9 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "../..";
+import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '../..';
 
 const selectEditorState = (state: RootState) => state.editor;
 
 export const selectCurrentEventIndex = createSelector(
-    selectEditorState,
-  (state) => state.currentEventIndex
+  selectEditorState,
+  (state) => state.currentEventIndex,
 );

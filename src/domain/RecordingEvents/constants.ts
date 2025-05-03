@@ -1,3 +1,3 @@
 export enum RecordingEventType {
-    CLICK = 'click',
+  CLICK = 'click',
 }
