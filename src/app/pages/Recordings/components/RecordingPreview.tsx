@@ -5,7 +5,7 @@ import { DeleteRecordingButton } from './DeleteRecordingButton';
 interface Props {
   id: string;
   duration: string;
-  imageUrl?: string;
+  imageUrl: string | null;
 }
 
 export const RecordingPreview: React.FC<Props> = ({ id, imageUrl, duration }) => {
@@ -15,7 +15,7 @@ export const RecordingPreview: React.FC<Props> = ({ id, imageUrl, duration }) =>
         <img
           src={imageUrl}
           alt="Recording thumbnail"
-          className="h-full w-full object-cover"
+          className="h-full w-full rounded-lg object-cover"
         />
       ) : (
         <DefaultRecordingPlaceholder />

@@ -9,6 +9,7 @@ export interface Recording {
   startTime: string;
   endTime: string;
   duration: number;
+  thumbnailUrl: string | null;
   events: RecordingEvents;
 }
 
