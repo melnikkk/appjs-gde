@@ -2,7 +2,6 @@ export const millesecondsToSeconds = (msValue: number) =>
   Number(Math.floor(msValue / 1000).toFixed(2));
 
 export function formatDuration(milliseconds: number): string {
-  debugger;
   if (!milliseconds && milliseconds !== 0) {
     return '';
   }
