@@ -20,7 +20,7 @@ export const RecordingsList: React.FC<Props> = ({ recordings }) => {
           name={recording.name}
           duration={recording.duration}
           createdAt={recording.createdAt}
-          thumbnailUrl={recording.sourceUrl}
+          thumbnailUrl={recording.thumbnailUrl}
           eventsCount={recording.events.length}
         />
       ))}

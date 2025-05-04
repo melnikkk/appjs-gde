@@ -1,15 +1,15 @@
+import { Calendar, MousePointer } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RecordingPreview } from './RecordingPreview';
 import { formatDate, formatDuration } from '@/app/shared/utils';
-import { Calendar, MousePointer } from 'lucide-react';
+import { RecordingPreview } from './RecordingPreview';
 
 interface Props {
   id: string;
   name: string;
   createdAt: string;
   duration: number;
-  thumbnailUrl?: string;
+  thumbnailUrl: string | null;
   eventsCount: number;
 }
 
@@ -24,12 +24,16 @@ export const RecordingCard: React.FC<Props> = ({
   const formattedDuration = formatDuration(duration);
   const formattedCreatedAt = formatDate(createdAt);
 
+  const recordingThumbnailUrl = thumbnailUrl
+    ? `${import.meta.env.VITE_BACKEND_URL}${thumbnailUrl}`
+    : null;
+
   return (
     <Card className="group pt-0">
       <Link to="/recordings/$id" params={{ id }} className="block h-full">
         <CardHeader className="p-0">
           <RecordingPreview
-            imageUrl={thumbnailUrl}
+            imageUrl={recordingThumbnailUrl}
             duration={formattedDuration}
             id={id}
           />
