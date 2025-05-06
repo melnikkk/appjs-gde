@@ -10,6 +10,7 @@ import { selectCurrentEventIndex } from '../../../infrastructure/store/slices/ed
 import { RecordingPlayer } from './RecordingPlayer';
 import { RecordingEventsPresenter } from './RecordingEventsPresenter';
 import { Button } from '@/components/ui/button';
+import { RecordingTimeline } from './components/RecordingTimeline';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
@@ -67,6 +68,7 @@ export const RecordingPage = () => {
         </Button>
         <Button onClick={onNextClick}>Next</Button>
       </div>
+      <RecordingTimeline recordingEvents={recording.events} startPointTimestamp={recording.startTime}/>
     </>
   );
 };

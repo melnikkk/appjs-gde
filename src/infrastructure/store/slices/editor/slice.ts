@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface EditorState {
   currentEventIndex: number;
@@ -18,9 +18,13 @@ export const editorSlice = createSlice({
     setPreviousEventIndex: (state) => {
       state.currentEventIndex -= 1;
     },
+    setCurrentEventIndex: (state, action: PayloadAction<number>) => {
+      state.currentEventIndex = action.payload;
+    },
   },
 });
 
-export const { setNextEventIndex, setPreviousEventIndex } = editorSlice.actions;
+export const { setNextEventIndex, setPreviousEventIndex, setCurrentEventIndex } =
+  editorSlice.actions;
 
 export default editorSlice.reducer;
