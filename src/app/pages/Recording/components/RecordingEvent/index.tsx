@@ -4,42 +4,60 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import { RecordingEvent } from '@/domain/RecordingEvents';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { selectCurrentEventIndex } from '@/infrastructure/store/slices/editor/selectors';
-import { setCurrentEventIndex } from '@/infrastructure/store/slices/editor/slice';
+import { selectCurrentEventId } from '@/infrastructure/store/slices/editor/selectors';
+import {
+  setCurrentEventIndex,
+  setCurrentEventId,
+} from '@/infrastructure/store/slices/editor/slice';
+import { useRecordingEvents } from '../../context/RecordingEventsContext';
 
 interface Props {
+  id: string;
+  index: number;
   startPointTimestamp: string;
-  stepNumber: number;
-  recordingEvent: RecordingEvent;
 }
 
 export const RecordingEventComponent: React.FC<Props> = ({
-  recordingEvent,
-  stepNumber,
+  id,
+  index,
   startPointTimestamp,
 }) => {
   const dispatch = useAppDispatch();
 
-  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
-  const isFocused = stepNumber - 1 === currentEventIndex;
+  const { recordingEvents } = useRecordingEvents();
+
+  const recordingEvent = recordingEvents[id];
+
+  if (!recordingEvent) {
+    return null;
+  }
+
+  const currentEventId = useAppSelector(selectCurrentEventId);
+
+  const isFocused = currentEventId === id;
+  const stepNumber = index + 1;
 
   const eventTime = formatDuration(
-    Number(recordingEvent.timestamp) - Number(startPointTimestamp),
+    recordingEvent.timestamp - Number(startPointTimestamp),
   );
-  const recordingEventDescription = `Clicked at coordinates (${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y})`;
+
+  const hasCoordinates = recordingEvent?.data?.coordinates != null;
+  const recordingEventDescription = hasCoordinates
+    ? `Clicked at coordinates (${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y})`
+    : 'Click event (coordinates unavailable)';
   const recordingEventTitle = `Step ${stepNumber}: Click Event`;
 
   const handleEventClick = () => {
-    dispatch(setCurrentEventIndex(stepNumber - 1));
+    dispatch(setCurrentEventIndex(index));
+    dispatch(setCurrentEventId(id));
   };
 
   return (
     <AccordionItem
-      value={`step-${recordingEvent.id}`}
-      className={`mb-3 overflow-hidden rounded-lg border border-solid !border-b transition-all duration-300 ${
+      value={`step-${id}`}
+      className={`mb-3 overflow-hidden rounded-lg border !border-b border-solid transition-all duration-300 ${
         isFocused ? 'border-primary bg-primary/5 ring-primary/20 ring-2' : ''
       }`}
       onClick={handleEventClick}
