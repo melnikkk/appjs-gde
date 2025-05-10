@@ -15,9 +15,10 @@ export type RecordingEventData = ClickRecordingEventData;
 
 export interface RecordingEvent {
   id: string;
-  timestamp: string;
-  type: RecordingEventType;
   data: RecordingEventData;
+  timestamp: number;
+  type: RecordingEventType;
+  index: number;
 }
 
-export type RecordingEvents = Array<RecordingEvent>;
+export type RecordingEvents = Record<string, RecordingEvent>;

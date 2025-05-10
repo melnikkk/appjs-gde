@@ -6,8 +6,8 @@ export interface Recording {
   sourceUrl: string;
   createdAt: string;
   fileSize: number;
-  startTime: string;
-  endTime: string;
+  startTime: number;
+  stopTime: number;
   duration: number;
   thumbnailUrl: string | null;
   events: RecordingEvents;

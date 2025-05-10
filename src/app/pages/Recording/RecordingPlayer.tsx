@@ -1,8 +1,11 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { VideoPlayer } from './VideoPlayer';
-import { selectCurrentEventIndex } from '../../../infrastructure/store/slices/editor/selectors';
-import { Recording } from '../../../domain/Recordings';
+import {
+  selectCurrentEventIndex,
+  selectCurrentEventId,
+} from '@/infrastructure/store/slices/editor/selectors';
+import { Recording } from '@/domain/Recordings';
+import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 
 interface Props {
   recording: Recording;
@@ -10,16 +13,19 @@ interface Props {
 }
 
 export const RecordingPlayer: FC<Props> = ({ recording, onResize }) => {
-  const currentEventIndex = useSelector(selectCurrentEventIndex);
+  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
+  const currentEventId = useAppSelector(selectCurrentEventId);
 
-  const currentEvent = recording?.events[currentEventIndex];
+  const currentEvent = currentEventId
+    ? recording.events[currentEventId]
+    : Object.values(recording.events).find((event) => event.index === currentEventIndex);
 
   if (!currentEvent) {
     return null;
   }
 
   const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
-  const pauseTime = Number(BigInt(currentEvent.timestamp) - BigInt(recording.startTime));
+  const pauseTime = currentEvent.timestamp - recording.startTime;
 
   return (
     <VideoPlayer
