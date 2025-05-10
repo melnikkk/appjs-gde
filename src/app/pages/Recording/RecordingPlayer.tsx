@@ -25,7 +25,7 @@ export const RecordingPlayer: FC<Props> = ({ recording, onResize }) => {
   }
 
   const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
-  const pauseTime = currentEvent.timestamp - Number(recording.startTime);
+  const pauseTime = currentEvent.timestamp - recording.startTime;
 
   return (
     <VideoPlayer
