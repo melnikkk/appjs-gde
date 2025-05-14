@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
-import { SidebarProvider } from '../../../components/ui/sidebar';
-import { AppSidebar } from './components/LeftSidebar';
 import { useRouterState } from '@tanstack/react-router';
-import { Header } from './components/Header';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { Toaster } from 'sonner';
 import { useHeaderTitle } from '@/app/shared/hooks/useHeaderTitle';
+import { AppSidebar } from './components/LeftSidebar';
+import { Header } from './components/Header';
 
 interface Props {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ export const AppLayout: React.FC<Props> = ({ children }) => {
 
   return (
     <SidebarProvider>
+      <Toaster position="top-right" />
       <AppSidebar />
 
       <main className="flex-1 overflow-y-auto">

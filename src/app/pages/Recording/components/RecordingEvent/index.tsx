@@ -11,12 +11,13 @@ import {
   setCurrentEventIndex,
   setCurrentEventId,
 } from '@/infrastructure/store/slices/editor/slice';
-import { useRecordingEvents } from '../../context/RecordingEventsContext';
+import { useRecordingEventsByRecordingId } from '@/infrastructure/store/slices/recordings/api';
+import { useParams } from '@tanstack/react-router';
 
 interface Props {
   id: string;
   index: number;
-  startPointTimestamp: string;
+  startPointTimestamp: number;
 }
 
 export const RecordingEventComponent: React.FC<Props> = ({
@@ -25,23 +26,20 @@ export const RecordingEventComponent: React.FC<Props> = ({
   startPointTimestamp,
 }) => {
   const dispatch = useAppDispatch();
+  const { id: recordingId } = useParams({ strict: false });
 
-  const { recordingEvents } = useRecordingEvents();
-
-  const recordingEvent = recordingEvents[id];
+  const currentEventId = useAppSelector(selectCurrentEventId);
+  const { recordingEvents } = useRecordingEventsByRecordingId(recordingId as string);
+  const recordingEvent = recordingEvents?.[id];
 
   if (!recordingEvent) {
     return null;
   }
 
-  const currentEventId = useAppSelector(selectCurrentEventId);
-
   const isFocused = currentEventId === id;
   const stepNumber = index + 1;
 
-  const eventTime = formatDuration(
-    recordingEvent.timestamp - Number(startPointTimestamp),
-  );
+  const eventTime = formatDuration(recordingEvent.timestamp - startPointTimestamp);
 
   const hasCoordinates = recordingEvent?.data?.coordinates != null;
   const recordingEventDescription = hasCoordinates

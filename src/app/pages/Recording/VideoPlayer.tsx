@@ -7,6 +7,7 @@ interface Props {
   pauseTime: number;
   source: string;
   ref?: React.RefObject<HTMLVideoElement>;
+  onTimeUpdate?: (time: number) => void;
   onResize?: (dimensions: { width: number; height: number }) => void;
 }
 
@@ -17,6 +18,7 @@ export const VideoPlayer: FC<Props> = ({
   pauseTime,
   ref,
   onResize,
+  onTimeUpdate,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(ref?.current ? ref.current : null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,8 +28,20 @@ export const VideoPlayer: FC<Props> = ({
   useEffect(() => {
     if (videoRef.current && isFinite(pauseTime) && pauseTime >= 0) {
       videoRef.current.currentTime = millesecondsToSeconds(pauseTime);
+
+      const handleTimeUpdate = () => {
+        if (onTimeUpdate && videoRef.current) {
+          onTimeUpdate(Math.floor(videoRef.current.currentTime));
+        }
+      };
+
+      videoRef.current.addEventListener('timeupdate', handleTimeUpdate);
+
+      return () => {
+        videoRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
+      };
     }
-  }, [pauseTime]);
+  }, [pauseTime, onTimeUpdate]);
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -56,20 +70,15 @@ export const VideoPlayer: FC<Props> = ({
 
   return (
     <div
+      className={`position-relative rounded-lg border max-h-${height} max-w-${width}`}
       ref={containerRef}
-      style={{
-        width: '100%',
-        height: '100%',
-        maxWidth: width,
-        maxHeight: height,
-        position: 'relative',
-      }}
     >
       <video
         width={dimensions.width}
         height={dimensions.height}
         ref={videoRef}
         style={{ display: 'block', width: '100%', height: 'auto' }}
+        className="block h-auto w-full rounded-lg"
       >
         {source && <source src={source} />}
         Your browser does not support the video tag.
