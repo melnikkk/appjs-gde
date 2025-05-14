@@ -2,29 +2,29 @@ import { useCallback, useState, useEffect } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import {
-  setNextEventIndex,
-  setPreviousEventIndex,
   setCurrentEventId,
   cacheEvents,
 } from '@/infrastructure/store/slices/editor/slice';
 import {
-  selectCurrentEventIndex,
   selectCurrentEventId,
   selectEventsAmount,
   selectEventsCache,
 } from '@/infrastructure/store/slices/editor/selectors';
-import { Button } from '@/components/ui/button';
-import { RecordingPlayer } from './RecordingPlayer';
-import { RecordingEventsPresenter } from './RecordingEventsPresenter';
-import { RecordingTimeline } from './components/RecordingTimeline';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
+import { Separator } from '@/components/ui/separator';
+import { RecordingTimeline } from './components/RecordingTimeline';
+import { AddEventDialog } from './components/AddEventDialog';
+import { RecordingTimelineNavigation } from './components/RecordingTimelineNavigation';
+import { RecordingPlayer } from './RecordingPlayer';
+import { RecordingEventsPresenter } from './RecordingEventsPresenter';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
   const dispatch = useAppDispatch();
 
-  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
+  const [currentTime, setCurrentTime] = useState(0);
+
   const currentEventId = useAppSelector(selectCurrentEventId);
   const eventsAmount = useAppSelector(selectEventsAmount);
   const eventsCache = useAppSelector(selectEventsCache);
@@ -42,13 +42,19 @@ export const RecordingPage = () => {
     },
   );
 
+  const handleResize = useCallback((newDimensions: { width: number; height: number }) => {
+    setDimensions(newDimensions);
+  }, []);
+
+  const handleTimeUpdate = useCallback((time: number) => {
+    setCurrentTime(time);
+  }, []);
+
   useEffect(() => {
     if (recording && recording.events) {
       dispatch(cacheEvents(Object.values(recording.events)));
     }
   }, [recording, dispatch, eventsAmount]);
-
-  const maxEventIndex = eventsAmount - 1 > 0 ? eventsAmount - 1 : 0;
 
   useEffect(() => {
     if (recording && !currentEventId && eventsAmount > 0) {
@@ -56,53 +62,26 @@ export const RecordingPage = () => {
     }
   }, [recording, dispatch, currentEventId, eventsCache, eventsAmount]);
 
-  const isPreviousButtonDisabled = currentEventIndex === 0;
-
-  const onPreviousClick = useCallback(() => {
-    if (currentEventIndex > 0 && eventsAmount > 0) {
-      const previousEventId = eventsCache[currentEventIndex - 1];
-
-      if (previousEventId) {
-        dispatch(setCurrentEventId(previousEventId));
-        dispatch(setPreviousEventIndex());
-      }
-    }
-  }, [dispatch, currentEventIndex, eventsAmount, eventsCache]);
-
-  const isNextButtonDisabled = currentEventIndex >= maxEventIndex;
-
-  const onNextClick = useCallback(() => {
-    if (currentEventIndex < maxEventIndex && eventsAmount > 0) {
-      const nextEventId = eventsCache[currentEventIndex + 1];
-
-      if (nextEventId) {
-        dispatch(setCurrentEventId(nextEventId));
-        dispatch(setNextEventIndex());
-      }
-    }
-  }, [dispatch, currentEventIndex, maxEventIndex, eventsCache, eventsAmount]);
-
-  const handleResize = useCallback((newDimensions: { width: number; height: number }) => {
-    setDimensions(newDimensions);
-  }, []);
-
   if (!recording) {
     return null;
   }
 
   return (
     <>
-      <div style={{ position: 'relative' }}>
-        <RecordingPlayer recording={recording} onResize={handleResize} />
-        <RecordingEventsPresenter recording={recording} dimensions={dimensions} />
-      </div>
-      <div className="mt-4 flex space-x-2">
-        <Button disabled={isPreviousButtonDisabled} onClick={onPreviousClick}>
-          Previous
-        </Button>
-        <Button disabled={isNextButtonDisabled} onClick={onNextClick}>
-          Next
-        </Button>
+      <div className="rounded-lg border p-4">
+        <div className="relative">
+          <RecordingPlayer
+            recording={recording}
+            onResize={handleResize}
+            onTimeUpdate={handleTimeUpdate}
+          />
+          <RecordingEventsPresenter recording={recording} dimensions={dimensions} />
+        </div>
+        <Separator className="my-4" />
+        <div className="mt-4 flex items-center justify-between">
+          <RecordingTimelineNavigation />
+          <AddEventDialog currentTime={currentTime} />
+        </div>
       </div>
       <RecordingTimeline
         recordingEvents={recording.events}

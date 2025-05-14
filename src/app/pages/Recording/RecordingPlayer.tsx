@@ -1,24 +1,16 @@
 import { FC } from 'react';
-import { VideoPlayer } from './VideoPlayer';
-import {
-  selectCurrentEventIndex,
-  selectCurrentEventId,
-} from '@/infrastructure/store/slices/editor/selectors';
 import { Recording } from '@/domain/Recordings';
-import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
+import { VideoPlayer } from './VideoPlayer';
+import { useCurrentEvent } from './hooks/useCurrentEvent';
 
 interface Props {
   recording: Recording;
   onResize?: (dimensions: { width: number; height: number }) => void;
+  onTimeUpdate?: (time: number) => void;
 }
 
-export const RecordingPlayer: FC<Props> = ({ recording, onResize }) => {
-  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
-  const currentEventId = useAppSelector(selectCurrentEventId);
-
-  const currentEvent = currentEventId
-    ? recording.events[currentEventId]
-    : Object.values(recording.events).find((event) => event.index === currentEventIndex);
+export const RecordingPlayer: FC<Props> = ({ recording, onResize, onTimeUpdate }) => {
+  const { currentEvent } = useCurrentEvent(recording);
 
   if (!currentEvent) {
     return null;
@@ -34,6 +26,7 @@ export const RecordingPlayer: FC<Props> = ({ recording, onResize }) => {
       source={recordingSourceUrl}
       pauseTime={pauseTime}
       onResize={onResize}
+      onTimeUpdate={onTimeUpdate}
     />
   );
 };
