@@ -24,11 +24,11 @@ export interface AddEventDialogContextValue {
 
 export const AddEventDialogContext = createContext<AddEventDialogContextValue>({
   isOpen: false,
-  setIsOpen: () => {},
+  isSubmitting: false,
   currentTime: 0,
   formattedTime: '0:00',
   addCustomEvent: () => {},
-  isSubmitting: false,
+  setIsOpen: () => {},
 });
 
 interface Props {
@@ -52,9 +52,8 @@ export const AddEventDialogProvider: React.FC<Props> = ({
   const eventsAmount = useAppSelector(selectEventsAmount);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [addEvents] = useAddEventsMutation();
+  const [addEvents, { isLoading }] = useAddEventsMutation();
 
   const { data: recording } = useGetRecordingQuery(
     { id: recordingId },
@@ -69,8 +68,6 @@ export const AddEventDialogProvider: React.FC<Props> = ({
     }
 
     try {
-      setIsSubmitting(true);
-
       const timestamp = recording.startTime + data.time * 1000;
       const eventId = uuidv4();
       const eventData = {
@@ -101,8 +98,6 @@ export const AddEventDialogProvider: React.FC<Props> = ({
       setIsOpen(false);
     } catch (error) {
       toast.error('Failed to add custom event. Please try again.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -113,7 +108,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({
         setIsOpen,
         currentTime,
         addCustomEvent,
-        isSubmitting,
+        isSubmitting: isLoading,
         formattedTime: formatTime(currentTime),
       }}
     >

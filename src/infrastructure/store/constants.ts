@@ -4,4 +4,4 @@ export enum Tag {
   RECORDING_EVENTS = 'RecordingEvents',
 }
 
-export const TAG_TYPES = [Tag.RECORDINGS, Tag.RECORDING];
+export const TAG_TYPES = [Tag.RECORDINGS, Tag.RECORDING, Tag.RECORDING_EVENTS];
