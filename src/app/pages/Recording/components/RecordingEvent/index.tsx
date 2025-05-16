@@ -13,6 +13,7 @@ import {
 } from '@/infrastructure/store/slices/editor/slice';
 import { useRecordingEventsByRecordingId } from '@/infrastructure/store/slices/recordings/api';
 import { useParams } from '@tanstack/react-router';
+import { DeleteEventButton } from '../DeleteEventButton';
 
 interface Props {
   id: string;
@@ -77,7 +78,10 @@ export const RecordingEventComponent: React.FC<Props> = ({
               </p>
             </div>
           </div>
-          <div className="text-muted-foreground text-sm">{eventTime}</div>
+          <div className="flex items-center gap-4">
+            <div className="text-muted-foreground text-sm">{eventTime}</div>
+            <DeleteEventButton eventId={id} />
+          </div>
         </div>
       </AccordionTrigger>
       <AccordionContent className="px-4 pt-0 pb-3">
