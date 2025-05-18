@@ -17,6 +17,7 @@ export interface RecordingEvent {
   id: string;
   timestamp: number;
   index: number;
+  screenshotUrl: string | null;
   type: RecordingEventType;
   data: RecordingEventData;
 }
