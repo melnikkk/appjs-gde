@@ -53,6 +53,11 @@ export const RecordingEventComponent: React.FC<Props> = ({
     dispatch(setCurrentEventId(id));
   };
 
+  const hasScreenshot = Boolean(recordingEvent.screenshotUrl);
+  const fullScreenshotUrl = hasScreenshot
+    ? `${import.meta.env.VITE_BACKEND_URL}${recordingEvent.screenshotUrl}`
+    : undefined;
+
   return (
     <AccordionItem
       value={`step-${id}`}
@@ -87,6 +92,15 @@ export const RecordingEventComponent: React.FC<Props> = ({
       <AccordionContent className="px-4 pt-0 pb-3">
         <div className="ml-11">
           <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
+          {hasScreenshot ? (
+            <div className="mt-4">
+              <img
+                src={fullScreenshotUrl}
+                alt={`Screenshot for ${recordingEventTitle}`}
+                className="h-auto max-h-[400px] w-full rounded-md border object-contain"
+              />
+            </div>
+          ) : null}
         </div>
       </AccordionContent>
     </AccordionItem>
