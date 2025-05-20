@@ -64,7 +64,6 @@ export const VideoPlayer: FC<Props> = ({
 
     window.addEventListener('resize', updateDimensions);
 
-    // Clean up
     return () => window.removeEventListener('resize', updateDimensions);
   }, [onResize]);
 
