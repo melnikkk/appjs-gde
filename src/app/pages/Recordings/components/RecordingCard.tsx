@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatDate, formatDuration } from '@/app/shared/utils';
 import { RecordingPreview } from './RecordingPreview';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface Props {
   id: string;
@@ -21,6 +22,8 @@ export const RecordingCard: React.FC<Props> = ({
   createdAt,
   eventsCount,
 }) => {
+  const { setOpen } = useSidebar();
+
   const formattedDuration = formatDuration(duration);
   const formattedCreatedAt = formatDate(createdAt);
 
@@ -28,8 +31,12 @@ export const RecordingCard: React.FC<Props> = ({
     ? `${import.meta.env.VITE_BACKEND_URL}${thumbnailUrl}`
     : null;
 
+  const onRecordingCardClick = () => {
+    setOpen(false);
+  };
+
   return (
-    <Card className="group pt-0">
+    <Card className="group pt-0" onClick={onRecordingCardClick}>
       <Link to="/recordings/$id" params={{ id }} className="block h-full">
         <CardHeader className="p-0">
           <RecordingPreview

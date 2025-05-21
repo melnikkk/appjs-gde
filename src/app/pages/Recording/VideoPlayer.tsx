@@ -1,17 +1,22 @@
-import { FC, useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
+import Konva from 'konva';
+import { RecordingEvent } from '@/domain/RecordingEvents';
 import { millesecondsToSeconds } from '../../shared/utils';
+import { MediaOverlay } from './MediaOverlay';
+import { useMediaDimensions } from './hooks/useMediaDimensions';
 
 interface Props {
   width: number;
   height: number;
   pauseTime: number;
   source: string;
+  currentEvent: RecordingEvent;
   ref?: React.RefObject<HTMLVideoElement>;
   onTimeUpdate?: (time: number) => void;
   onResize?: (dimensions: { width: number; height: number }) => void;
 }
 
-export const VideoPlayer: FC<Props> = ({
+export const VideoPlayer: React.FC<Props> = ({
   source,
   width,
   height,
@@ -19,11 +24,13 @@ export const VideoPlayer: FC<Props> = ({
   ref,
   onResize,
   onTimeUpdate,
+  currentEvent,
 }) => {
-  const videoRef = useRef<HTMLVideoElement>(ref?.current ? ref.current : null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<Konva.Stage | null>(null);
+  const { mediaRef, dimensions, handleMediaLoad } = useMediaDimensions();
 
-  const [dimensions, setDimensions] = useState({ width, height });
+  const videoRef = ref || (mediaRef as React.RefObject<HTMLVideoElement>);
 
   useEffect(() => {
     if (videoRef.current && isFinite(pauseTime) && pauseTime >= 0) {
@@ -41,47 +48,45 @@ export const VideoPlayer: FC<Props> = ({
         videoRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
       };
     }
-  }, [pauseTime, onTimeUpdate]);
+  }, [pauseTime, onTimeUpdate, videoRef]);
 
   useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const { clientWidth, clientHeight } = containerRef.current;
-        const newDimensions = {
-          width: clientWidth,
-          height: clientHeight,
-        };
-
-        setDimensions(newDimensions);
-
-        if (onResize) {
-          onResize(newDimensions);
-        }
-      }
-    };
-
-    updateDimensions();
-
-    window.addEventListener('resize', updateDimensions);
-
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, [onResize]);
+    if (dimensions && onResize) {
+      onResize({
+        width: dimensions.width,
+        height: dimensions.height,
+      });
+    }
+  }, [dimensions, onResize]);
 
   return (
-    <div
-      className={`position-relative rounded-lg border max-h-${height} max-w-${width}`}
-      ref={containerRef}
-    >
+    <div className="relative rounded-lg border" ref={containerRef}>
       <video
-        width={dimensions.width}
-        height={dimensions.height}
-        ref={videoRef}
-        style={{ display: 'block', width: '100%', height: 'auto' }}
+        ref={videoRef as React.RefObject<HTMLVideoElement>}
+        style={{
+          display: 'block',
+          width: '100%',
+          height: 'auto',
+          maxHeight: `${height}px`,
+          maxWidth: `${width}px`,
+          objectFit: 'contain',
+        }}
         className="block h-auto w-full rounded-lg"
+        onLoadedMetadata={handleMediaLoad}
       >
         {source && <source src={source} />}
         Your browser does not support the video tag.
       </video>
+
+      {dimensions && (
+        <MediaOverlay
+          width={dimensions.width}
+          height={dimensions.height}
+          event={currentEvent}
+          stageRef={stageRef}
+          markerColor="green"
+        />
+      )}
     </div>
   );
 };

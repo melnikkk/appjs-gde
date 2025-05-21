@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react';
+import React, { useRef } from 'react';
 import Konva from 'konva';
 import { Recording } from '@/domain/Recordings';
 import { CanvasOverlay } from './CanvasOverlay';
@@ -9,7 +9,7 @@ interface Props {
   dimensions?: { width: number; height: number };
 }
 
-export const RecordingEventsPresenter: FC<Props> = ({ recording, dimensions }) => {
+export const RecordingEventsPresenter: React.FC<Props> = ({ recording, dimensions }) => {
   const stageRef = useRef<Konva.Stage>(null);
   const { currentEvent } = useCurrentEvent(recording);
 
