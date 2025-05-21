@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import { Stage, Layer, Circle } from 'react-konva';
 import Konva from 'konva';
 import { RecordingEvent } from '../../../domain/RecordingEvents';
@@ -11,7 +11,7 @@ interface Props {
   stageRef: React.RefObject<Konva.Stage | null>;
 }
 
-export const CanvasOverlay: FC<Props> = ({ width, height, event, stageRef }) => {
+export const CanvasOverlay: React.FC<Props> = ({ width, height, event, stageRef }) => {
   const radius = 20;
   const { x, y } = scaleCoordinates(
     { width, height },

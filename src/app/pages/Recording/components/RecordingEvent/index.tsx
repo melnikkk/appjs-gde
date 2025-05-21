@@ -14,6 +14,7 @@ import {
 import { useRecordingEventsByRecordingId } from '@/infrastructure/store/slices/recordings/api';
 import { useParams } from '@tanstack/react-router';
 import { DeleteEventButton } from '../DeleteEventButton';
+import { ScreenshotWithOverlay } from '../ScreenshotWithOverlay';
 
 interface Props {
   id: string;
@@ -93,13 +94,14 @@ export const RecordingEventComponent: React.FC<Props> = ({
         <div className="ml-11">
           <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
           {hasScreenshot ? (
-            <div className="mt-4">
-              <img
-                src={fullScreenshotUrl}
+            fullScreenshotUrl ? (
+              <ScreenshotWithOverlay
+                screenshotUrl={fullScreenshotUrl}
+                event={recordingEvent}
                 alt={`Screenshot for ${recordingEventTitle}`}
-                className="h-auto max-h-[400px] w-full rounded-md border object-contain"
+                className="mt-4"
               />
-            </div>
+            ) : null
           ) : null}
         </div>
       </AccordionContent>

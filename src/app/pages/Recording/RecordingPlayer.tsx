@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import { Recording } from '@/domain/Recordings';
 import { VideoPlayer } from './VideoPlayer';
 import { useCurrentEvent } from './hooks/useCurrentEvent';
@@ -9,7 +9,11 @@ interface Props {
   onTimeUpdate?: (time: number) => void;
 }
 
-export const RecordingPlayer: FC<Props> = ({ recording, onResize, onTimeUpdate }) => {
+export const RecordingPlayer: React.FC<Props> = ({
+  recording,
+  onResize,
+  onTimeUpdate,
+}) => {
   const { currentEvent } = useCurrentEvent(recording);
 
   if (!currentEvent) {
@@ -27,6 +31,7 @@ export const RecordingPlayer: FC<Props> = ({ recording, onResize, onTimeUpdate }
       pauseTime={pauseTime}
       onResize={onResize}
       onTimeUpdate={onTimeUpdate}
+      currentEvent={currentEvent}
     />
   );
 };

@@ -14,9 +14,17 @@ export const scaleCoordinates = (
 
   const scaleX = outputSize.width / eventScreenSize.width;
   const scaleY = outputSize.height / eventScreenSize.height;
-  debugger;
+
+  const scale = Math.min(scaleX, scaleY);
+
+  const scaledWidth = eventScreenSize.width * scale;
+  const scaledHeight = eventScreenSize.height * scale;
+
+  const offsetX = (outputSize.width - scaledWidth) / 2;
+  const offsetY = (outputSize.height - scaledHeight) / 2;
+
   return {
-    x: Math.round(x * scaleX),
-    y: Math.round(y * scaleY),
+    x: Math.round(x * scale + offsetX),
+    y: Math.round(y * scale + offsetY),
   };
 };
