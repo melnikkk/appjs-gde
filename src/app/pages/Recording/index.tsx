@@ -77,9 +77,18 @@ export const RecordingPage = () => {
           />
           <RecordingEventsPresenter recording={recording} dimensions={dimensions} />
         </div>
+
         <Separator className="my-4" />
-        <div className="mt-4 flex items-center justify-between">
-          <RecordingTimelineNavigation />
+
+        <RecordingTimelineNavigation
+          recordingEvents={recording.events}
+          startPointTimestamp={recording.startTime}
+          endPointTimestamp={recording.stopTime}
+          duration={recording.duration}
+          currentTime={currentTime}
+        />
+
+        <div className="mt-3 flex items-center justify-end">
           <AddEventDialog currentTime={currentTime} />
         </div>
       </div>

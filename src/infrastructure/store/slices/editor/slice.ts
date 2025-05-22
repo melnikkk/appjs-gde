@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RecordingEvent } from '@/domain/RecordingEvents';
+import { EventsCache } from './types';
 
 interface EditorState {
   currentEventIndex: number;
   currentEventId: string | null;
-  eventsCache: Record<number, string>;
   sortedEventIds: Array<string>;
+  eventsCache: EventsCache;
 }
 
 const initialState: EditorState = {
