@@ -6,7 +6,7 @@ import {
   selectCurrentEventIndex,
   selectCurrentEventId,
   selectSortedEventIds,
-} from '@/infrastructure/store/slices/editor/selectors';
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { useEffect, useState } from 'react';
 

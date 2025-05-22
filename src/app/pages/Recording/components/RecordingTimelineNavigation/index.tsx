@@ -3,7 +3,7 @@ import {
   selectCurrentEventIndex,
   selectEventsAmount,
   selectEventsCache,
-} from '@/infrastructure/store/slices/editor/selectors';
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { RecordingEvents } from '@/domain/RecordingEvents';
 import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
 import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';

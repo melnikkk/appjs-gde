@@ -6,11 +6,11 @@ import {
 } from '@/components/ui/accordion';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { selectCurrentEventId } from '@/infrastructure/store/slices/editor/selectors';
+import { selectCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import {
   setCurrentEventIndex,
   setCurrentEventId,
-} from '@/infrastructure/store/slices/editor/slice';
+} from '@/infrastructure/store/slices/recordingEvents/slice';
 import { useRecordingEventsByRecordingId } from '@/infrastructure/store/slices/recordings/api';
 import { useParams } from '@tanstack/react-router';
 import { DeleteEventButton } from '../DeleteEventButton';

@@ -6,7 +6,9 @@ import { RecordingEventType } from '@/domain/RecordingEvents/constants';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import { toast } from 'sonner';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectEventsAmount } from '@/infrastructure/store/slices/editor/selectors';
+import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
+import { selectEventsAmount } from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { cacheEvents } from '@/infrastructure/store/slices/recordingEvents/slice';
 
 export interface EventFormData {
   time: number;
@@ -48,6 +50,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({
   currentTime = 0,
 }) => {
   const { id: recordingId } = useParams({ strict: false });
+  const dispatch = useAppDispatch();
 
   const eventsAmount = useAppSelector(selectEventsAmount);
 
@@ -55,7 +58,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({
 
   const [addEvents, { isLoading }] = useAddEventsMutation();
 
-  const { data: recording } = useGetRecordingQuery(
+  const { data: recording, refetch } = useGetRecordingQuery(
     { id: recordingId },
     { skip: !recordingId },
   );
@@ -74,10 +77,14 @@ export const AddEventDialogProvider: React.FC<Props> = ({
         coordinates: {
           x: 100,
           y: 100,
+          pageX: 100,
+          pageY: 100,
         },
         view: {
-          innerWidth: Object.values(recording.events)[0]?.data.view.innerWidth,
-          innerHeight: Object.values(recording.events)[0]?.data.view.innerHeight,
+          innerWidth: Object.values(recording.events)[0]?.data.view.innerWidth || 1024,
+          innerHeight: Object.values(recording.events)[0]?.data.view.innerHeight || 768,
+          scrollX: 0,
+          scrollY: 0,
         },
       };
       const event = {
@@ -85,6 +92,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({
         id: eventId,
         type: data.type,
         index: eventsAmount,
+        screenshotUrl: null,
         data: eventData,
       };
 
@@ -92,6 +100,14 @@ export const AddEventDialogProvider: React.FC<Props> = ({
         recordingId,
         events: { [eventId]: event },
       }).unwrap();
+
+      // Refetch recording to get updated events
+      const { data: updatedRecording } = await refetch();
+
+      // Re-cache events if we have updated data
+      if (updatedRecording && updatedRecording.events) {
+        dispatch(cacheEvents(Object.values(updatedRecording.events)));
+      }
 
       toast.success(`Custom event "${data.type}" added successfully.`);
 

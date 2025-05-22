@@ -9,3 +9,5 @@ export interface DeleteRecordingEventDto {
   recordingId: string;
   eventId: string;
 }
+
+export type EventsCache = Record<number, string>;

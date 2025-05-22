@@ -3,10 +3,10 @@ import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import {
   setCurrentEventId,
   setPreviousEventIndex,
-} from '@/infrastructure/store/slices/editor/slice';
+} from '@/infrastructure/store/slices/recordingEvents/slice';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { EventsCache } from '@/infrastructure/store/slices/editor/types';
+import { EventsCache } from '@/infrastructure/store/slices/recordingEvents/types';
 
 interface Props {
   currentEventIndex: number;
