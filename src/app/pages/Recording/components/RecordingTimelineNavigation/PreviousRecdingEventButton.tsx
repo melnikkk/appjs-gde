@@ -1,23 +1,19 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import {
-  setCurrentEventId,
-  setPreviousEventIndex,
-} from '@/infrastructure/store/slices/recordingEvents/slice';
-import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { EventsCache } from '@/infrastructure/store/slices/recordingEvents/types';
+import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
+import { setCurrentEventIndex } from '@/infrastructure/store/slices/recordingEvents/slice';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   currentEventIndex: number;
   eventsAmount: number;
-  eventsCache: EventsCache;
+  sortedEventsIds: Array<string>;
 }
 
 export const PreviousRecordingEventButton: React.FC<Props> = ({
   currentEventIndex,
   eventsAmount,
-  eventsCache,
+  sortedEventsIds,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -25,14 +21,14 @@ export const PreviousRecordingEventButton: React.FC<Props> = ({
 
   const onPreviousClick = useCallback(() => {
     if (currentEventIndex > 0 && eventsAmount > 0) {
-      const previousEventId = eventsCache[currentEventIndex - 1];
+      const previousEventIndex = Math.max(0, currentEventIndex - 1);
+      const previousEventId = sortedEventsIds[previousEventIndex];
 
       if (previousEventId) {
-        dispatch(setCurrentEventId(previousEventId));
-        dispatch(setPreviousEventIndex());
+        dispatch(setCurrentEventIndex(previousEventIndex));
       }
     }
-  }, [dispatch, currentEventIndex, eventsAmount, eventsCache]);
+  }, [dispatch, currentEventIndex, eventsAmount, sortedEventsIds]);
 
   return (
     <Button

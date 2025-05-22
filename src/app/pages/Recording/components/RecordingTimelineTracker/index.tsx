@@ -23,7 +23,7 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
       const event = recordingEvents[eventId];
 
       if (!event) {
-        return { id: eventId, position: 0 };
+        return { id: eventId, position: 0, timeStamp: 0 };
       }
 
       const position =
@@ -32,6 +32,7 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
       return {
         id: eventId,
         position: Math.min(Math.max(position, 0), 100),
+        timeStamp: event.timestamp,
       };
     });
   }, [sortedEventIds, recordingEvents, startPointTimestamp, recordingDuration]);
@@ -41,19 +42,19 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
       <div className="relative mt-6 mb-4 h-2 w-full rounded-full bg-gray-300">
         <TimeMarker duration={0} />
 
-        <TimeMarker className="right-0" duration={recordingDuration} />
-
-        {eventPositions.map(({ id, position }) => {
+        {eventPositions.map(({ id, position, timeStamp }) => {
           return (
             <RecordingTimelineTrackerEvent
               key={id}
               recordingEventId={id}
               position={position}
-              recordingEventTimestamp={recordingEvents[id].timestamp}
+              recordingEventTimestamp={timeStamp}
               startPointTimestamp={startPointTimestamp}
             />
           );
         })}
+
+        <TimeMarker className="right-0" duration={recordingDuration} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import {
   selectCurrentEventIndex,
   selectEventsAmount,
-  selectEventsCache,
+  selectSortedEventIds,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { RecordingEvents } from '@/domain/RecordingEvents';
 import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
@@ -24,14 +24,14 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
 }) => {
   const currentEventIndex = useAppSelector(selectCurrentEventIndex);
   const eventsAmount = useAppSelector(selectEventsAmount);
-  const eventsCache = useAppSelector(selectEventsCache);
+  const sortedEventsIds = useAppSelector(selectSortedEventIds);
 
   return (
     <div className="my-6 flex w-full items-center justify-center gap-2">
       <PreviousRecordingEventButton
         currentEventIndex={currentEventIndex}
         eventsAmount={eventsAmount}
-        eventsCache={eventsCache}
+        sortedEventsIds={sortedEventsIds}
       />
       <RecordingTimelineTracker
         recordingEvents={recordingEvents}
@@ -41,7 +41,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
       <NextRecordingEventButton
         currentEventIndex={currentEventIndex}
         eventsAmount={eventsAmount}
-        eventsCache={eventsCache}
+        sortedEventsIds={sortedEventsIds}
       />
     </div>
   );

@@ -3,12 +3,12 @@ import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import {
   setCurrentEventId,
-  cacheEvents,
+  setSortedRecordingEventsIds,
 } from '@/infrastructure/store/slices/recordingEvents/slice';
 import {
   selectCurrentEventId,
   selectEventsAmount,
-  selectEventsCache,
+  selectSortedEventIds,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
@@ -27,7 +27,7 @@ export const RecordingPage = () => {
 
   const currentEventId = useAppSelector(selectCurrentEventId);
   const eventsAmount = useAppSelector(selectEventsAmount);
-  const eventsCache = useAppSelector(selectEventsCache);
+  const sortedEventsIds = useAppSelector(selectSortedEventIds);
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
@@ -52,15 +52,15 @@ export const RecordingPage = () => {
 
   useEffect(() => {
     if (recording && recording.events) {
-      dispatch(cacheEvents(Object.values(recording.events)));
+      dispatch(setSortedRecordingEventsIds(Object.values(recording.events)));
     }
   }, [recording, dispatch, eventsAmount]);
 
   useEffect(() => {
     if (recording && !currentEventId && eventsAmount > 0) {
-      dispatch(setCurrentEventId(eventsCache[0]));
+      dispatch(setCurrentEventId(sortedEventsIds[0]));
     }
-  }, [recording, dispatch, currentEventId, eventsCache, eventsAmount]);
+  }, [recording, dispatch, currentEventId, sortedEventsIds, eventsAmount]);
 
   if (!recording) {
     return null;

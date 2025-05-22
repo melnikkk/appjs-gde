@@ -2,22 +2,18 @@ import { useCallback } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { Button } from '@/components/ui/button';
-import {
-  setCurrentEventId,
-  setNextEventIndex,
-} from '@/infrastructure/store/slices/recordingEvents/slice';
-import { EventsCache } from '@/infrastructure/store/slices/recordingEvents/types';
+import { setCurrentEventIndex } from '@/infrastructure/store/slices/recordingEvents/slice';
 
 interface Props {
   currentEventIndex: number;
   eventsAmount: number;
-  eventsCache: EventsCache;
+  sortedEventsIds: Array<string>;
 }
 
 export const NextRecordingEventButton: React.FC<Props> = ({
   currentEventIndex,
   eventsAmount,
-  eventsCache,
+  sortedEventsIds,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -26,14 +22,14 @@ export const NextRecordingEventButton: React.FC<Props> = ({
 
   const onClick = useCallback(() => {
     if (currentEventIndex < maxEventIndex && eventsAmount > 0) {
-      const nextEventId = eventsCache[currentEventIndex + 1];
+      const nextEventIndex = Math.min(currentEventIndex + 1, maxEventIndex);
+      const nextEventId = sortedEventsIds[nextEventIndex];
 
       if (nextEventId) {
-        dispatch(setCurrentEventId(nextEventId));
-        dispatch(setNextEventIndex());
+        dispatch(setCurrentEventIndex(nextEventIndex));
       }
     }
-  }, [dispatch, currentEventIndex, maxEventIndex, eventsCache, eventsAmount]);
+  }, [dispatch, currentEventIndex, maxEventIndex, sortedEventsIds, eventsAmount]);
 
   return (
     <Button

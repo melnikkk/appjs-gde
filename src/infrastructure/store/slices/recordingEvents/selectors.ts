@@ -13,11 +13,6 @@ export const selectCurrentEventId = createSelector(
   (state) => state.currentEventId,
 );
 
-export const selectEventsCache = createSelector(
-  selectRecordingEventsState,
-  (state) => state.eventsCache,
-);
-
 export const selectSortedEventIds = createSelector(
   selectRecordingEventsState,
   (state) => state.sortedEventIds,

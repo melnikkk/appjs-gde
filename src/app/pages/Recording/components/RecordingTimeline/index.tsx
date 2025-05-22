@@ -3,7 +3,6 @@ import { Accordion } from '@/components/ui/accordion';
 import { RecordingEventComponent } from '../RecordingEvent';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import {
-  selectCurrentEventIndex,
   selectCurrentEventId,
   selectSortedEventIds,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
@@ -21,7 +20,6 @@ export const RecordingTimeline: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
   const currentEventId = useAppSelector(selectCurrentEventId);
   const sortedEventIds = useAppSelector(selectSortedEventIds);
 
@@ -31,7 +29,7 @@ export const RecordingTimeline: React.FC<Props> = ({
     if (currentEventId && recordingEvents[currentEventId]) {
       setActiveItem(`step-${currentEventId}`);
     }
-  }, [currentEventIndex, currentEventId, recordingEvents, dispatch]);
+  }, [currentEventId, recordingEvents, dispatch]);
 
   return (
     <div className="mt-4 rounded-lg border p-4">
