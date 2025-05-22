@@ -101,10 +101,8 @@ export const AddEventDialogProvider: React.FC<Props> = ({
         events: { [eventId]: event },
       }).unwrap();
 
-      // Refetch recording to get updated events
       const { data: updatedRecording } = await refetch();
 
-      // Re-cache events if we have updated data
       if (updatedRecording && updatedRecording.events) {
         dispatch(cacheEvents(Object.values(updatedRecording.events)));
       }
