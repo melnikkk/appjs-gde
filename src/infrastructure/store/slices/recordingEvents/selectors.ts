@@ -1,25 +1,25 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../..';
 
-const selectEditorState = (state: RootState) => state.editor;
+const selectRecordingEventsState = (state: RootState) => state.recordingEvents;
 
 export const selectCurrentEventIndex = createSelector(
-  selectEditorState,
+  selectRecordingEventsState,
   (state) => state.currentEventIndex,
 );
 
 export const selectCurrentEventId = createSelector(
-  selectEditorState,
+  selectRecordingEventsState,
   (state) => state.currentEventId,
 );
 
 export const selectEventsCache = createSelector(
-  selectEditorState,
+  selectRecordingEventsState,
   (state) => state.eventsCache,
 );
 
 export const selectSortedEventIds = createSelector(
-  selectEditorState,
+  selectRecordingEventsState,
   (state) => state.sortedEventIds,
 );
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectSortedEventIds } from '@/infrastructure/store/slices/editor/selectors';
+import { selectSortedEventIds } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { RecordingEvents } from '@/domain/RecordingEvents';
 import { RecordingTimelineTrackerEvent } from './RecordingTimelineTrackerEvent';
 import { TimeMarker } from './TimeMarker';

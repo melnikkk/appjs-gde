@@ -7,8 +7,8 @@ import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import {
   selectCurrentEventId,
   selectSortedEventIds,
-} from '@/infrastructure/store/slices/editor/selectors';
-import { setCurrentEventId } from '@/infrastructure/store/slices/editor/slice';
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 
 interface Props {
   eventId: string;

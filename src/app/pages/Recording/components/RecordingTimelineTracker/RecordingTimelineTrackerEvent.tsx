@@ -1,7 +1,7 @@
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectCurrentEventId } from '@/infrastructure/store/slices/editor/selectors';
-import { setCurrentEventId } from '@/infrastructure/store/slices/editor/slice';
+import { selectCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { cn } from '@/lib/utils';
 import { useCallback } from 'react';
 import { formatDuration } from '@/app/shared/utils';

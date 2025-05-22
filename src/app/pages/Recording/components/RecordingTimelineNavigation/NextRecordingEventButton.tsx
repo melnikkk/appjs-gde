@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import {
   setCurrentEventId,
   setNextEventIndex,
-} from '@/infrastructure/store/slices/editor/slice';
-import { EventsCache } from '@/infrastructure/store/slices/editor/types';
+} from '@/infrastructure/store/slices/recordingEvents/slice';
+import { EventsCache } from '@/infrastructure/store/slices/recordingEvents/types';
 
 interface Props {
   currentEventIndex: number;

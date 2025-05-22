@@ -4,12 +4,12 @@ import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/a
 import {
   setCurrentEventId,
   cacheEvents,
-} from '@/infrastructure/store/slices/editor/slice';
+} from '@/infrastructure/store/slices/recordingEvents/slice';
 import {
   selectCurrentEventId,
   selectEventsAmount,
   selectEventsCache,
-} from '@/infrastructure/store/slices/editor/selectors';
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { Separator } from '@/components/ui/separator';

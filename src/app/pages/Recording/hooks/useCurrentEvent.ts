@@ -3,7 +3,7 @@ import { Recording } from '@/domain/Recordings';
 import {
   selectCurrentEventIndex,
   selectCurrentEventId,
-} from '@/infrastructure/store/slices/editor/selectors';
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 
 export const useCurrentEvent = (recording: Recording) => {
   const currentEventIndex = useAppSelector(selectCurrentEventIndex);
