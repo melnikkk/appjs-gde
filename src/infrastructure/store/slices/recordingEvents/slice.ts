@@ -20,39 +20,25 @@ export const recordingEventsSlice = createSlice({
   name: 'recordingEvents',
   initialState,
   reducers: {
-    setNextEventIndex: (state) => {
-      state.currentEventIndex += 1;
-    },
-    setPreviousEventIndex: (state) => {
-      state.currentEventIndex = Math.max(0, state.currentEventIndex - 1);
-    },
     setCurrentEventIndex: (state, action: PayloadAction<number>) => {
       state.currentEventIndex = action.payload;
-      state.currentEventId = state.eventsCache[action.payload] || null;
+      state.currentEventId = state.sortedEventIds[action.payload] || null;
     },
     setCurrentEventId: (state, action: PayloadAction<string>) => {
       state.currentEventId = action.payload;
     },
-    cacheEvents: (state, action: PayloadAction<Array<RecordingEvent>>) => {
+    setSortedRecordingEventsIds: (
+      state,
+      action: PayloadAction<Array<RecordingEvent>>,
+    ) => {
       const sortedEvents = [...action.payload].sort((a, b) => a.timestamp - b.timestamp);
-
-      state.eventsCache = sortedEvents.reduce<Record<number, string>>((cache, event) => {
-        cache[event.index] = event.id;
-
-        return cache;
-      }, {});
 
       state.sortedEventIds = sortedEvents.map((event) => event.id);
     },
   },
 });
 
-export const {
-  setNextEventIndex,
-  setPreviousEventIndex,
-  setCurrentEventIndex,
-  setCurrentEventId,
-  cacheEvents,
-} = recordingEventsSlice.actions;
+export const { setCurrentEventIndex, setCurrentEventId, setSortedRecordingEventsIds } =
+  recordingEventsSlice.actions;
 
 export default recordingEventsSlice.reducer;

@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { selectEventsAmount } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { cacheEvents } from '@/infrastructure/store/slices/recordingEvents/slice';
+import { setSortedRecordingEventsIds } from '@/infrastructure/store/slices/recordingEvents/slice';
 
 export interface EventFormData {
   time: number;
@@ -104,7 +104,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({
       const { data: updatedRecording } = await refetch();
 
       if (updatedRecording && updatedRecording.events) {
-        dispatch(cacheEvents(Object.values(updatedRecording.events)));
+        dispatch(setSortedRecordingEventsIds(Object.values(updatedRecording.events)));
       }
 
       toast.success(`Custom event "${data.type}" added successfully.`);
