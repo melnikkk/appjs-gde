@@ -3,32 +3,32 @@ import { ChevronLeft } from 'lucide-react';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { setCurrentEventIndex } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { Button } from '@/components/ui/button';
+import { TrackerEvents } from '@/app/pages/Recording/components/RecordingTimelineTracker/types';
 
 interface Props {
   currentEventIndex: number;
-  eventsAmount: number;
-  sortedEventsIds: Array<string>;
+  trackerEvents: TrackerEvents;
 }
 
 export const PreviousRecordingEventButton: React.FC<Props> = ({
   currentEventIndex,
-  eventsAmount,
-  sortedEventsIds,
+  trackerEvents,
 }) => {
   const dispatch = useAppDispatch();
 
+  const eventsAmount = trackerEvents.length;
   const isDisabled = currentEventIndex === 0;
 
   const onPreviousClick = useCallback(() => {
     if (currentEventIndex > 0 && eventsAmount > 0) {
       const previousEventIndex = Math.max(0, currentEventIndex - 1);
-      const previousEventId = sortedEventsIds[previousEventIndex];
+      const previousEventId = trackerEvents[previousEventIndex];
 
       if (previousEventId) {
         dispatch(setCurrentEventIndex(previousEventIndex));
       }
     }
-  }, [dispatch, currentEventIndex, eventsAmount, sortedEventsIds]);
+  }, [dispatch, currentEventIndex, eventsAmount, trackerEvents]);
 
   return (
     <Button

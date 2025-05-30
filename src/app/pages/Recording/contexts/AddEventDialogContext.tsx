@@ -6,9 +6,7 @@ import { RecordingEventType } from '@/domain/RecordingEvents/constants';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import { toast } from 'sonner';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { selectEventsAmount } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { setSortedRecordingEventsIds } from '@/infrastructure/store/slices/recordingEvents/slice';
 
 export interface EventFormData {
   time: number;
@@ -50,15 +48,13 @@ export const AddEventDialogProvider: React.FC<Props> = ({
   currentTime = 0,
 }) => {
   const { id: recordingId } = useParams({ strict: false });
-  const dispatch = useAppDispatch();
 
   const eventsAmount = useAppSelector(selectEventsAmount);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const [addEvents, { isLoading }] = useAddEventsMutation();
-
-  const { data: recording, refetch } = useGetRecordingQuery(
+  const { data: recording } = useGetRecordingQuery(
     { id: recordingId },
     { skip: !recordingId },
   );
@@ -71,7 +67,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({
     }
 
     try {
-      const timestamp = recording.startTime + data.time * 1000;
+      const timestamp = recording.startTime + data.time;
       const eventId = uuidv4();
       const eventData = {
         coordinates: {
@@ -81,8 +77,8 @@ export const AddEventDialogProvider: React.FC<Props> = ({
           pageY: 100,
         },
         view: {
-          innerWidth: Object.values(recording.events)[0]?.data.view.innerWidth || 1024,
-          innerHeight: Object.values(recording.events)[0]?.data.view.innerHeight || 768,
+          innerWidth: recording.viewData.width || 1024,
+          innerHeight: recording.viewData.height || 768,
           scrollX: 0,
           scrollY: 0,
         },
@@ -100,12 +96,6 @@ export const AddEventDialogProvider: React.FC<Props> = ({
         recordingId,
         events: { [eventId]: event },
       }).unwrap();
-
-      const { data: updatedRecording } = await refetch();
-
-      if (updatedRecording && updatedRecording.events) {
-        dispatch(setSortedRecordingEventsIds(Object.values(updatedRecording.events)));
-      }
 
       toast.success(`Custom event "${data.type}" added successfully.`);
 

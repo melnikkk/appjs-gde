@@ -27,8 +27,12 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetRecordingsQuery, useGetRecordingQuery, useDeleteRecordingMutation } =
-  recordingsApiSlice;
+export const {
+  useGetRecordingsQuery,
+  useGetRecordingQuery,
+  useLazyGetRecordingQuery,
+  useDeleteRecordingMutation,
+} = recordingsApiSlice;
 
 export const useRecordingEventsByRecordingId = (recordingId: string) => {
   return useGetRecordingQuery(

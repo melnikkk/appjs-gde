@@ -1,9 +1,9 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import {
   setCurrentEventId,
-  setSortedRecordingEventsIds,
+  setRecordingEvents,
 } from '@/infrastructure/store/slices/recordingEvents/slice';
 import {
   selectCurrentEventId,
@@ -14,22 +14,16 @@ import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { Separator } from '@/components/ui/separator';
 import { RecordingTimeline } from './components/RecordingTimeline';
-import { AddEventDialog } from './components/AddEventDialog';
 import { RecordingTimelineNavigation } from './components/RecordingTimelineNavigation';
 import { RecordingPlayer } from './RecordingPlayer';
-import { RecordingEventsPresenter } from './RecordingEventsPresenter';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
   const dispatch = useAppDispatch();
 
-  const [currentTime, setCurrentTime] = useState(0);
-
   const currentEventId = useAppSelector(selectCurrentEventId);
   const eventsAmount = useAppSelector(selectEventsAmount);
   const sortedEventsIds = useAppSelector(selectSortedEventIds);
-
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const { id } = useParams({ strict: false });
 
@@ -42,17 +36,9 @@ export const RecordingPage = () => {
     },
   );
 
-  const handleResize = useCallback((newDimensions: { width: number; height: number }) => {
-    setDimensions(newDimensions);
-  }, []);
-
-  const handleTimeUpdate = useCallback((time: number) => {
-    setCurrentTime(time);
-  }, []);
-
   useEffect(() => {
     if (recording && recording.events) {
-      dispatch(setSortedRecordingEventsIds(Object.values(recording.events)));
+      dispatch(setRecordingEvents(recording.events));
     }
   }, [recording, dispatch, eventsAmount]);
 
@@ -69,14 +55,7 @@ export const RecordingPage = () => {
   return (
     <>
       <div className="rounded-lg border p-4">
-        <div className="relative">
-          <RecordingPlayer
-            recording={recording}
-            onResize={handleResize}
-            onTimeUpdate={handleTimeUpdate}
-          />
-          <RecordingEventsPresenter recording={recording} dimensions={dimensions} />
-        </div>
+        <RecordingPlayer recording={recording} />
 
         <Separator className="my-4" />
 
@@ -85,14 +64,11 @@ export const RecordingPage = () => {
           startPointTimestamp={recording.startTime}
           endPointTimestamp={recording.stopTime}
           duration={recording.duration}
-          currentTime={currentTime}
         />
-
-        <div className="mt-3 flex items-center justify-end">
-          <AddEventDialog currentTime={currentTime} />
-        </div>
       </div>
+
       <RecordingTimeline
+        recording={recording}
         recordingEvents={recording.events}
         startPointTimestamp={recording.startTime}
       />

@@ -9,14 +9,6 @@ export interface ClickRecordingEventData {
   coordinates: {
     x: number;
     y: number;
-    pageX: number;
-    pageY: number;
-  };
-  view: {
-    innerWidth: number;
-    innerHeight: number;
-    scrollX: number;
-    scrollY: number;
   };
 }
 

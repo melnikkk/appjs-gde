@@ -1,22 +1,26 @@
+import { useEffect, useState } from 'react';
 import { RecordingEvents } from '@/domain/RecordingEvents';
 import { Accordion } from '@/components/ui/accordion';
-import { RecordingEventComponent } from '../RecordingEvent';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import {
   selectCurrentEventId,
   selectSortedEventIds,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { useEffect, useState } from 'react';
+import { AddEventDialog } from '@/app/pages/Recording/components/AddEventDialog';
+import { RecordingEventComponent } from '../RecordingEvent';
+import { Recording } from '@/domain/Recordings';
 
 interface Props {
   startPointTimestamp: number;
   recordingEvents: RecordingEvents;
+  recording: Recording;
 }
 
 export const RecordingTimeline: React.FC<Props> = ({
   recordingEvents,
   startPointTimestamp,
+  recording,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -33,10 +37,16 @@ export const RecordingTimeline: React.FC<Props> = ({
 
   return (
     <div className="mt-4 rounded-lg border p-4">
-      <h2 className="text-lg font-semibold">Recording Events Timeline</h2>
+      <div className="flex justify-between">
+        <div>
+          <h2 className="text-lg font-semibold">Recording Events Timeline</h2>
 
-      <div className="text-muted-foreground mb-4 text-sm">
-        Detected events in the recording
+          <div className="text-muted-foreground mb-4 text-sm">
+            Detected events in the recording
+          </div>
+        </div>
+
+        <AddEventDialog currentTime={0} />
       </div>
 
       <Accordion
@@ -52,6 +62,7 @@ export const RecordingTimeline: React.FC<Props> = ({
             id={eventId}
             index={index}
             startPointTimestamp={startPointTimestamp}
+            initialDimensions={recording.viewData}
           />
         ))}
       </Accordion>

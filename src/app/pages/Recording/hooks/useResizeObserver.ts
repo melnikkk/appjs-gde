@@ -2,10 +2,8 @@ import { useEffect, useState, RefObject } from 'react';
 
 export const useResizeObserver = <T extends HTMLElement>(
   elementRef: RefObject<T | null>,
-): { width: number; height: number } | null => {
-  const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(
-    null,
-  );
+): Dimensions | null => {
+  const [dimensions, setDimensions] = useState<Dimensions | null>(null);
 
   useEffect(() => {
     const element = elementRef.current;

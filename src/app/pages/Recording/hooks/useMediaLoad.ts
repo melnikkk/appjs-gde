@@ -7,7 +7,7 @@ export const useMediaLoad = (): {
   isLoaded: boolean;
   handleMediaLoad: () => void;
 } => {
-  const mediaRef = useRef<MediaElement>(null);
+  const mediaRef = useRef<MediaElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMediaLoad = () => {

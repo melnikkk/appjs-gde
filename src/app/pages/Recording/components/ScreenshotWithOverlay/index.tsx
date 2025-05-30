@@ -1,15 +1,15 @@
-import { useRef } from 'react';
-import Konva from 'konva';
 import { RecordingEvent } from '@/domain/RecordingEvents';
-import { MediaOverlay } from '../../MediaOverlay';
 import { useMediaDimensions } from '../../hooks/useMediaDimensions';
+import { RecordingEventsPresenter } from '@/app/pages/Recording/RecordingEventsPresenter';
+import { Dimensions } from '@/domain/Recordings';
 
 interface Props {
   screenshotUrl: string;
-  event: RecordingEvent;
   alt?: string;
-  maxHeight?: number;
   className?: string;
+  maxHeight?: number;
+  initialDimensions: Dimensions;
+  event: RecordingEvent;
 }
 
 export const ScreenshotWithOverlay: React.FC<Props> = ({
@@ -18,9 +18,8 @@ export const ScreenshotWithOverlay: React.FC<Props> = ({
   alt = 'Screenshot',
   maxHeight = 400,
   className = '',
+  initialDimensions,
 }) => {
-  const stageRef = useRef<Konva.Stage | null>(null);
-
   const { mediaRef, dimensions, handleMediaLoad } = useMediaDimensions();
 
   return (
@@ -35,12 +34,10 @@ export const ScreenshotWithOverlay: React.FC<Props> = ({
       />
 
       {dimensions && (
-        <MediaOverlay
-          width={dimensions.width}
-          height={dimensions.height}
-          event={event}
-          stageRef={stageRef}
-          markerColor="green"
+        <RecordingEventsPresenter
+          dimensions={dimensions}
+          initialEventCoordinates={event.data.coordinates}
+          initialDimensions={initialDimensions}
         />
       )}
     </div>
