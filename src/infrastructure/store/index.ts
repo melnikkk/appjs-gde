@@ -1,9 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { apiSlice } from './api';
 import { recordingEventsSlice } from './slices/recordingEvents/slice';
+import { editorSlice } from '@/infrastructure/store/slices/editor/slice';
 
 const rootReducer = combineReducers({
   [recordingEventsSlice.name]: recordingEventsSlice.reducer,
+  [editorSlice.name]: editorSlice.reducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 

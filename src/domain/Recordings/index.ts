@@ -1,5 +1,10 @@
 import { RecordingEvents } from '../RecordingEvents';
 
+export interface Dimensions {
+  width: number;
+  height: number;
+}
+
 export interface Recording {
   id: string;
   name: string;
@@ -10,6 +15,7 @@ export interface Recording {
   stopTime: number;
   duration: number;
   thumbnailUrl: string | null;
+  viewData: Dimensions;
   events: RecordingEvents;
 }
 

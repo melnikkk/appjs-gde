@@ -1,19 +1,25 @@
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { selectCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
+import {
+  setCurrentEventId,
+  setRecordingEventToAdd,
+} from '@/infrastructure/store/slices/recordingEvents/slice';
 import { cn } from '@/lib/utils';
 import { useCallback } from 'react';
 import { formatDuration } from '@/app/shared/utils';
+import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
 
 interface Props {
+  isNewEvent?: boolean;
   recordingEventId: string;
   recordingEventTimestamp: number;
   position: number;
   startPointTimestamp: number;
 }
 
-export const RecordingTimelineTrackerEvent: React.FC<Props> = ({
+export const TimelineTrackerEvent: React.FC<Props> = ({
+  isNewEvent,
   recordingEventId,
   recordingEventTimestamp,
   position,
@@ -24,11 +30,19 @@ export const RecordingTimelineTrackerEvent: React.FC<Props> = ({
   const currentEventId = useAppSelector(selectCurrentEventId);
 
   const isActive = recordingEventId === currentEventId;
-  const eventTime = formatDuration(recordingEventTimestamp - startPointTimestamp);
+  const pauseTimestamp = recordingEventTimestamp - startPointTimestamp;
+  const eventTime = formatDuration(pauseTimestamp);
 
-  const onClick = useCallback(() => {
-    dispatch(setCurrentEventId(recordingEventId));
-  }, [dispatch, recordingEventId]);
+  const onClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+
+      dispatch(setCurrentEventId(recordingEventId));
+      dispatch(setRecordingEventToAdd(null));
+      dispatch(setRecordingPauseTimestamp(pauseTimestamp));
+    },
+    [dispatch, recordingEventId],
+  );
 
   return (
     <div className="absolute" style={{ left: `${position}%` }}>
@@ -36,8 +50,9 @@ export const RecordingTimelineTrackerEvent: React.FC<Props> = ({
         className={cn(
           'absolute top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/4 cursor-pointer rounded-full transition-all duration-150',
           isActive
-            ? 'bg-primary ring-primary/30 scale-110 ring-2'
-            : 'bg-black hover:scale-105 hover:bg-gray-800',
+            ? 'ring-primary/30 scale-110 ring-2'
+            : 'hover:scale-105 hover:bg-gray-800',
+          isNewEvent ? 'bg-secondary' : 'bg-primary',
         )}
         onClick={onClick}
       />

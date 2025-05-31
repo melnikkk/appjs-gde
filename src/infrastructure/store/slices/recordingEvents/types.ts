@@ -10,4 +10,17 @@ export interface DeleteRecordingEventDto {
   eventId: string;
 }
 
-export type EventsCache = Record<number, string>;
+export interface RecordingEventToAddDto {
+  id: string;
+  trackerPosition: number;
+  timestamp: number;
+  coordinates: Coordinates;
+}
+
+export interface RecordingEventsState {
+  currentEventIndex: number;
+  currentEventId: string | null;
+  sortedEventIds: Array<string>;
+  entities: RecordingEvents;
+  recordingEventToAdd: RecordingEventToAddDto | null;
+}

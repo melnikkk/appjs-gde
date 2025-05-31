@@ -15,17 +15,20 @@ import { useRecordingEventsByRecordingId } from '@/infrastructure/store/slices/r
 import { useParams } from '@tanstack/react-router';
 import { DeleteEventButton } from '../DeleteEventButton';
 import { ScreenshotWithOverlay } from '../ScreenshotWithOverlay';
+import { Dimensions } from '@/domain/Recordings';
 
 interface Props {
   id: string;
   index: number;
   startPointTimestamp: number;
+  initialDimensions: Dimensions;
 }
 
 export const RecordingEventComponent: React.FC<Props> = ({
   id,
   index,
   startPointTimestamp,
+  initialDimensions,
 }) => {
   const dispatch = useAppDispatch();
   const { id: recordingId } = useParams({ strict: false });
@@ -96,6 +99,7 @@ export const RecordingEventComponent: React.FC<Props> = ({
           {hasScreenshot ? (
             fullScreenshotUrl ? (
               <ScreenshotWithOverlay
+                initialDimensions={initialDimensions}
                 screenshotUrl={fullScreenshotUrl}
                 event={recordingEvent}
                 alt={`Screenshot for ${recordingEventTitle}`}

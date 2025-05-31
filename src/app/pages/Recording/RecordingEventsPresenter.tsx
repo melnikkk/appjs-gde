@@ -1,31 +1,27 @@
-import React, { useRef } from 'react';
-import Konva from 'konva';
-import { Recording } from '@/domain/Recordings';
+import { Dimensions } from '@/domain/Recordings';
 import { CanvasOverlay } from './CanvasOverlay';
-import { useCurrentEvent } from './hooks/useCurrentEvent';
+import { scaleCoordinates } from '@/domain/RecordingEvents/utils';
+import { Coordinates } from '@/domain/RecordingEvents';
 
 interface Props {
-  recording: Recording;
-  dimensions?: { width: number; height: number };
+  initialDimensions: Dimensions;
+  initialEventCoordinates: Coordinates;
+  dimensions: Dimensions | null;
 }
 
-export const RecordingEventsPresenter: React.FC<Props> = ({ recording, dimensions }) => {
-  const stageRef = useRef<Konva.Stage>(null);
-  const { currentEvent } = useCurrentEvent(recording);
+export const RecordingEventsPresenter: React.FC<Props> = ({
+  dimensions,
+  initialDimensions,
+  initialEventCoordinates,
+}) => {
+  const width = dimensions?.width || initialDimensions.width;
+  const height = dimensions?.height || initialDimensions.height;
 
-  if (!currentEvent) {
-    return null;
-  }
-
-  const width = dimensions?.width || currentEvent.data.view.innerWidth;
-  const height = dimensions?.height || currentEvent.data.view.innerHeight;
-
-  return (
-    <CanvasOverlay
-      event={currentEvent}
-      width={width}
-      height={height}
-      stageRef={stageRef}
-    />
+  const scaledCoordinates = scaleCoordinates(
+    { width, height },
+    initialDimensions,
+    initialEventCoordinates,
   );
+
+  return <CanvasOverlay coordinates={scaledCoordinates} width={width} height={height} />;
 };
