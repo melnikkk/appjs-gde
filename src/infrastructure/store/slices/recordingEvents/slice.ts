@@ -17,7 +17,7 @@ export const recordingEventsSlice = createSlice({
       state.currentEventIndex = payload;
       state.currentEventId = state.sortedEventIds[payload] || null;
     },
-    setCurrentEventId: (state, { payload }: PayloadAction<string>) => {
+    setCurrentEventId: (state, { payload }: PayloadAction<string | null>) => {
       state.currentEventId = payload;
     },
     setRecordingEvents: (state, { payload }: PayloadAction<RecordingEvents>) => {

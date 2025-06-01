@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
+import { Toaster } from 'sonner';
 import { useRouterState } from '@tanstack/react-router';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { Toaster } from 'sonner';
 import { useHeaderTitle } from '@/app/shared/hooks/useHeaderTitle';
 import { AppSidebar } from './components/LeftSidebar';
 import { Header } from './components/Header';
@@ -35,7 +35,9 @@ export const AppLayout: React.FC<Props> = ({ children }) => {
           onSave={routePath.includes('/recordings/') ? handleSave : undefined}
           onExport={routePath.includes('/recordings/') ? handleExport : undefined}
         />
-        <div className="mt-13 h-[calc(100vh-52px)]">{children}</div>
+        <div className="mt-[var(--header-height)] h-[calc(100%-var(--header-height))]">
+          {children}
+        </div>
       </main>
     </SidebarProvider>
   );

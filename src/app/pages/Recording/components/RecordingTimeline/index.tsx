@@ -46,7 +46,7 @@ export const RecordingTimeline: React.FC<Props> = ({
           </div>
         </div>
 
-        <AddEventDialog currentTime={0} />
+        <AddEventDialog />
       </div>
 
       <Accordion

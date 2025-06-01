@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { AddEventHint } from './AddEventHint';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
+import { DEFAULT_RECORDING_EVENT_COORDINATES } from '@/domain/RecordingEvents/constants';
 
 interface Props extends React.PropsWithChildren {
   startPointTimestamp: number;
@@ -18,7 +19,7 @@ export const TimelineTracker: React.FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const [isHovering, setIsHovering] = useState(false);
-  const [hintPosition, setHintPosition] = useState({ x: 0, y: 0 });
+  const [hintPosition, setHintPosition] = useState(DEFAULT_RECORDING_EVENT_COORDINATES);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
