@@ -23,11 +23,6 @@ export const selectEventsAmount = createSelector(
   (events) => events.length,
 );
 
-export const selectRecordingEventToAdd = createSelector(
-  selectRecordingEventsState,
-  (state) => state.recordingEventToAdd,
-);
-
 export const selectRecordingEventsEntities = createSelector(
   selectRecordingEventsState,
   (state) => state.entities,
@@ -43,3 +38,8 @@ export const selectCurrentEvent = createSelector(
   selectCurrentEventId,
   (entities, eventId) => (eventId ? entities[eventId] : null),
 );
+
+export const selectDoesRecordingEventExist = (eventId: string | undefined) =>
+  createSelector(selectRecordingEventsEntities, (entities) =>
+    eventId ? Boolean(entities[eventId]) : false,
+  );

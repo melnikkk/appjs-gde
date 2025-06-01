@@ -10,7 +10,6 @@ export const AddEventDialogTrigger = () => {
     <DialogTrigger asChild>
       <Button className="flex items-center gap-1.5" onClick={() => setIsOpen(true)}>
         <PlusIcon className="h-4 w-4" />
-        Add Custom Event
       </Button>
     </DialogTrigger>
   );

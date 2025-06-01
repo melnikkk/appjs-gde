@@ -36,7 +36,7 @@ export const ScreenshotWithOverlay: React.FC<Props> = ({
       {dimensions && (
         <RecordingEventsPresenter
           dimensions={dimensions}
-          initialEventCoordinates={event.data.coordinates}
+          coordinates={event.data.coordinates}
           initialDimensions={initialDimensions}
         />
       )}

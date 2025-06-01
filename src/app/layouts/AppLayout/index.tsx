@@ -35,7 +35,7 @@ export const AppLayout: React.FC<Props> = ({ children }) => {
           onSave={routePath.includes('/recordings/') ? handleSave : undefined}
           onExport={routePath.includes('/recordings/') ? handleExport : undefined}
         />
-        <div className="mt-13 p-6">{children}</div>
+        <div className="mt-13 h-[calc(100vh-52px)]">{children}</div>
       </main>
     </SidebarProvider>
   );

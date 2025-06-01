@@ -3,7 +3,7 @@ import { ChevronLeft } from 'lucide-react';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { setCurrentEventIndex } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { Button } from '@/components/ui/button';
-import { TrackerEvents } from '@/app/pages/Recording/components/RecordingTimelineTracker/types';
+import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
 
 interface Props {
   currentEventIndex: number;
