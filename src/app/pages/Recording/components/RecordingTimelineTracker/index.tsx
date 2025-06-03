@@ -13,10 +13,6 @@ import {
 import { TimelineTrackerEvent } from './TimelineTrackerEvent';
 import { TimeMarker } from './TimeMarker';
 import { TimelineTracker } from './TimelineTracker';
-import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
-import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
-import { selectDoesRecordingEventExist } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
 
 interface Props {
   startPointTimestamp: number;

@@ -71,6 +71,7 @@ export const TimelineTracker: React.FC<Props> = ({
       >
         {children}
       </div>
+
       <AddEventHint isHovering={isHovering} position={hintPosition} />
     </div>
   );

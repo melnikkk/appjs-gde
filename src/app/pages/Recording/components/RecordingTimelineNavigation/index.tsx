@@ -18,7 +18,7 @@ import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
 import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';
 import { NextRecordingEventButton } from './NextRecordingEventButton';
 import { useParams } from '@tanstack/react-router';
-import { useAddEventsMutation } from '@/infrastructure/store/slices/recordingEvents/api';
+import { useAddEventsMutation, useEditRecordingEventMutation, } from '@/infrastructure/store/slices/recordingEvents/api';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import { DEFAULT_RECORDING_EVENT_COORDINATES } from '@/domain/RecordingEvents/constants';
@@ -46,7 +46,9 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
 
   const { id: recordingId } = useParams({ strict: false });
 
-  const [addEvents, { isLoading: isSubmitting }] = useAddEventsMutation();
+  const [triggerAddEvents, { isLoading: isAddEventsSubmitting }] = useAddEventsMutation();
+  const [triggerUpdateRecordingEvent, { isLoading: isEditRecordingEventSubmitting }] =
+    useEditRecordingEventMutation();
 
   const { dimensions: recordingDimensions } = useMediaDimensions();
 
@@ -75,30 +77,52 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
       return;
     }
 
-    const eventId = uuidv4();
     const { coordinates, timestamp } = selectedTrackerEvent;
 
-    try {
-      await addEvents({
-        recordingId,
-        events: {
-          [eventId]: {
-            id: eventId,
-            timestamp,
+    if (mode === EventFormMode.EDIT) {
+      try {
+        await triggerUpdateRecordingEvent({
+          recordingId,
+          eventId: selectedTrackerEvent.id,
+          event: {
+            id: selectedTrackerEvent.id,
+            timestamp: selectedTrackerEvent.timestamp,
             type: values.type,
             data: {
               coordinates: coordinates ?? DEFAULT_RECORDING_EVENT_COORDINATES,
             },
-            screenshotUrl: null,
           },
-        },
-      }).unwrap();
+        });
+      } catch (e) {
+        toast.error('Failed to edit custom event. Please try again.');
+      }
+    }
 
-      onClose();
+    if (mode === EventFormMode.CREATE) {
+      const eventId = uuidv4();
 
-      toast.success(`Custom event "${values.type}" added successfully.`);
-    } catch (error) {
-      toast.error('Failed to add custom event. Please try again.');
+      try {
+        await triggerAddEvents({
+          recordingId,
+          events: {
+            [eventId]: {
+              id: eventId,
+              timestamp,
+              type: values.type,
+              data: {
+                coordinates: coordinates ?? DEFAULT_RECORDING_EVENT_COORDINATES,
+              },
+              screenshotUrl: null,
+            },
+          },
+        }).unwrap();
+
+        onClose();
+
+        toast.success(`Custom event "${values.type}" added successfully.`);
+      } catch (error) {
+        toast.error('Failed to add custom event. Please try again.');
+      }
     }
   };
 
@@ -132,7 +156,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
             className="pt-2"
             isTimeFieldEditable={false}
             mode={mode}
-            isSubmitting={isSubmitting}
+            isSubmitting={isAddEventsSubmitting || isEditRecordingEventSubmitting}
             initialValues={{
               time: selectedTrackerEvent.timestamp - startPointTimestamp,
             }}
