@@ -13,6 +13,7 @@ import {
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { Separator } from '@/components/ui/separator';
+import { Sidebar, SidebarContent, SidebarProvider } from '@/components/ui/sidebar';
 import { RecordingTimeline } from './components/RecordingTimeline';
 import { RecordingTimelineNavigation } from './components/RecordingTimelineNavigation';
 import { RecordingPlayer } from './RecordingPlayer';
@@ -53,25 +54,42 @@ export const RecordingPage = () => {
   }
 
   return (
-    <>
-      <div className="rounded-lg border p-4">
-        <RecordingPlayer recording={recording} />
+    <div className="flex h-full">
+      <SidebarProvider
+        style={
+          {
+            '--sidebar-width': '350px',
+            '--sidebar-width-mobile': '300px',
+          } as React.CSSProperties
+        }
+        className="min-h-fit"
+      >
+        <div className="flex-1 px-3 pt-3">
+          <div className="rounded-lg border p-4">
+            <RecordingPlayer recording={recording} />
 
-        <Separator className="my-4" />
+            <Separator className="my-4" />
 
-        <RecordingTimelineNavigation
-          recordingEvents={recording.events}
-          startPointTimestamp={recording.startTime}
-          endPointTimestamp={recording.stopTime}
-          duration={recording.duration}
-        />
-      </div>
+            <RecordingTimelineNavigation
+              recordingEvents={recording.events}
+              startPointTimestamp={recording.startTime}
+              endPointTimestamp={recording.stopTime}
+              duration={recording.duration}
+              initialRecordingDimensions={recording.viewData}
+            />
+          </div>
+        </div>
 
-      <RecordingTimeline
-        recording={recording}
-        recordingEvents={recording.events}
-        startPointTimestamp={recording.startTime}
-      />
-    </>
+        <Sidebar side="right" collapsible="none" className="border-l">
+          <SidebarContent>
+            <RecordingTimeline
+              recording={recording}
+              recordingEvents={recording.events}
+              startPointTimestamp={recording.startTime}
+            />
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>
+    </div>
   );
 };

@@ -1,14 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RecordingEvents } from '@/domain/RecordingEvents';
-import {
-  RecordingEventsState,
-  RecordingEventToAddDto,
-} from '@/infrastructure/store/slices/recordingEvents/types';
+import { RecordingEventsState } from '@/infrastructure/store/slices/recordingEvents/types';
 
 const initialState: RecordingEventsState = {
   currentEventIndex: 0,
   currentEventId: null,
-  recordingEventToAdd: null,
   entities: {},
   sortedEventIds: [],
 };
@@ -32,20 +28,10 @@ export const recordingEventsSlice = createSlice({
       state.sortedEventIds = sortedEvents.map((event) => event.id);
       state.entities = payload;
     },
-    setRecordingEventToAdd: (
-      state,
-      { payload }: PayloadAction<RecordingEventToAddDto | null>,
-    ) => {
-      state.recordingEventToAdd = payload;
-    },
   },
 });
 
-export const {
-  setCurrentEventIndex,
-  setCurrentEventId,
-  setRecordingEvents,
-  setRecordingEventToAdd,
-} = recordingEventsSlice.actions;
+export const { setCurrentEventIndex, setCurrentEventId, setRecordingEvents } =
+  recordingEventsSlice.actions;
 
 export default recordingEventsSlice.reducer;

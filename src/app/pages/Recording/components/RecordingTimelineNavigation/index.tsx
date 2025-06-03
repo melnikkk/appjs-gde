@@ -1,40 +1,50 @@
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import {
-  selectCurrentEventIndex,
-  selectRecordingEventToAdd,
-} from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { selectCurrentEventIndex } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { RecordingEvents } from '@/domain/RecordingEvents';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { setRecordingEventToAdd } from '@/infrastructure/store/slices/recordingEvents/slice';
-import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
-import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';
-import { NextRecordingEventButton } from './NextRecordingEventButton';
 import { AddEventForm } from '@/app/pages/Recording/components/AddEventDialog/AddEventForm';
 import { useTrackerEvents } from '@/app/pages/Recording/components/RecordingTimelineTracker/hooks';
 import { AddEventDialogProvider } from '@/app/pages/Recording/contexts/AddEventDialogContext';
+import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
+import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
+import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
+import { Dimensions } from '@/domain/Recordings';
+import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
+import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';
+import { NextRecordingEventButton } from './NextRecordingEventButton';
 
 interface Props {
   startPointTimestamp: number;
   endPointTimestamp: number;
   duration: number;
   recordingEvents: RecordingEvents;
+  initialRecordingDimensions: Dimensions;
 }
 
 export const RecordingTimelineNavigation: React.FC<Props> = ({
   recordingEvents,
   startPointTimestamp,
   duration,
+  initialRecordingDimensions,
 }) => {
   const dispatch = useAppDispatch();
 
+  const { dimensions: recordingDimensions } = useMediaDimensions();
+
   const currentEventIndex = useAppSelector(selectCurrentEventIndex);
-  const recordingEventToAdd = useAppSelector(selectRecordingEventToAdd);
+  const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
 
   const { trackerEvents } = useTrackerEvents({
     recordingEvents,
     startPointTimestamp,
     recordingDuration: duration,
+    recordingDimensions,
+    initialRecordingDimensions,
   });
+
+  const onClose = () => {
+    dispatch(setSelectedTrackerEvent(null));
+  };
 
   return (
     <>
@@ -53,7 +63,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
           trackerEvents={trackerEvents}
         />
       </div>
-      {recordingEventToAdd ? (
+      {selectedTrackerEvent ? (
         <div className="mx-2">
           <div className="mb-2 space-y-2">
             <h4 className="font-medium">Add Event</h4>
@@ -65,8 +75,8 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
             <AddEventForm
               className="pt-2"
               isTimeFieldEditable={false}
-              initialTime={recordingEventToAdd.timestamp - startPointTimestamp}
-              onClose={() => dispatch(setRecordingEventToAdd(null))}
+              initialTime={selectedTrackerEvent.timestamp - startPointTimestamp}
+              onClose={onClose}
             />
           </AddEventDialogProvider>
         </div>

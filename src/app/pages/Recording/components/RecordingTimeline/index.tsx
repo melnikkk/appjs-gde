@@ -10,6 +10,7 @@ import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { AddEventDialog } from '@/app/pages/Recording/components/AddEventDialog';
 import { RecordingEventComponent } from '../RecordingEvent';
 import { Recording } from '@/domain/Recordings';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Props {
   startPointTimestamp: number;
@@ -36,12 +37,11 @@ export const RecordingTimeline: React.FC<Props> = ({
   }, [currentEventId, recordingEvents, dispatch]);
 
   return (
-    <div className="mt-4 rounded-lg border p-4">
-      <div className="flex justify-between">
+    <div className="px-2 pt-3">
+      <div className="mb-4 flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold">Recording Events Timeline</h2>
-
-          <div className="text-muted-foreground mb-4 text-sm">
+          <h2 className="text-lg font-semibold">Recording Events</h2>
+          <div className="text-muted-foreground text-sm">
             Detected events in the recording
           </div>
         </div>
@@ -56,15 +56,17 @@ export const RecordingTimeline: React.FC<Props> = ({
         value={activeItem}
         onValueChange={setActiveItem}
       >
-        {sortedEventIds.map((eventId, index) => (
-          <RecordingEventComponent
-            key={eventId}
-            id={eventId}
-            index={index}
-            startPointTimestamp={startPointTimestamp}
-            initialDimensions={recording.viewData}
-          />
-        ))}
+        <ScrollArea>
+          {sortedEventIds.map((eventId, index) => (
+            <RecordingEventComponent
+              key={eventId}
+              id={eventId}
+              index={index}
+              startPointTimestamp={startPointTimestamp}
+              initialDimensions={recording.viewData}
+            />
+          ))}
+        </ScrollArea>
       </Accordion>
     </div>
   );

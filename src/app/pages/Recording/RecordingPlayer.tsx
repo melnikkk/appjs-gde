@@ -1,11 +1,11 @@
 import { Recording } from '@/domain/Recordings';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import {
-  selectCurrentEvent,
-  selectRecordingEventToAdd,
-} from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { selectCurrentEvent } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { VideoPlayer } from './VideoPlayer';
-import { selectRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/selectors';
+import {
+  selectSelectedTrackerEvent,
+  selectRecordingPauseTimestamp,
+} from '@/infrastructure/store/slices/editor/selectors';
 import { RecordingEventsPresenter } from '@/app/pages/Recording/RecordingEventsPresenter';
 import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
 
@@ -19,7 +19,7 @@ export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) =>
   const videoRef = mediaRef as React.RefObject<HTMLVideoElement>;
 
   const currentEvent = useAppSelector(selectCurrentEvent);
-  const recordingEventToAdd = useAppSelector(selectRecordingEventToAdd);
+  const recordingEventToAdd = useAppSelector(selectSelectedTrackerEvent);
   const recordingPauseTimestamp = useAppSelector(selectRecordingPauseTimestamp);
 
   const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
@@ -39,7 +39,7 @@ export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) =>
       {(currentEvent || recordingEventToAdd) && (
         <RecordingEventsPresenter
           initialDimensions={recording.viewData}
-          initialEventCoordinates={
+          coordinates={
             currentEvent?.data.coordinates ||
             recordingEventToAdd?.coordinates || { x: 0, y: 0 }
           }

@@ -7,3 +7,8 @@ export const selectRecordingPauseTimestamp = createSelector(
   selectEditorState,
   (state) => state.recordingPauseTimestamp ?? 0,
 );
+
+export const selectSelectedTrackerEvent = createSelector(
+  selectEditorState,
+  (state) => state.selectedTrackerEvent,
+);

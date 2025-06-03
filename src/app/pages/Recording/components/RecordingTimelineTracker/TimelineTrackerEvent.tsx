@@ -1,35 +1,38 @@
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { selectCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import {
-  setCurrentEventId,
-  setRecordingEventToAdd,
-} from '@/infrastructure/store/slices/recordingEvents/slice';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { cn } from '@/lib/utils';
 import { useCallback } from 'react';
 import { formatDuration } from '@/app/shared/utils';
-import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
+import {
+  setRecordingPauseTimestamp,
+  setSelectedTrackerEvent,
+} from '@/infrastructure/store/slices/editor/slice';
+import { TrackerEvent } from '@/infrastructure/store/slices/editor/types';
 
 interface Props {
   isNewEvent?: boolean;
-  recordingEventId: string;
-  recordingEventTimestamp: number;
-  position: number;
   startPointTimestamp: number;
+  trackerEvent: TrackerEvent;
 }
 
 export const TimelineTrackerEvent: React.FC<Props> = ({
   isNewEvent,
-  recordingEventId,
-  recordingEventTimestamp,
-  position,
   startPointTimestamp,
+  trackerEvent,
 }) => {
+  const {
+    id: recordingEventId,
+    timestamp: recordingEventTimestamp,
+    trackerPosition,
+    coordinates,
+  } = trackerEvent;
   const dispatch = useAppDispatch();
 
   const currentEventId = useAppSelector(selectCurrentEventId);
 
-  const isActive = recordingEventId === currentEventId;
+  const isActive = trackerEvent.id === currentEventId;
   const pauseTimestamp = recordingEventTimestamp - startPointTimestamp;
   const eventTime = formatDuration(pauseTimestamp);
 
@@ -38,14 +41,21 @@ export const TimelineTrackerEvent: React.FC<Props> = ({
       e.stopPropagation();
 
       dispatch(setCurrentEventId(recordingEventId));
-      dispatch(setRecordingEventToAdd(null));
+      dispatch(
+        setSelectedTrackerEvent({
+          id: recordingEventId,
+          timestamp: recordingEventTimestamp,
+          coordinates,
+          trackerPosition,
+        }),
+      );
       dispatch(setRecordingPauseTimestamp(pauseTimestamp));
     },
     [dispatch, recordingEventId],
   );
 
   return (
-    <div className="absolute" style={{ left: `${position}%` }}>
+    <div className="absolute" style={{ left: `${trackerPosition}%` }}>
       <div
         className={cn(
           'absolute top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/4 cursor-pointer rounded-full transition-all duration-150',
