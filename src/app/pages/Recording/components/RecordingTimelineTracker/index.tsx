@@ -2,13 +2,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { TimelineTrackerEvent } from './TimelineTrackerEvent';
-import { TimeMarker } from './TimeMarker';
-import { TimelineTracker } from './TimelineTracker';
 import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
 import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
 import { selectDoesRecordingEventExist } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
+import {
+  DEFAULT_RECORDING_EVENT_COORDINATES,
+  RecordingEventType,
+} from '@/domain/RecordingEvents/constants';
+import { TimelineTrackerEvent } from './TimelineTrackerEvent';
+import { TimeMarker } from './TimeMarker';
+import { TimelineTracker } from './TimelineTracker';
 
 interface Props {
   startPointTimestamp: number;
@@ -37,7 +41,8 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
         id,
         timestamp,
         trackerPosition,
-        coordinates: { x: 50, y: 50 },
+        coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
+        type: RecordingEventType.CLICK,
       }),
     );
     dispatch(setCurrentEventId(id));

@@ -1,4 +1,4 @@
-import { RecordingEvents } from '@/domain/RecordingEvents';
+import { RecordingEvent, RecordingEvents } from '@/domain/RecordingEvents';
 
 export interface AddRecordingEventsDto {
   recordingId: string;
@@ -8,6 +8,12 @@ export interface AddRecordingEventsDto {
 export interface DeleteRecordingEventDto {
   recordingId: string;
   eventId: string;
+}
+
+export interface EditRecordingEventDto {
+  recordingId: string;
+  eventId: string;
+  event: Partial<RecordingEvent>;
 }
 
 export interface RecordingEventsState {

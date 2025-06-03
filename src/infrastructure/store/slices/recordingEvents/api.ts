@@ -1,10 +1,15 @@
+import { RecordingEvent, RecordingEvents } from '@/domain/RecordingEvents';
 import { apiSlice } from '../../api';
 import { Tag } from '../../constants';
-import { AddRecordingEventsDto, DeleteRecordingEventDto } from './types';
+import {
+  AddRecordingEventsDto,
+  DeleteRecordingEventDto,
+  EditRecordingEventDto,
+} from './types';
 
 export const recordingEventsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    addEvents: builder.mutation<void, AddRecordingEventsDto>({
+    addEvents: builder.mutation<RecordingEvents, AddRecordingEventsDto>({
       query: ({ recordingId, events }) => ({
         url: `recordings/${recordingId}/events`,
         method: 'POST',
@@ -19,7 +24,19 @@ export const recordingEventsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [Tag.RECORDING_EVENTS, Tag.RECORDING],
     }),
+    editRecordingEvent: builder.mutation<RecordingEvent, EditRecordingEventDto>({
+      query: ({ recordingId, eventId, event }) => ({
+        url: `recordings/${recordingId}/events/${eventId}`,
+        method: 'PATCH',
+        body: event,
+      }),
+      invalidatesTags: [Tag.RECORDING_EVENTS, Tag.RECORDING],
+    }),
   }),
 });
 
-export const { useAddEventsMutation, useDeleteEventMutation } = recordingEventsApiSlice;
+export const {
+  useAddEventsMutation,
+  useDeleteEventMutation,
+  useEditRecordingEventMutation,
+} = recordingEventsApiSlice;

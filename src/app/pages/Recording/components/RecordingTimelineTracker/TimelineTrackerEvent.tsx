@@ -27,7 +27,9 @@ export const TimelineTrackerEvent: React.FC<Props> = ({
     timestamp: recordingEventTimestamp,
     trackerPosition,
     coordinates,
+    type,
   } = trackerEvent;
+
   const dispatch = useAppDispatch();
 
   const currentEventId = useAppSelector(selectCurrentEventId);
@@ -47,11 +49,12 @@ export const TimelineTrackerEvent: React.FC<Props> = ({
           timestamp: recordingEventTimestamp,
           coordinates,
           trackerPosition,
+          type,
         }),
       );
       dispatch(setRecordingPauseTimestamp(pauseTimestamp));
     },
-    [dispatch, recordingEventId],
+    [dispatch, recordingEventId, trackerEvent],
   );
 
   return (

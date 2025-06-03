@@ -8,6 +8,7 @@ import {
 } from '@/infrastructure/store/slices/editor/selectors';
 import { RecordingEventsPresenter } from '@/app/pages/Recording/RecordingEventsPresenter';
 import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
+import { DEFAULT_RECORDING_EVENT_COORDINATES } from '@/domain/RecordingEvents/constants';
 
 interface Props {
   recording: Recording;
@@ -41,7 +42,8 @@ export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) =>
           initialDimensions={recording.viewData}
           coordinates={
             currentEvent?.data.coordinates ||
-            recordingEventToAdd?.coordinates || { x: 0, y: 0 }
+            recordingEventToAdd?.coordinates ||
+            DEFAULT_RECORDING_EVENT_COORDINATES
           }
           dimensions={dimensions}
         />

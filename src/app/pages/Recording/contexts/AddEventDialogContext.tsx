@@ -2,11 +2,17 @@ import React, { createContext, ReactNode, useState } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { v4 as uuidv4 } from 'uuid';
 import { useAddEventsMutation } from '@/infrastructure/store/slices/recordingEvents/api';
-import { RecordingEventType } from '@/domain/RecordingEvents/constants';
+import {
+  DEFAULT_RECORDING_EVENT_COORDINATES,
+  RecordingEventType,
+} from '@/domain/RecordingEvents/constants';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import { toast } from 'sonner';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectEventsAmount } from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
+import { RecordingEvent } from '@/domain/RecordingEvents';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
+import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 
 export interface EventFormData {
   time: number;
@@ -15,8 +21,6 @@ export interface EventFormData {
 
 export interface AddEventDialogContextValue {
   isOpen: boolean;
-  currentTime: number;
-  formattedTime: string;
   isSubmitting: boolean;
   setIsOpen: (open: boolean) => void;
   addCustomEvent: (data: EventFormData) => void;
@@ -25,33 +29,22 @@ export interface AddEventDialogContextValue {
 export const AddEventDialogContext = createContext<AddEventDialogContextValue>({
   isOpen: false,
   isSubmitting: false,
-  currentTime: 0,
-  formattedTime: '0:00',
   addCustomEvent: () => {},
   setIsOpen: () => {},
 });
 
 interface Props {
   children: ReactNode;
-  currentTime?: number;
 }
 
-const formatTime = (timeInSeconds: number): string => {
-  const minutes = Math.floor(timeInSeconds / 60);
-  const seconds = Math.floor(timeInSeconds % 60);
-
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-};
-
-export const AddEventDialogProvider: React.FC<Props> = ({
-  children,
-  currentTime = 0,
-}) => {
+export const AddEventDialogProvider: React.FC<Props> = ({ children }) => {
   const { id: recordingId } = useParams({ strict: false });
 
-  const eventsAmount = useAppSelector(selectEventsAmount);
+  const dispatch = useAppDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const trackerEvent = useAppSelector(selectSelectedTrackerEvent);
 
   const [addEvents, { isLoading }] = useAddEventsMutation();
   const { data: recording } = useGetRecordingQuery(
@@ -66,40 +59,46 @@ export const AddEventDialogProvider: React.FC<Props> = ({
       return;
     }
 
-    try {
+    let eventToAdd: RecordingEvent;
+
+    if (!trackerEvent) {
       const timestamp = recording.startTime + data.time;
-      const eventId = uuidv4();
       const eventData = {
-        coordinates: {
-          x: 100,
-          y: 100,
-          pageX: 100,
-          pageY: 100,
-        },
-        view: {
-          innerWidth: recording.viewData.width || 1024,
-          innerHeight: recording.viewData.height || 768,
-          scrollX: 0,
-          scrollY: 0,
-        },
+        coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
       };
-      const event = {
+
+      eventToAdd = {
         timestamp,
-        id: eventId,
-        type: data.type,
-        index: eventsAmount,
+        id: uuidv4(),
         screenshotUrl: null,
+        type: data.type,
         data: eventData,
       };
+    } else {
+      const { coordinates, timestamp, id } = trackerEvent;
 
+      eventToAdd = {
+        id,
+        timestamp,
+        type: data.type,
+        data: {
+          coordinates,
+        },
+        screenshotUrl: null,
+      };
+    }
+
+    try {
       await addEvents({
         recordingId,
-        events: { [eventId]: event },
+        events: { [eventToAdd.id]: eventToAdd },
       }).unwrap();
 
-      toast.success(`Custom event "${data.type}" added successfully.`);
-
       setIsOpen(false);
+
+      dispatch(setCurrentEventId(eventToAdd.id));
+
+      toast.success(`Custom event "${data.type}" added successfully.`);
     } catch (error) {
       toast.error('Failed to add custom event. Please try again.');
     }
@@ -109,11 +108,9 @@ export const AddEventDialogProvider: React.FC<Props> = ({
     <AddEventDialogContext.Provider
       value={{
         isOpen,
-        setIsOpen,
-        currentTime,
-        addCustomEvent,
         isSubmitting: isLoading,
-        formattedTime: formatTime(currentTime),
+        setIsOpen,
+        addCustomEvent,
       }}
     >
       {children}

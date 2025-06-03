@@ -6,7 +6,7 @@ export const RecordingsPage = () => {
   const { data: recordingsList, isLoading, error } = useGetRecordingsQuery();
 
   return (
-    <div className="container py-6">
+    <div className="container p-5">
       <ScrollArea className="h-[calc(100vh-150px)]">
         {isLoading ? (
           <div className="flex justify-center p-8">Loading recordings...</div>

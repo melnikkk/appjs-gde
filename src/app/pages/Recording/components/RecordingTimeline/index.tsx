@@ -37,7 +37,7 @@ export const RecordingTimeline: React.FC<Props> = ({
   }, [currentEventId, recordingEvents, dispatch]);
 
   return (
-    <div className="px-2 pt-3">
+    <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold">Recording Events</h2>
@@ -46,7 +46,7 @@ export const RecordingTimeline: React.FC<Props> = ({
           </div>
         </div>
 
-        <AddEventDialog currentTime={0} />
+        <AddEventDialog />
       </div>
 
       <Accordion
