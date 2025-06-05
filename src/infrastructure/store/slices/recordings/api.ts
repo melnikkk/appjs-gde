@@ -29,18 +29,3 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
 
 export const { useGetRecordingsQuery, useGetRecordingQuery, useDeleteRecordingMutation } =
   recordingsApiSlice;
-
-export const useRecordingEventsByRecordingId = (recordingId: string) => {
-  return useGetRecordingQuery(
-    { id: recordingId },
-    {
-      skip: !recordingId,
-      selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
-        recordingEvents: data?.events || null,
-        isLoading,
-        isFetching,
-        isError,
-      }),
-    },
-  );
-};

@@ -6,7 +6,6 @@ import {
   selectCurrentEventIndex,
   selectDoesRecordingEventExist,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { RecordingEvents } from '@/domain/RecordingEvents';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { useTrackerEvents } from '@/app/pages/Recording/components/RecordingTimelineTracker/hooks';
 import {
@@ -34,13 +33,11 @@ interface Props {
   startPointTimestamp: number;
   endPointTimestamp: number;
   duration: number;
-  recordingEvents: RecordingEvents;
   initialRecordingDimensions: Dimensions;
   currentRecordingDimensions: Dimensions | null;
 }
 
 export const RecordingTimelineNavigation: React.FC<Props> = ({
-  recordingEvents,
   startPointTimestamp,
   duration,
   initialRecordingDimensions,
@@ -50,25 +47,25 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
 
   const { id: recordingId } = useParams({ strict: false });
 
-  const [triggerAddEvents, { isLoading: isAddEventsSubmitting }] = useAddEventsMutation();
-  const [triggerUpdateRecordingEvent, { isLoading: isEditRecordingEventSubmitting }] =
-    useEditRecordingEventMutation();
-
   const currentEventIndex = useAppSelector(selectCurrentEventIndex);
   const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
   const doesEventExist = useAppSelector(
     selectDoesRecordingEventExist(selectedTrackerEvent?.id),
   );
 
-  const mode = doesEventExist ? EventFormMode.EDIT : EventFormMode.CREATE;
+  const [triggerAddEvents, { isLoading: isAddEventsSubmitting }] = useAddEventsMutation();
+
+  const [triggerUpdateRecordingEvent, { isLoading: isEditRecordingEventSubmitting }] =
+    useEditRecordingEventMutation();
 
   const { trackerEvents } = useTrackerEvents({
-    recordingEvents,
     startPointTimestamp,
+    initialRecordingDimensions,
     recordingDuration: duration,
     recordingDimensions: currentRecordingDimensions,
-    initialRecordingDimensions,
   });
+
+  const mode = doesEventExist ? EventFormMode.EDIT : EventFormMode.CREATE;
 
   const onClose = () => {
     dispatch(setSelectedTrackerEvent(null));
