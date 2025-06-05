@@ -1,6 +1,8 @@
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectSortedEventIds } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { RecordingEvents } from '@/domain/RecordingEvents';
+import {
+  selectRecordingEventsEntities,
+  selectSortedEventIds,
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
 import { scaleCoordinates } from '@/domain/RecordingEvents/utils';
 import { Dimensions } from '@/domain/Recordings';
@@ -12,19 +14,18 @@ import {
 interface Params {
   startPointTimestamp: number;
   recordingDuration: number;
-  recordingEvents: RecordingEvents;
   recordingDimensions: Dimensions | null;
   initialRecordingDimensions: Dimensions;
 }
 
 export const useTrackerEvents = ({
-  recordingEvents,
   startPointTimestamp,
   recordingDuration,
   recordingDimensions,
   initialRecordingDimensions,
 }: Params): { trackerEvents: TrackerEvents } => {
   const sortedEventIds = useAppSelector(selectSortedEventIds);
+  const recordingEvents = useAppSelector(selectRecordingEventsEntities);
 
   const trackerEvents = sortedEventIds.map((eventId) => {
     const event = recordingEvents[eventId];

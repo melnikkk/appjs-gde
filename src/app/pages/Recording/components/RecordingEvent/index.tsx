@@ -6,13 +6,14 @@ import {
 } from '@/components/ui/accordion';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { selectCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/selectors';
+import {
+  selectCurrentEventId,
+  selectRecordingEventsEntities,
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 import {
   setCurrentEventIndex,
   setCurrentEventId,
 } from '@/infrastructure/store/slices/recordingEvents/slice';
-import { useRecordingEventsByRecordingId } from '@/infrastructure/store/slices/recordings/api';
-import { useParams } from '@tanstack/react-router';
 import { DeleteEventButton } from '../DeleteEventButton';
 import { ScreenshotWithOverlay } from '../ScreenshotWithOverlay';
 import { Dimensions } from '@/domain/Recordings';
@@ -32,11 +33,9 @@ export const RecordingEventComponent: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const { id: recordingId } = useParams({ strict: false });
-
   const currentEventId = useAppSelector(selectCurrentEventId);
+  const recordingEvents = useAppSelector(selectRecordingEventsEntities);
 
-  const { recordingEvents } = useRecordingEventsByRecordingId(recordingId as string);
   const recordingEvent = recordingEvents?.[id];
 
   if (!recordingEvent) {

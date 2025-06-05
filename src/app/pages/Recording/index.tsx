@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
-import {
-  setCurrentEventId,
-  setRecordingEvents,
-} from '@/infrastructure/store/slices/recordingEvents/slice';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import {
   selectCurrentEventId,
   selectEventsAmount,
@@ -14,10 +11,12 @@ import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { Separator } from '@/components/ui/separator';
 import { Sidebar, SidebarContent, SidebarProvider } from '@/components/ui/sidebar';
+import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
+import { useGetEventsQuery } from '@/infrastructure/store/slices/recordingEvents/api';
+import { setCurrentRecordingId } from '@/infrastructure/store/slices/recordings/slice';
 import { RecordingTimeline } from './components/RecordingTimeline';
 import { RecordingTimelineNavigation } from './components/RecordingTimelineNavigation';
 import { RecordingPlayer } from './RecordingPlayer';
-import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
@@ -40,12 +39,24 @@ export const RecordingPage = () => {
       skip: !id,
     },
   );
+  useGetEventsQuery(
+    {
+      recordingId: id as string,
+    },
+    {
+      skip: !id,
+    },
+  );
 
   useEffect(() => {
-    if (recording && recording.events) {
-      dispatch(setRecordingEvents(recording.events));
+    if (id) {
+      dispatch(setCurrentRecordingId(id));
     }
-  }, [recording, dispatch, eventsAmount]);
+
+    return () => {
+      dispatch(setCurrentRecordingId(null));
+    };
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (recording && !currentEventId && eventsAmount > 0) {
@@ -80,7 +91,6 @@ export const RecordingPage = () => {
             <Separator className="my-4" />
 
             <RecordingTimelineNavigation
-              recordingEvents={recording.events}
               startPointTimestamp={recording.startTime}
               endPointTimestamp={recording.stopTime}
               duration={recording.duration}
@@ -94,7 +104,6 @@ export const RecordingPage = () => {
           <SidebarContent>
             <RecordingTimeline
               recording={recording}
-              recordingEvents={recording.events}
               startPointTimestamp={recording.startTime}
             />
           </SidebarContent>

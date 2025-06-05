@@ -10,6 +10,15 @@ export interface DeleteRecordingEventDto {
   eventId: string;
 }
 
+export interface GetRecordingEventsDto {
+  recordingId: string;
+}
+
+export type GetRecordingEventsResponse = {
+  entities: RecordingEvents;
+  sortedEventIds: Array<string>;
+};
+
 export interface EditRecordingEventDto {
   recordingId: string;
   eventId: string;

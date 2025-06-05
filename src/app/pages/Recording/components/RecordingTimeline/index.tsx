@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { RecordingEvents } from '@/domain/RecordingEvents';
 import { Accordion } from '@/components/ui/accordion';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import {
   selectCurrentEventId,
+  selectDoesRecordingEventExist,
   selectSortedEventIds,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
@@ -14,12 +14,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Props {
   startPointTimestamp: number;
-  recordingEvents: RecordingEvents;
   recording: Recording;
 }
 
 export const RecordingTimeline: React.FC<Props> = ({
-  recordingEvents,
   startPointTimestamp,
   recording,
 }) => {
@@ -27,14 +25,15 @@ export const RecordingTimeline: React.FC<Props> = ({
 
   const currentEventId = useAppSelector(selectCurrentEventId);
   const sortedEventIds = useAppSelector(selectSortedEventIds);
+  const doesEventExist = useAppSelector(selectDoesRecordingEventExist(currentEventId));
 
   const [activeItem, setActiveItem] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (currentEventId && recordingEvents[currentEventId]) {
+    if (doesEventExist) {
       setActiveItem(`step-${currentEventId}`);
     }
-  }, [currentEventId, recordingEvents, dispatch]);
+  }, [currentEventId, dispatch]);
 
   return (
     <div className="p-4">
