@@ -1,3 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'sonner';
+import { useParams } from '@tanstack/react-router';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import {
   selectCurrentEventIndex,
@@ -12,21 +15,20 @@ import {
 } from '@/app/pages/Recording/components/AddEventForm';
 import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
 import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
-import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
 import { Dimensions } from '@/domain/Recordings';
-import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
-import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';
-import { NextRecordingEventButton } from './NextRecordingEventButton';
-import { useParams } from '@tanstack/react-router';
-import { useAddEventsMutation, useEditRecordingEventMutation, } from '@/infrastructure/store/slices/recordingEvents/api';
-import { toast } from 'sonner';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  useAddEventsMutation,
+  useEditRecordingEventMutation,
+} from '@/infrastructure/store/slices/recordingEvents/api';
 import { DEFAULT_RECORDING_EVENT_COORDINATES } from '@/domain/RecordingEvents/constants';
 import {
   EventFormMode,
   FORM_DESCRIPTION_BY_MODE,
   FORM_TITLE_BY_MODE,
 } from '@/app/pages/Recording/components/AddEventForm/constants';
+import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
+import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';
+import { NextRecordingEventButton } from './NextRecordingEventButton';
 
 interface Props {
   startPointTimestamp: number;
@@ -34,6 +36,7 @@ interface Props {
   duration: number;
   recordingEvents: RecordingEvents;
   initialRecordingDimensions: Dimensions;
+  currentRecordingDimensions: Dimensions | null;
 }
 
 export const RecordingTimelineNavigation: React.FC<Props> = ({
@@ -41,6 +44,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
   startPointTimestamp,
   duration,
   initialRecordingDimensions,
+  currentRecordingDimensions,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -49,8 +53,6 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
   const [triggerAddEvents, { isLoading: isAddEventsSubmitting }] = useAddEventsMutation();
   const [triggerUpdateRecordingEvent, { isLoading: isEditRecordingEventSubmitting }] =
     useEditRecordingEventMutation();
-
-  const { dimensions: recordingDimensions } = useMediaDimensions();
 
   const currentEventIndex = useAppSelector(selectCurrentEventIndex);
   const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
@@ -64,7 +66,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
     recordingEvents,
     startPointTimestamp,
     recordingDuration: duration,
-    recordingDimensions,
+    recordingDimensions: currentRecordingDimensions,
     initialRecordingDimensions,
   });
 

@@ -1,4 +1,5 @@
 import { useEffect, useState, RefObject } from 'react';
+import { Dimensions } from '@/domain/Recordings';
 
 export const useResizeObserver = <T extends HTMLElement>(
   elementRef: RefObject<T | null>,

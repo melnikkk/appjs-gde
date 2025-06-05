@@ -31,9 +31,11 @@ export const RecordingEventComponent: React.FC<Props> = ({
   initialDimensions,
 }) => {
   const dispatch = useAppDispatch();
+
   const { id: recordingId } = useParams({ strict: false });
 
   const currentEventId = useAppSelector(selectCurrentEventId);
+
   const { recordingEvents } = useRecordingEventsByRecordingId(recordingId as string);
   const recordingEvent = recordingEvents?.[id];
 
