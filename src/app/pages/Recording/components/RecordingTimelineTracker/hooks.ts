@@ -4,7 +4,10 @@ import { RecordingEvents } from '@/domain/RecordingEvents';
 import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
 import { scaleCoordinates } from '@/domain/RecordingEvents/utils';
 import { Dimensions } from '@/domain/Recordings';
-import { DEFAULT_RECORDING_EVENT_COORDINATES } from '@/domain/RecordingEvents/constants';
+import {
+  DEFAULT_RECORDING_EVENT_COORDINATES,
+  RecordingEventType,
+} from '@/domain/RecordingEvents/constants';
 
 interface Params {
   startPointTimestamp: number;
@@ -32,6 +35,7 @@ export const useTrackerEvents = ({
         trackerPosition: 0,
         timestamp: 0,
         coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
+        type: RecordingEventType.CLICK,
       };
     }
 
@@ -49,6 +53,7 @@ export const useTrackerEvents = ({
         : DEFAULT_RECORDING_EVENT_COORDINATES,
       trackerPosition: Math.min(Math.max(trackerPosition, 0), 100),
       timestamp: event.timestamp,
+      type: event.type,
     };
   });
 

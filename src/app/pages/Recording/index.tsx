@@ -17,10 +17,14 @@ import { Sidebar, SidebarContent, SidebarProvider } from '@/components/ui/sideba
 import { RecordingTimeline } from './components/RecordingTimeline';
 import { RecordingTimelineNavigation } from './components/RecordingTimelineNavigation';
 import { RecordingPlayer } from './RecordingPlayer';
+import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
   const dispatch = useAppDispatch();
+
+  const { mediaRef, handleMediaLoad, dimensions } = useMediaDimensions();
+  const videoRef = mediaRef as React.RefObject<HTMLVideoElement>;
 
   const currentEventId = useAppSelector(selectCurrentEventId);
   const eventsAmount = useAppSelector(selectEventsAmount);
@@ -66,7 +70,12 @@ export const RecordingPage = () => {
       >
         <div className="flex-1 px-3 pt-3">
           <div className="rounded-lg border p-4">
-            <RecordingPlayer recording={recording} />
+            <RecordingPlayer
+              recording={recording}
+              dimensions={dimensions}
+              videoRef={videoRef}
+              handleMediaLoad={handleMediaLoad}
+            />
 
             <Separator className="my-4" />
 
@@ -76,6 +85,7 @@ export const RecordingPage = () => {
               endPointTimestamp={recording.stopTime}
               duration={recording.duration}
               initialRecordingDimensions={recording.viewData}
+              currentRecordingDimensions={dimensions}
             />
           </div>
         </div>

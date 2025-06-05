@@ -1,26 +1,28 @@
-import { Recording } from '@/domain/Recordings';
+import { Dimensions, Recording } from '@/domain/Recordings';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectCurrentEvent } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { VideoPlayer } from './VideoPlayer';
 import {
   selectSelectedTrackerEvent,
   selectRecordingPauseTimestamp,
 } from '@/infrastructure/store/slices/editor/selectors';
 import { RecordingEventsPresenter } from '@/app/pages/Recording/RecordingEventsPresenter';
-import { useMediaDimensions } from '@/app/pages/Recording/hooks/useMediaDimensions';
-import { DEFAULT_RECORDING_EVENT_COORDINATES } from '@/domain/RecordingEvents/constants';
 
 interface Props {
   recording: Recording;
+  dimensions: Dimensions | null;
+  videoRef: React.RefObject<HTMLVideoElement>;
   onTimeUpdate?: (time: number) => void;
+  handleMediaLoad: () => void;
 }
 
-export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) => {
-  const { mediaRef, handleMediaLoad, dimensions } = useMediaDimensions();
-  const videoRef = mediaRef as React.RefObject<HTMLVideoElement>;
-
-  const currentEvent = useAppSelector(selectCurrentEvent);
-  const recordingEventToAdd = useAppSelector(selectSelectedTrackerEvent);
+export const RecordingPlayer: React.FC<Props> = ({
+  recording,
+  videoRef,
+  dimensions,
+  onTimeUpdate,
+  handleMediaLoad,
+}) => {
+  const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
   const recordingPauseTimestamp = useAppSelector(selectRecordingPauseTimestamp);
 
   const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
@@ -36,18 +38,13 @@ export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) =>
         videoRef={videoRef}
         handleMediaLoad={handleMediaLoad}
       />
-      {/* TODO: needs to be refactored */}
-      {(currentEvent || recordingEventToAdd) && (
+      {selectedTrackerEvent ? (
         <RecordingEventsPresenter
           initialDimensions={recording.viewData}
-          coordinates={
-            currentEvent?.data.coordinates ||
-            recordingEventToAdd?.coordinates ||
-            DEFAULT_RECORDING_EVENT_COORDINATES
-          }
+          coordinates={selectedTrackerEvent.coordinates}
           dimensions={dimensions}
         />
-      )}
+      ) : null}
     </div>
   );
 };

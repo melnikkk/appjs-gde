@@ -1,4 +1,4 @@
-import { Recording, Recordings } from '../../../../domain/Recordings';
+import { Recording, Recordings } from '@/domain/Recordings';
 import { apiSlice } from '../../api';
 import { Tag } from '../../constants';
 import { RequestRecordingDto } from './types';
@@ -27,12 +27,8 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useGetRecordingsQuery,
-  useGetRecordingQuery,
-  useLazyGetRecordingQuery,
-  useDeleteRecordingMutation,
-} = recordingsApiSlice;
+export const { useGetRecordingsQuery, useGetRecordingQuery, useDeleteRecordingMutation } =
+  recordingsApiSlice;
 
 export const useRecordingEventsByRecordingId = (recordingId: string) => {
   return useGetRecordingQuery(
