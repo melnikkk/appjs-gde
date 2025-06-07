@@ -1,11 +1,9 @@
 import { Dimensions, Recording } from '@/domain/Recordings';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { VideoPlayer } from './VideoPlayer';
-import {
-  selectSelectedTrackerEvent,
-  selectRecordingPauseTimestamp,
-} from '@/infrastructure/store/slices/editor/selectors';
+import { selectRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/selectors';
 import { RecordingEventsPresenter } from '@/app/pages/Recording/RecordingEventsPresenter';
+import { selectCurrentEvent } from '@/infrastructure/store/slices/recordingEvents/selectors';
 
 interface Props {
   recording: Recording;
@@ -22,7 +20,7 @@ export const RecordingPlayer: React.FC<Props> = ({
   onTimeUpdate,
   handleMediaLoad,
 }) => {
-  const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
+  const selectedEvent = useAppSelector(selectCurrentEvent);
   const recordingPauseTimestamp = useAppSelector(selectRecordingPauseTimestamp);
 
   const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
@@ -38,10 +36,10 @@ export const RecordingPlayer: React.FC<Props> = ({
         videoRef={videoRef}
         handleMediaLoad={handleMediaLoad}
       />
-      {selectedTrackerEvent ? (
+      {selectedEvent ? (
         <RecordingEventsPresenter
           initialDimensions={recording.viewData}
-          coordinates={selectedTrackerEvent.coordinates}
+          coordinates={selectedEvent.data.coordinates}
           dimensions={dimensions}
         />
       ) : null}

@@ -5,10 +5,7 @@ import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents
 import { cn } from '@/lib/utils';
 import { useCallback } from 'react';
 import { formatDuration } from '@/app/shared/utils';
-import {
-  setRecordingPauseTimestamp,
-  setSelectedTrackerEvent,
-} from '@/infrastructure/store/slices/editor/slice';
+import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
 import { TrackerEvent } from '@/infrastructure/store/slices/editor/types';
 
 interface Props {
@@ -26,8 +23,6 @@ export const TimelineTrackerEvent: React.FC<Props> = ({
     id: recordingEventId,
     timestamp: recordingEventTimestamp,
     trackerPosition,
-    coordinates,
-    type,
   } = trackerEvent;
 
   const dispatch = useAppDispatch();
@@ -43,15 +38,6 @@ export const TimelineTrackerEvent: React.FC<Props> = ({
       e.stopPropagation();
 
       dispatch(setCurrentEventId(recordingEventId));
-      dispatch(
-        setSelectedTrackerEvent({
-          id: recordingEventId,
-          timestamp: recordingEventTimestamp,
-          coordinates,
-          trackerPosition,
-          type,
-        }),
-      );
       dispatch(setRecordingPauseTimestamp(pauseTimestamp));
     },
     [dispatch, recordingEventId, trackerEvent],

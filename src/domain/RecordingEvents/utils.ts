@@ -1,13 +1,9 @@
 import { Coordinates } from '.';
-
-interface Size {
-  width: number;
-  height: number;
-}
+import { Dimensions } from '@/domain/Recordings';
 
 export const scaleCoordinates = (
-  outputSize: Size,
-  eventScreenSize: Size,
+  outputSize: Dimensions,
+  eventScreenSize: Dimensions,
   eventCoordinates: Coordinates,
 ): Coordinates => {
   const { x, y } = eventCoordinates;

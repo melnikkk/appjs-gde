@@ -3,17 +3,15 @@ import { toast } from 'sonner';
 import { useParams } from '@tanstack/react-router';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import {
-  selectCurrentEventIndex,
+  selectCurrentTrackerEvent,
   selectDoesRecordingEventExist,
+  selectTrackerEvents,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { useTrackerEvents } from '@/app/pages/Recording/components/RecordingTimelineTracker/hooks';
 import {
   AddEventForm,
   AddEventFormValues,
 } from '@/app/pages/Recording/components/AddEventForm';
-import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
-import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
 import { Dimensions } from '@/domain/Recordings';
 import {
   useAddEventsMutation,
@@ -28,6 +26,7 @@ import {
 import { RecordingTimelineTracker } from '../RecordingTimelineTracker';
 import { PreviousRecordingEventButton } from './PreviousRecdingEventButton';
 import { NextRecordingEventButton } from './NextRecordingEventButton';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 
 interface Props {
   startPointTimestamp: number;
@@ -40,15 +39,14 @@ interface Props {
 export const RecordingTimelineNavigation: React.FC<Props> = ({
   startPointTimestamp,
   duration,
-  initialRecordingDimensions,
-  currentRecordingDimensions,
 }) => {
   const dispatch = useAppDispatch();
 
   const { id: recordingId } = useParams({ strict: false });
 
-  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
-  const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
+  const trackerEvents = useAppSelector(selectTrackerEvents);
+  const selectedTrackerEvent = useAppSelector(selectCurrentTrackerEvent);
+
   const doesEventExist = useAppSelector(
     selectDoesRecordingEventExist(selectedTrackerEvent?.id),
   );
@@ -58,17 +56,10 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
   const [triggerUpdateRecordingEvent, { isLoading: isEditRecordingEventSubmitting }] =
     useEditRecordingEventMutation();
 
-  const { trackerEvents } = useTrackerEvents({
-    startPointTimestamp,
-    initialRecordingDimensions,
-    recordingDuration: duration,
-    recordingDimensions: currentRecordingDimensions,
-  });
-
   const mode = doesEventExist ? EventFormMode.EDIT : EventFormMode.CREATE;
 
   const onClose = () => {
-    dispatch(setSelectedTrackerEvent(null));
+    dispatch(setCurrentEventId(null));
   };
 
   const handleSubmit = async (values: AddEventFormValues) => {
@@ -76,7 +67,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
       return;
     }
 
-    const { coordinates, timestamp } = selectedTrackerEvent;
+    const { timestamp } = selectedTrackerEvent;
 
     if (mode === EventFormMode.EDIT) {
       try {
@@ -88,7 +79,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
             timestamp: selectedTrackerEvent.timestamp,
             type: values.type,
             data: {
-              coordinates: coordinates ?? DEFAULT_RECORDING_EVENT_COORDINATES,
+              coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
             },
           },
         });
@@ -109,7 +100,7 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
               timestamp,
               type: values.type,
               data: {
-                coordinates: coordinates ?? DEFAULT_RECORDING_EVENT_COORDINATES,
+                coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
               },
               screenshotUrl: null,
             },
@@ -128,19 +119,13 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
   return (
     <>
       <div className="my-6 flex w-full items-center justify-center gap-2">
-        <PreviousRecordingEventButton
-          currentEventIndex={currentEventIndex}
-          trackerEvents={trackerEvents}
-        />
+        <PreviousRecordingEventButton />
         <RecordingTimelineTracker
           trackerEvents={trackerEvents}
           startPointTimestamp={startPointTimestamp}
           recordingDuration={duration}
         />
-        <NextRecordingEventButton
-          currentEventIndex={currentEventIndex}
-          trackerEvents={trackerEvents}
-        />
+        <NextRecordingEventButton />
       </div>
       {selectedTrackerEvent ? (
         <div className="mx-2">

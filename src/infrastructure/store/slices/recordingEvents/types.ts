@@ -26,8 +26,5 @@ export interface EditRecordingEventDto {
 }
 
 export interface RecordingEventsState {
-  currentEventIndex: number;
   currentEventId: string | null;
-  sortedEventIds: Array<string>;
-  entities: RecordingEvents;
 }

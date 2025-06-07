@@ -10,10 +10,7 @@ import {
   selectCurrentEventId,
   selectRecordingEventsEntities,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import {
-  setCurrentEventIndex,
-  setCurrentEventId,
-} from '@/infrastructure/store/slices/recordingEvents/slice';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { DeleteEventButton } from '../DeleteEventButton';
 import { ScreenshotWithOverlay } from '../ScreenshotWithOverlay';
 import { Dimensions } from '@/domain/Recordings';
@@ -47,14 +44,13 @@ export const RecordingEventComponent: React.FC<Props> = ({
 
   const eventTime = formatDuration(recordingEvent.timestamp - startPointTimestamp);
 
-  const hasCoordinates = recordingEvent?.data?.coordinates != null;
+  const hasCoordinates = Boolean(recordingEvent?.data?.coordinates);
   const recordingEventDescription = hasCoordinates
     ? `Clicked at coordinates (${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y})`
     : 'Click event (coordinates unavailable)';
   const recordingEventTitle = `Step ${stepNumber}: Click Event`;
 
   const handleEventClick = () => {
-    dispatch(setCurrentEventIndex(index));
     dispatch(setCurrentEventId(id));
   };
 

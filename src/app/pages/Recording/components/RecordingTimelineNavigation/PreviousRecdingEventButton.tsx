@@ -1,32 +1,32 @@
 import { useCallback } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { setCurrentEventIndex } from '@/infrastructure/store/slices/recordingEvents/slice';
+import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { Button } from '@/components/ui/button';
-import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
+import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
+import {
+  selectCurrentEventIndex,
+  selectEventsAmount,
+  selectTrackerEvents,
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
 
-interface Props {
-  currentEventIndex: number;
-  trackerEvents: TrackerEvents;
-}
-
-export const PreviousRecordingEventButton: React.FC<Props> = ({
-  currentEventIndex,
-  trackerEvents,
-}) => {
+export const PreviousRecordingEventButton: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const eventsAmount = trackerEvents.length;
+  const currentEventIndex = useAppSelector(selectCurrentEventIndex);
+  const eventsAmount = useAppSelector(selectEventsAmount);
+  const trackerEvents = useAppSelector(selectTrackerEvents);
+
   const isDisabled = currentEventIndex === 0;
 
   const onPreviousClick = useCallback(() => {
     if (currentEventIndex > 0 && eventsAmount > 0) {
       const previousEventIndex = Math.max(0, currentEventIndex - 1);
-      const previousEventId = trackerEvents[previousEventIndex];
+      const previousEvent = trackerEvents[previousEventIndex];
 
-      if (previousEventId) {
-        dispatch(setCurrentEventIndex(previousEventIndex));
-      }
+      dispatch(setCurrentEventId(previousEvent.id));
+      dispatch(setRecordingPauseTimestamp(previousEvent.timestamp));
     }
   }, [dispatch, currentEventIndex, eventsAmount, trackerEvents]);
 
