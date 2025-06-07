@@ -3,13 +3,10 @@ import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { TrackerEvents } from '@/infrastructure/store/slices/editor/types';
-import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
-import { selectDoesRecordingEventExist } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
 import {
-  DEFAULT_RECORDING_EVENT_COORDINATES,
-  RecordingEventType,
-} from '@/domain/RecordingEvents/constants';
+  selectCurrentTrackerEvent,
+  selectDoesRecordingEventExist,
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { TimelineTrackerEvent } from './TimelineTrackerEvent';
 import { TimeMarker } from './TimeMarker';
 import { TimelineTracker } from './TimelineTracker';
@@ -27,7 +24,7 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
+  const selectedTrackerEvent = useAppSelector(selectCurrentTrackerEvent);
   const doesEventExists = useAppSelector(
     selectDoesRecordingEventExist(selectedTrackerEvent?.id),
   );
@@ -35,16 +32,15 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
   const onTimelineTrackerClick = (timestamp: number) => {
     const id = uuidv4();
     const trackerPosition = ((timestamp - startPointTimestamp) / recordingDuration) * 100;
-
-    dispatch(
-      setSelectedTrackerEvent({
-        id,
-        timestamp,
-        trackerPosition,
-        coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
-        type: RecordingEventType.CLICK,
-      }),
-    );
+    // TODO: provide event to add
+    // dispatch(
+    //   setSelectedTrackerEvent({
+    //     id,
+    //     timestamp,
+    //     trackerPosition,
+    //     type: RecordingEventType.CLICK,
+    //   }),
+    // );
     dispatch(setCurrentEventId(id));
   };
 

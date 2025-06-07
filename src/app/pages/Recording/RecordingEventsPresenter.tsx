@@ -1,10 +1,7 @@
 import { Dimensions } from '@/domain/Recordings';
 import { CanvasOverlay } from './CanvasOverlay';
 import { Coordinates } from '@/domain/RecordingEvents';
-import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
-import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
-import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
+import { scaleCoordinates } from '@/domain/RecordingEvents/utils';
 
 interface Props {
   initialDimensions: Dimensions;
@@ -17,22 +14,25 @@ export const RecordingEventsPresenter: React.FC<Props> = ({
   initialDimensions,
   coordinates,
 }) => {
-  const dispatch = useAppDispatch();
-
-  const selectedTrackerEvent = useAppSelector(selectSelectedTrackerEvent);
+  const scaledCoordinates = scaleCoordinates(
+    dimensions ?? initialDimensions,
+    initialDimensions,
+    coordinates,
+  );
 
   const width = dimensions?.width || initialDimensions.width;
   const height = dimensions?.height || initialDimensions.height;
 
   const onEventPositionChangeEnd = (coordinates: Coordinates) => {
-    if (selectedTrackerEvent) {
-      dispatch(setSelectedTrackerEvent({ ...selectedTrackerEvent, coordinates }));
-    }
+    // TODO: provide change coordinates logic
+    // if (selectedTrackerEvent) {
+    //   dispatch(setSelectedTrackerEvent({ ...selectedTrackerEvent }));
+    // }
   };
 
   return (
     <CanvasOverlay
-      coordinates={coordinates}
+      coordinates={scaledCoordinates}
       width={width}
       height={height}
       onPositionChangeEnd={onEventPositionChangeEnd}

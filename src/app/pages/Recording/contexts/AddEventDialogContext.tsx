@@ -9,10 +9,10 @@ import {
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
 import { toast } from 'sonner';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
 import { RecordingEvent } from '@/domain/RecordingEvents';
 import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
+import { selectCurrentTrackerEvent } from '@/infrastructure/store/slices/recordingEvents/selectors';
 
 export interface EventFormData {
   time: number;
@@ -44,7 +44,7 @@ export const AddEventDialogProvider: React.FC<Props> = ({ children }) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const trackerEvent = useAppSelector(selectSelectedTrackerEvent);
+  const trackerEvent = useAppSelector(selectCurrentTrackerEvent);
 
   const [addEvents, { isLoading }] = useAddEventsMutation();
   const { data: recording } = useGetRecordingQuery(

@@ -6,16 +6,16 @@ import {
   FORM_TITLE_BY_MODE,
 } from '@/app/pages/Recording/components/AddEventForm/constants';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
-import { selectSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/selectors';
 import { useAddEventDialog } from '../../hooks/useAddEventDialog';
 import { AddEventDialogProvider } from '../../contexts/AddEventDialogContext';
 import { AddEventDialogTrigger } from './AddEventDialogTrigger';
 import { AddEventForm, AddEventFormValues } from '../AddEventForm';
+import { selectCurrentTrackerEvent } from '@/infrastructure/store/slices/recordingEvents/selectors';
 
 export const AddEventDialogComponent = () => {
   const { isOpen, setIsOpen, addCustomEvent, isSubmitting } = useAddEventDialog();
 
-  const selectedEvent = useAppSelector(selectSelectedTrackerEvent);
+  const selectedEvent = useAppSelector(selectCurrentTrackerEvent);
 
   const onOpenChange = (isOpen: boolean) => {
     setIsOpen(isOpen);

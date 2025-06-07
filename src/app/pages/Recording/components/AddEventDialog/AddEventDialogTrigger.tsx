@@ -3,7 +3,6 @@ import { DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
-import { setSelectedTrackerEvent } from '@/infrastructure/store/slices/editor/slice';
 import { useAddEventDialog } from '../../hooks/useAddEventDialog';
 
 export const AddEventDialogTrigger = () => {
@@ -13,7 +12,6 @@ export const AddEventDialogTrigger = () => {
 
   const onDialogTriggerClick = () => {
     dispatch(setCurrentEventId(null));
-    dispatch(setSelectedTrackerEvent(null));
 
     setIsOpen(true);
   };
