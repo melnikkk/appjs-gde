@@ -6,11 +6,10 @@ import {
   selectDoesRecordingEventExist,
   selectSortedEventIds,
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { AddEventDialog } from '@/app/pages/Recording/components/AddEventDialog';
-import { RecordingEventComponent } from '../RecordingEvent';
 import { Recording } from '@/domain/Recordings';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { RecordingEventComponent } from '../RecordingEvent';
 
 interface Props {
   startPointTimestamp: number;
@@ -21,19 +20,19 @@ export const RecordingTimeline: React.FC<Props> = ({
   startPointTimestamp,
   recording,
 }) => {
-  const dispatch = useAppDispatch();
-
   const currentEventId = useAppSelector(selectCurrentEventId);
   const sortedEventIds = useAppSelector(selectSortedEventIds);
   const doesEventExist = useAppSelector(selectDoesRecordingEventExist(currentEventId));
 
-  const [activeItem, setActiveItem] = useState<string | undefined>(undefined);
+  const [activeItem, setActiveItem] = useState('');
 
   useEffect(() => {
-    if (doesEventExist) {
+    if (currentEventId && doesEventExist) {
       setActiveItem(`step-${currentEventId}`);
+    } else {
+      setActiveItem('');
     }
-  }, [currentEventId, dispatch]);
+  }, [currentEventId, doesEventExist]);
 
   return (
     <div className="p-4">

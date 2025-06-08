@@ -79,7 +79,7 @@ export const AddEventForm: React.FC<Props> = ({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Time (seconds)</FormLabel>
+              <FormLabel>Time (milliseconds)</FormLabel>
               <FormControl>
                 <Input
                   {...field}
