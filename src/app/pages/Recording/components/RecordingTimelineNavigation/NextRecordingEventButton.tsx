@@ -18,19 +18,15 @@ export const NextRecordingEventButton: React.FC = () => {
   const eventsAmount = useAppSelector(selectEventsAmount);
   const trackerEvents = useAppSelector(selectTrackerEvents);
 
-  const maxEventIndex = eventsAmount - 1 > 0 ? eventsAmount - 1 : 0;
-  const isDisabled = currentEventIndex >= maxEventIndex;
-
   const onClick = useCallback(() => {
-    if (currentEventIndex < maxEventIndex && eventsAmount > 0) {
-      const nextEventIndex = Math.min(currentEventIndex + 1, maxEventIndex);
-
+    if (eventsAmount > 0) {
+      const nextEventIndex = (currentEventIndex + 1) % eventsAmount;
       const nextEvent = trackerEvents[nextEventIndex];
 
       dispatch(setCurrentEventId(nextEvent.id));
       dispatch(setRecordingPauseTimestamp(nextEvent.timestamp));
     }
-  }, [dispatch, currentEventIndex, maxEventIndex, eventsAmount, trackerEvents]);
+  }, [dispatch, currentEventIndex, eventsAmount, trackerEvents]);
 
   return (
     <Button
@@ -38,7 +34,6 @@ export const NextRecordingEventButton: React.FC = () => {
       size="icon"
       className="h-9 w-9 p-0"
       onClick={onClick}
-      disabled={isDisabled}
       aria-label="Next event"
     >
       <ChevronRight className="h-4 w-4" />

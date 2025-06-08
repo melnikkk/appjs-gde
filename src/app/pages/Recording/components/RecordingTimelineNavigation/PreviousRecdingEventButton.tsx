@@ -18,11 +18,19 @@ export const PreviousRecordingEventButton: React.FC = () => {
   const eventsAmount = useAppSelector(selectEventsAmount);
   const trackerEvents = useAppSelector(selectTrackerEvents);
 
-  const isDisabled = currentEventIndex === 0;
-
   const onPreviousClick = useCallback(() => {
-    if (currentEventIndex > 0 && eventsAmount > 0) {
-      const previousEventIndex = Math.max(0, currentEventIndex - 1);
+    if (eventsAmount > 0) {
+      if (currentEventIndex === -1) {
+        const lastEventIndex = eventsAmount - 1;
+        const lastEvent = trackerEvents[lastEventIndex];
+
+        dispatch(setCurrentEventId(lastEvent.id));
+        dispatch(setRecordingPauseTimestamp(lastEvent.timestamp));
+
+        return;
+      }
+
+      const previousEventIndex = (currentEventIndex - 1 + eventsAmount) % eventsAmount;
       const previousEvent = trackerEvents[previousEventIndex];
 
       dispatch(setCurrentEventId(previousEvent.id));
@@ -35,7 +43,6 @@ export const PreviousRecordingEventButton: React.FC = () => {
       variant="outline"
       size="icon"
       className="h-9 w-9 p-0"
-      disabled={isDisabled}
       onClick={onPreviousClick}
       aria-label="Previous event"
     >
