@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
@@ -10,6 +9,7 @@ import {
 import { TimelineTrackerEvent } from './TimelineTrackerEvent';
 import { TimeMarker } from './TimeMarker';
 import { TimelineTracker } from './TimelineTracker';
+import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
 
 interface Props {
   startPointTimestamp: number;
@@ -29,19 +29,9 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
     selectDoesRecordingEventExist(selectedTrackerEvent?.id),
   );
 
-  const onTimelineTrackerClick = (timestamp: number) => {
-    const id = uuidv4();
-    const trackerPosition = ((timestamp - startPointTimestamp) / recordingDuration) * 100;
-    // TODO: provide event to add
-    // dispatch(
-    //   setSelectedTrackerEvent({
-    //     id,
-    //     timestamp,
-    //     trackerPosition,
-    //     type: RecordingEventType.CLICK,
-    //   }),
-    // );
-    dispatch(setCurrentEventId(id));
+  const onTimelineTrackerClick = (trackerTimestamp: number) => {
+    dispatch(setRecordingPauseTimestamp(trackerTimestamp));
+    dispatch(setCurrentEventId(null));
   };
 
   return (

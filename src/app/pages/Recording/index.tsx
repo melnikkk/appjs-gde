@@ -1,13 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '@/infrastructure/store/slices/recordings/api';
-import { setCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/slice';
-import {
-  selectCurrentEventId,
-  selectEventsAmount,
-  selectSortedEventIds,
-} from '@/infrastructure/store/slices/recordingEvents/selectors';
-import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
 import { useAppDispatch } from '@/app/shared/hooks/useAppDispatch';
 import { Separator } from '@/components/ui/separator';
 import { Sidebar, SidebarContent, SidebarProvider } from '@/components/ui/sidebar';
@@ -24,10 +17,6 @@ export const RecordingPage = () => {
 
   const { mediaRef, handleMediaLoad, dimensions } = useMediaDimensions();
   const videoRef = mediaRef as React.RefObject<HTMLVideoElement>;
-
-  const currentEventId = useAppSelector(selectCurrentEventId);
-  const eventsAmount = useAppSelector(selectEventsAmount);
-  const sortedEventsIds = useAppSelector(selectSortedEventIds);
 
   const { id } = useParams({ strict: false });
 
@@ -57,12 +46,6 @@ export const RecordingPage = () => {
       dispatch(setCurrentRecordingId(null));
     };
   }, [id, dispatch]);
-
-  useEffect(() => {
-    if (recording && !currentEventId && eventsAmount > 0) {
-      dispatch(setCurrentEventId(sortedEventsIds[0]));
-    }
-  }, [recording, dispatch, currentEventId, sortedEventsIds, eventsAmount]);
 
   if (!recording) {
     return null;
