@@ -67,6 +67,7 @@ export const CanvasOverlay: React.FC<Props> = ({
   const handleDragMove = () => {
     if (groupRef.current) {
       const newPos = groupRef.current.position();
+
       setPosition(newPos);
     }
   };
@@ -74,6 +75,7 @@ export const CanvasOverlay: React.FC<Props> = ({
   const handleDragEnd = () => {
     if (groupRef.current) {
       const finalPos = groupRef.current.position();
+
       if (onPositionChangeEnd) {
         onPositionChangeEnd(finalPos);
       }

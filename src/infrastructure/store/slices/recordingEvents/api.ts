@@ -9,6 +9,7 @@ import {
   GetRecordingEventsResponse,
 } from './types';
 import { getRecordingEventsTransform } from '@/infrastructure/store/slices/recordingEvents/transforms';
+import { RootState } from '@/infrastructure/store';
 
 export const recordingEventsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -40,6 +41,42 @@ export const recordingEventsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: event,
       }),
+      onQueryStarted: async (
+        { recordingId, eventId, event },
+        { dispatch, queryFulfilled, getState },
+      ) => {
+        const state = getState() as RootState;
+        const getResult = recordingEventsApiSlice.endpoints.getEvents.select({
+          recordingId,
+        })(state);
+
+        if (!getResult.data) {
+          return;
+        }
+
+        const patchResult = dispatch(
+          recordingEventsApiSlice.util.updateQueryData(
+            'getEvents',
+            { recordingId },
+            (draft) => {
+              if (draft.entities && draft.entities[eventId]) {
+                draft.entities[eventId] = {
+                  ...draft.entities[eventId],
+                  ...event,
+                };
+              }
+            },
+          ),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch (err) {
+          patchResult.undo();
+
+          console.error('Failed to update event coordinates: ', err);
+        }
+      },
       invalidatesTags: [Tag.RECORDING_EVENTS],
     }),
   }),
