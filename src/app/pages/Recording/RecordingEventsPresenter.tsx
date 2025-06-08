@@ -1,7 +1,16 @@
+import { toast } from 'sonner';
+import { useState } from 'react';
 import { Dimensions } from '@/domain/Recordings';
-import { CanvasOverlay } from './CanvasOverlay';
 import { Coordinates } from '@/domain/RecordingEvents';
 import { scaleCoordinates } from '@/domain/RecordingEvents/utils';
+import { useAppSelector } from '@/app/shared/hooks/useAppSelector';
+import {
+  selectCurrentEventId,
+  selectRecordingEventsEntities,
+} from '@/infrastructure/store/slices/recordingEvents/selectors';
+import { selectCurrentRecordingId } from '@/infrastructure/store/slices/recordings/selectors';
+import { useEditRecordingEventMutation } from '@/infrastructure/store/slices/recordingEvents/api';
+import { CanvasOverlay } from './CanvasOverlay';
 
 interface Props {
   initialDimensions: Dimensions;
@@ -12,22 +21,62 @@ interface Props {
 export const RecordingEventsPresenter: React.FC<Props> = ({
   dimensions,
   initialDimensions,
-  coordinates,
+  coordinates: initialCoordinates,
 }) => {
+  const currentEventId = useAppSelector(selectCurrentEventId);
+  const recordingId = useAppSelector(selectCurrentRecordingId);
+  const recordingEvents = useAppSelector(selectRecordingEventsEntities);
+
+  // Local state for optimistic coordinates update
+  const [localCoordinates, setLocalCoordinates] = useState<Coordinates | null>(null);
+
+  const [triggerEditRecordingEvent] = useEditRecordingEventMutation();
+
+  // Use optimistic coordinates for display if available, otherwise use the original
+  const effectiveCoordinates = localCoordinates || initialCoordinates;
+
   const scaledCoordinates = scaleCoordinates(
     dimensions ?? initialDimensions,
     initialDimensions,
-    coordinates,
+    effectiveCoordinates,
   );
 
   const width = dimensions?.width || initialDimensions.width;
   const height = dimensions?.height || initialDimensions.height;
 
-  const onEventPositionChangeEnd = (coordinates: Coordinates) => {
-    // TODO: provide change coordinates logic
-    // if (selectedTrackerEvent) {
-    //   dispatch(setSelectedTrackerEvent({ ...selectedTrackerEvent }));
-    // }
+  const onEventPositionChangeEnd = async (newCoordinates: Coordinates) => {
+    if (!currentEventId || !recordingId) return;
+
+    try {
+      const currentEvent = recordingEvents[currentEventId];
+
+      if (!currentEvent) {
+        return;
+      }
+
+      const originalCoordinates = scaleCoordinates(
+        initialDimensions,
+        dimensions ?? initialDimensions,
+        newCoordinates,
+      );
+
+      const { id, data } = currentEvent;
+
+      await triggerEditRecordingEvent({
+        recordingId,
+        eventId: id,
+        event: {
+          data: {
+            ...data,
+            coordinates: originalCoordinates,
+          },
+        },
+      }).unwrap();
+    } catch (error) {
+      toast.error('Failed to update event coordinates');
+    } finally {
+      setLocalCoordinates(null);
+    }
   };
 
   return (
