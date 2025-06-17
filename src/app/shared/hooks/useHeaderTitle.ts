@@ -5,6 +5,7 @@ const DEFAULT_TITLE = 'Guide Creator';
 
 export const useHeaderTitle = () => {
   const routerState = useRouterState();
+
   const [headerTitle, setHeaderTitle] = useState(DEFAULT_TITLE);
 
   const routePath = routerState.location.pathname;

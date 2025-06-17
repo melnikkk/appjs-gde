@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/select';
 import { RecordingEventType } from '@/domain/RecordingEvents/constants';
 import { useFormContext } from 'react-hook-form';
-import { AddEventFormValues } from './index';
+import { AddEventFormValues } from './';
 
 const OPTIONS = [
   {

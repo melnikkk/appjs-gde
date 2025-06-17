@@ -5,3 +5,7 @@ export interface RequestRecordingDto {
 export interface RecordingsState {
   currentRecordingId: string | null;
 }
+
+export interface ExportAsStepByStepHTMLRequestDto {
+  recordingId: string;
+}

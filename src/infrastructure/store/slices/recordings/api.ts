@@ -1,7 +1,7 @@
 import { Recording, Recordings } from '@/domain/Recordings';
 import { apiSlice } from '../../api';
 import { Tag } from '../../constants';
-import { RequestRecordingDto } from './types';
+import { ExportAsStepByStepHTMLRequestDto, RequestRecordingDto } from './types';
 
 export const recordingsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,8 +24,21 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [Tag.RECORDINGS],
     }),
+    exportAsStepByStepHTML: builder.query<string, ExportAsStepByStepHTMLRequestDto>({
+      query: ({ recordingId }) => ({
+        url: `/recordings/${recordingId}/embed-code`,
+        method: 'GET',
+        responseHandler: async (response) => {
+          return await response.text();
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetRecordingsQuery, useGetRecordingQuery, useDeleteRecordingMutation } =
-  recordingsApiSlice;
+export const {
+  useGetRecordingsQuery,
+  useGetRecordingQuery,
+  useDeleteRecordingMutation,
+  useExportAsStepByStepHTMLQuery,
+} = recordingsApiSlice;
