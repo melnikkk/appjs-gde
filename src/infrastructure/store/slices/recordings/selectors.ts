@@ -35,3 +35,8 @@ export const selectCurrentRecordingDuration = createSelector(
   selectRecordingEventsFromCache,
   (recording) => recording?.duration ?? null,
 );
+
+export const selectCurrentRecordingTitle = createSelector(
+  selectRecordingEventsFromCache,
+  (recording) => recording?.name ?? '',
+);

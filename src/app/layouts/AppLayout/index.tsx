@@ -1,44 +1,50 @@
-import { useCallback } from 'react';
 import { Toaster } from 'sonner';
 import { useRouterState } from '@tanstack/react-router';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import {
+  HeaderPortsProvider,
+  useHeaderPorts,
+} from '@/app/shared/contexts/HeaderPortsContext';
 import { useHeaderTitle } from '@/app/shared/hooks/useHeaderTitle';
-import { AppSidebar } from './components/LeftSidebar';
+import { AppSidebar } from './components/LeftSidebar/LeftSidebar';
 import { Header } from './components/Header';
+import { HeaderRegistry } from './components/Header/HeaderRegistry';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export const AppLayout: React.FC<Props> = ({ children }) => {
+const DynamicHeader: React.FC = () => {
   const routerState = useRouterState();
+
   const headerTitle = useHeaderTitle();
+  const { getHeaderForPath } = useHeaderPorts();
 
   const routePath = routerState.location.pathname;
-
-  const handleSave = useCallback(() => {
-    console.log('Saving guide');
-  }, []);
-
-  const handleExport = useCallback(() => {
-    console.log('Exporting guide');
-  }, []);
+  const HeaderComponent = getHeaderForPath(routePath) || (() => null);
 
   return (
-    <SidebarProvider>
-      <Toaster position="top-right" />
-      <AppSidebar />
+    <Header title={headerTitle}>
+      <HeaderComponent title={headerTitle} />
+    </Header>
+  );
+};
 
-      <main className="flex-1 overflow-y-auto">
-        <Header
-          title={headerTitle}
-          onSave={routePath.includes('/recordings/') ? handleSave : undefined}
-          onExport={routePath.includes('/recordings/') ? handleExport : undefined}
-        />
-        <div className="mt-[var(--header-height)] h-[calc(100%-var(--header-height))]">
-          {children}
-        </div>
-      </main>
-    </SidebarProvider>
+export const AppLayout: React.FC<Props> = ({ children }) => {
+  return (
+    <HeaderPortsProvider>
+      <HeaderRegistry />
+      <SidebarProvider>
+        <Toaster position="top-right" />
+        <AppSidebar />
+
+        <main className="flex-1 overflow-y-auto">
+          <DynamicHeader />
+          <div className="mt-[var(--header-height)] h-[calc(100%-var(--header-height))]">
+            {children}
+          </div>
+        </main>
+      </SidebarProvider>
+    </HeaderPortsProvider>
   );
 };
