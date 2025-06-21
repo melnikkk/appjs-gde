@@ -21,13 +21,13 @@ export const RecordingTimelineNavigation: React.FC<Props> = ({
 
   return (
     <div className="my-6 flex w-full items-center justify-center gap-2">
-      <PreviousRecordingEventButton />
+      <PreviousRecordingEventButton startPointTimestamp={startPointTimestamp} />
       <RecordingTimelineTracker
         trackerEvents={trackerEvents}
         startPointTimestamp={startPointTimestamp}
         recordingDuration={duration}
       />
-      <NextRecordingEventButton />
+      <NextRecordingEventButton startPointTimestamp={startPointTimestamp} />
     </div>
   );
 };
