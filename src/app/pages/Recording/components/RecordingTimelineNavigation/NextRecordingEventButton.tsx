@@ -11,7 +11,11 @@ import {
 } from '@/infrastructure/store/slices/recordingEvents/selectors';
 import { setRecordingPauseTimestamp } from '@/infrastructure/store/slices/editor/slice';
 
-export const NextRecordingEventButton: React.FC = () => {
+interface Props {
+  startPointTimestamp: number;
+}
+
+export const NextRecordingEventButton: React.FC<Props> = ({ startPointTimestamp }) => {
   const dispatch = useAppDispatch();
 
   const currentEventIndex = useAppSelector(selectCurrentEventIndex);
@@ -22,9 +26,10 @@ export const NextRecordingEventButton: React.FC = () => {
     if (eventsAmount > 0) {
       const nextEventIndex = (currentEventIndex + 1) % eventsAmount;
       const nextEvent = trackerEvents[nextEventIndex];
+      const pauseTimestamp = nextEvent.timestamp - startPointTimestamp;
 
       dispatch(setCurrentEventId(nextEvent.id));
-      dispatch(setRecordingPauseTimestamp(nextEvent.timestamp));
+      dispatch(setRecordingPauseTimestamp(pauseTimestamp));
     }
   }, [dispatch, currentEventIndex, eventsAmount, trackerEvents]);
 

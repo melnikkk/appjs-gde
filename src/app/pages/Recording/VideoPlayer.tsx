@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { millesecondsToSeconds } from '../../shared/utils';
+import { millesecondsToSeconds } from '@/app/shared/utils';
 
 interface Props {
   width: number;
@@ -36,7 +36,7 @@ export const VideoPlayer: React.FC<Props> = ({
         videoRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
       };
     }
-  }, [pauseTime, onTimeUpdate, videoRef]);
+  }, [pauseTime, onTimeUpdate]);
 
   return (
     <video
