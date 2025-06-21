@@ -27,12 +27,10 @@ export const RecordingEventsPresenter: React.FC<Props> = ({
   const recordingId = useAppSelector(selectCurrentRecordingId);
   const recordingEvents = useAppSelector(selectRecordingEventsEntities);
 
-  // Local state for optimistic coordinates update
   const [localCoordinates, setLocalCoordinates] = useState<Coordinates | null>(null);
 
   const [triggerEditRecordingEvent] = useEditRecordingEventMutation();
 
-  // Use optimistic coordinates for display if available, otherwise use the original
   const effectiveCoordinates = localCoordinates || initialCoordinates;
 
   const scaledCoordinates = scaleCoordinates(
