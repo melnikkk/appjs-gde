@@ -45,10 +45,10 @@ export const RecordingEventComponent: React.FC<Props> = ({
   const eventTime = formatDuration(recordingEvent.timestamp - startPointTimestamp);
 
   const hasCoordinates = Boolean(recordingEvent?.data?.coordinates);
-  const recordingEventDescription = hasCoordinates
-    ? `Clicked at coordinates (${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y})`
-    : 'Click event (coordinates unavailable)';
-  const recordingEventTitle = `Step ${stepNumber}: Click Event`;
+  const coordinatesInfo = `Clicked at coordinates (${hasCoordinates ? `${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y}` : 'coordinates unavailable'})`;
+
+  const recordingEventTitle = `Step ${stepNumber}: ${recordingEvent.title ?? 'Click Event'}`;
+  const recordingEventDescription = recordingEvent.description ?? coordinatesInfo;
 
   const handleEventClick = () => {
     dispatch(setCurrentEventId(id));
@@ -79,9 +79,7 @@ export const RecordingEventComponent: React.FC<Props> = ({
             </div>
             <div>
               <h3 className="font-semibold">{recordingEventTitle}</h3>
-              <p className="text-muted-foreground text-sm">
-                Here should be an event description :)
-              </p>
+              <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -92,7 +90,7 @@ export const RecordingEventComponent: React.FC<Props> = ({
       </AccordionTrigger>
       <AccordionContent className="px-4 pt-0 pb-3">
         <div className="ml-11">
-          <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
+          <p className="text-muted-foreground text-sm">{coordinatesInfo}</p>
           {hasScreenshot ? (
             fullScreenshotUrl ? (
               <ScreenshotWithOverlay

@@ -51,6 +51,8 @@ export const VideoPlayer: React.FC<Props> = ({
       }}
       className="block h-auto w-full rounded-lg"
       onLoadedMetadata={handleMediaLoad}
+      onLoadedData={handleMediaLoad}
+      preload="metadata"
     >
       {source && <source src={source} />}
       Your browser does not support the video tag.

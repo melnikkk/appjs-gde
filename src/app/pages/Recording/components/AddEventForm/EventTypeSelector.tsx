@@ -21,14 +21,14 @@ export const EventTypeSelector = () => {
   const form = useFormContext<AddEventFormValues>();
 
   return (
-    <FormItem>
-      <FormLabel>Event Type</FormLabel>
+    <FormItem className="flex-1">
+      <FormLabel>Event type:</FormLabel>
       <FormControl>
         <Select
           onValueChange={(value) => form.setValue('type', value as RecordingEventType)}
           defaultValue={form.getValues('type')}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select event type" />
           </SelectTrigger>
           <SelectContent>

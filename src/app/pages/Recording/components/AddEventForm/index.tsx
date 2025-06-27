@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { RecordingEventType } from '@/domain/RecordingEvents/constants';
 import { EventTypeSelector } from './EventTypeSelector';
@@ -22,6 +23,8 @@ import {
 
 export interface AddEventFormValues {
   time: number;
+  title: string;
+  description?: string;
   type: RecordingEventType;
 }
 
@@ -32,6 +35,7 @@ interface Props {
   initialValues?: Partial<AddEventFormValues>;
   mode?: EventFormMode;
   onSubmit: (values: AddEventFormValues) => void;
+  onCancel?: () => void;
 }
 
 export const AddEventForm: React.FC<Props> = ({
@@ -41,12 +45,15 @@ export const AddEventForm: React.FC<Props> = ({
   mode = EventFormMode.CREATE,
   initialValues,
   onSubmit,
+  onCancel,
 }) => {
   const form = useForm<AddEventFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       time: initialValues?.time ?? 0,
       type: initialValues?.type ?? RecordingEventType.CLICK,
+      title: initialValues?.title ?? '',
+      description: initialValues?.description ?? '',
     },
   });
 
@@ -57,6 +64,14 @@ export const AddEventForm: React.FC<Props> = ({
 
     if (initialValues?.type) {
       form.setValue('type', initialValues.type);
+    }
+
+    if (initialValues?.title) {
+      form.setValue('title', initialValues.title);
+    }
+
+    if (initialValues?.description) {
+      form.setValue('description', initialValues.description);
     }
   }, [form, initialValues]);
 
@@ -71,23 +86,41 @@ export const AddEventForm: React.FC<Props> = ({
   return (
     <FormProvider {...form}>
       <form
-        className={cn('space-y-4', className)}
+        className={cn('mt-2 space-y-4', className)}
         onSubmit={form.handleSubmit(handleSubmit)}
       >
+        <div className="flex flex-row gap-4">
+          <FormField name="type" control={form.control} render={EventTypeSelector} />
+
+          <FormField
+            name="time"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Time (milliseconds):</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    step="100"
+                    disabled={!isTimeFieldEditable}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
-          name="time"
+          name="title"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Time (milliseconds)</FormLabel>
+              <FormLabel>Title:</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="number"
-                  step="100"
-                  disabled={!isTimeFieldEditable}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input {...field} placeholder="Enter event title" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,12 +128,32 @@ export const AddEventForm: React.FC<Props> = ({
         />
 
         <FormField
-          name="type"
+          name="description"
           control={form.control}
-          render={() => <EventTypeSelector />}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description:</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="Enter event description (optional)"
+                  className="min-h-[80px]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        <div className="flex justify-end space-x-2">
+        <div className="flex justify-between space-x-3 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onCancel?.()}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting
               ? SUBMIT_BUTTON_LOADING_TEXT_BY_MODE[mode]

@@ -31,14 +31,22 @@ export const AddEventDialogComponent = () => {
       ? {
           time: selectedEvent.timestamp - currentRecordingStartTimestamp,
           type: selectedEvent.type,
+          title: selectedEvent.title,
+          description: selectedEvent.description ?? '',
         }
       : {
           time: recordingPauseTimestamp,
           type: RecordingEventType.CLICK,
+          title: '',
+          description: '',
         };
 
   const onOpenChange = (isOpen: boolean) => {
     setIsOpen(isOpen);
+  };
+
+  const onCancelClick = () => {
+    setIsOpen(false);
   };
 
   const handleSubmit = async (values: AddEventFormValues) => {
@@ -59,17 +67,14 @@ export const AddEventDialogComponent = () => {
           <DialogTitle>{FORM_TITLE_BY_MODE[mode]}</DialogTitle>
         </DialogHeader>
 
-        <div className="pb-4">
-          <div className="text-muted-foreground mb-4">
-            {FORM_DESCRIPTION_BY_MODE[mode]}
-          </div>
-        </div>
+        <div className="text-muted-foreground">{FORM_DESCRIPTION_BY_MODE[mode]}</div>
 
         <AddEventForm
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
           mode={mode}
           initialValues={initialValues}
+          onCancel={onCancelClick}
         />
       </DialogContent>
     </Dialog>

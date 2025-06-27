@@ -1,13 +1,31 @@
+import { useEffect, useState } from 'react';
+import { Dimensions } from '@/domain/Recordings';
 import { useMediaLoad } from './useMediaLoad';
 import { useResizeObserver } from './useResizeObserver';
 
 export const useMediaDimensions = () => {
   const { mediaRef, isLoaded, handleMediaLoad } = useMediaLoad();
-  const dimensions = useResizeObserver(mediaRef);
+
+  const observedDimensions = useResizeObserver(mediaRef);
+
+  const [dimensions, setDimensions] = useState<Dimensions | null>(null);
+
+  useEffect(() => {
+    if (isLoaded && mediaRef.current) {
+      if (!observedDimensions) {
+        setDimensions({
+          width: mediaRef.current.clientWidth,
+          height: mediaRef.current.clientHeight,
+        });
+      } else {
+        setDimensions(observedDimensions);
+      }
+    }
+  }, [isLoaded, observedDimensions, mediaRef]);
 
   return {
     mediaRef,
-    dimensions: isLoaded ? dimensions : null,
+    dimensions,
     handleMediaLoad,
   };
 };

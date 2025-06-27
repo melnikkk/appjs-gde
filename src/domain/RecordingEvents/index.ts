@@ -16,8 +16,10 @@ export type RecordingEventData = ClickRecordingEventData;
 
 export interface RecordingEvent {
   id: string;
-  timestamp: number;
+  title: string;
+  description: string | null;
   screenshotUrl: string | null;
+  timestamp: number;
   type: RecordingEventType;
   data: RecordingEventData;
 }
