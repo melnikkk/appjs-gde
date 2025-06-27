@@ -17,6 +17,8 @@ import { selectCurrentRecordingStartTimestamp } from '@/infrastructure/store/sli
 export interface EventFormData {
   time: number;
   type: RecordingEventType;
+  title: string;
+  description?: string;
 }
 
 export interface AddEventDialogContextValue {
@@ -71,12 +73,16 @@ export const AddEventDialogProvider: React.FC<Props> = ({ children }) => {
           id: currentEvent.id,
           timestamp: currentRecordingStartTimestamp + values.time,
           type: values.type,
+          title: values.title,
+          description: values.description || null,
           data: {
             coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
           },
         },
       });
-    } catch (e) {
+    } catch (error) {
+      console.error('Failed to edit custom event:', error);
+
       toast.error('Failed to edit custom event. Please try again.');
     }
   };
@@ -100,6 +106,8 @@ export const AddEventDialogProvider: React.FC<Props> = ({ children }) => {
             id: eventId,
             timestamp: currentRecordingStartTimestamp + values.time,
             type: values.type,
+            title: values.title,
+            description: values.description || null,
             data: {
               coordinates: DEFAULT_RECORDING_EVENT_COORDINATES,
             },
@@ -108,8 +116,10 @@ export const AddEventDialogProvider: React.FC<Props> = ({ children }) => {
         },
       }).unwrap();
 
-      toast.success(`Custom event "${values.type}" added successfully.`);
+      toast.success(`Event "${values.title}" added successfully.`);
     } catch (error) {
+      console.error('Failed to add custom event:', error);
+      
       toast.error('Failed to add custom event. Please try again.');
     } finally {
       setIsOpen(false);

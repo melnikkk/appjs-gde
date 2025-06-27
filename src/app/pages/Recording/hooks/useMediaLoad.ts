@@ -28,20 +28,14 @@ export const useMediaLoad = (): {
       setIsLoaded(true);
     }
 
-    const handleLoad = () => {
+    const handleLoadedMetadata = () => {
       setIsLoaded(true);
     };
 
-    const handleLoadedData = () => {
-      setIsLoaded(true);
-    };
-
-    element.addEventListener('load', handleLoad);
-    element.addEventListener('loadeddata', handleLoadedData);
+    element.addEventListener('loadedmetadata', handleLoadedMetadata);
 
     return () => {
-      element.removeEventListener('load', handleLoad);
-      element.removeEventListener('loadeddata', handleLoadedData);
+      element.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
   }, []);
 
