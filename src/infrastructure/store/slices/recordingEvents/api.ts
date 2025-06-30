@@ -79,6 +79,13 @@ export const recordingEventsApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: [Tag.RECORDING_EVENTS],
     }),
+    generateAiRecordingEventsContent: builder.mutation<string, { recordingId: string }>({
+      query: ({ recordingId }) => ({
+        url: `recordings/${recordingId}/events/generate-ai-content`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tag.RECORDING_EVENTS],
+    }),
   }),
 });
 
@@ -87,4 +94,5 @@ export const {
   useAddEventsMutation,
   useDeleteEventMutation,
   useEditRecordingEventMutation,
+  useGenerateAiRecordingEventsContentMutation,
 } = recordingEventsApiSlice;

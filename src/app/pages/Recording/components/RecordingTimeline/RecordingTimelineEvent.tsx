@@ -22,7 +22,7 @@ interface Props {
   initialDimensions: Dimensions;
 }
 
-export const RecordingEventComponent: React.FC<Props> = ({
+export const RecordingTimelineEvent: React.FC<Props> = ({
   id,
   index,
   startPointTimestamp,
@@ -79,7 +79,6 @@ export const RecordingEventComponent: React.FC<Props> = ({
             </div>
             <div>
               <h3 className="font-semibold">{recordingEventTitle}</h3>
-              <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -89,20 +88,18 @@ export const RecordingEventComponent: React.FC<Props> = ({
         </div>
       </AccordionTrigger>
       <AccordionContent className="px-4 pt-0 pb-3">
-        <div className="ml-11">
-          <p className="text-muted-foreground text-sm">{coordinatesInfo}</p>
-          {hasScreenshot ? (
-            fullScreenshotUrl ? (
-              <ScreenshotWithOverlay
-                initialDimensions={initialDimensions}
-                screenshotUrl={fullScreenshotUrl}
-                event={recordingEvent}
-                alt={`Screenshot for ${recordingEventTitle}`}
-                className="mt-4"
-              />
-            ) : null
-          ) : null}
-        </div>
+        <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
+        {hasScreenshot ? (
+          fullScreenshotUrl ? (
+            <ScreenshotWithOverlay
+              initialDimensions={initialDimensions}
+              screenshotUrl={fullScreenshotUrl}
+              event={recordingEvent}
+              alt={`Screenshot for ${recordingEventTitle}`}
+              className="mt-4"
+            />
+          ) : null
+        ) : null}
       </AccordionContent>
     </AccordionItem>
   );

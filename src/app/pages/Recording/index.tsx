@@ -20,7 +20,7 @@ export const RecordingPage = () => {
 
   const { id } = useParams({ strict: false });
 
-  const { data: recording } = useGetRecordingQuery(
+  const { data: recording, isLoading: isLoadingRecording } = useGetRecordingQuery(
     {
       id: id as string,
     },
@@ -28,7 +28,8 @@ export const RecordingPage = () => {
       skip: !id,
     },
   );
-  useGetEventsQuery(
+
+  const { isLoading: isLoadingEvents } = useGetEventsQuery(
     {
       recordingId: id as string,
     },
@@ -36,6 +37,8 @@ export const RecordingPage = () => {
       skip: !id,
     },
   );
+
+  const isLoading = isLoadingRecording || isLoadingEvents;
 
   useEffect(() => {
     if (id) {
@@ -88,6 +91,7 @@ export const RecordingPage = () => {
             <RecordingTimeline
               recording={recording}
               startPointTimestamp={recording.startTime}
+              isLoading={isLoading}
             />
           </SidebarContent>
         </Sidebar>
