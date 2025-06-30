@@ -1,5 +1,4 @@
-import { Dialog } from '@/components/ui/dialog';
-import { DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   EventFormMode,
   FORM_DESCRIPTION_BY_MODE,

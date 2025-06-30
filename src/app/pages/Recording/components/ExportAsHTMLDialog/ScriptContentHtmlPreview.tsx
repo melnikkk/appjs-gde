@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Props {
   scriptContent: string | undefined;
@@ -10,8 +10,6 @@ export const ScriptContentHtmlPreview: React.FC<Props> = ({
   isLoading,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!scriptContent || !containerRef.current) {
@@ -41,7 +39,7 @@ export const ScriptContentHtmlPreview: React.FC<Props> = ({
         oldScript.parentNode?.replaceChild(newScript, oldScript);
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to render preview');
+      console.error(err instanceof Error ? err.message : 'Failed to render preview');
     }
   }, [scriptContent]);
 

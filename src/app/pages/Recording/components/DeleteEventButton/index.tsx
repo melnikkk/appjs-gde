@@ -58,6 +58,8 @@ export const DeleteEventButton: React.FC<Props> = ({ eventId }) => {
 
       toast.success('Event deleted successfully');
     } catch (error) {
+      console.error('Failed to delete event:', error);
+
       toast.error('Failed to delete event');
     }
   };

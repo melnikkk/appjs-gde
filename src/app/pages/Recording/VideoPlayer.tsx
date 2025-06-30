@@ -21,22 +21,24 @@ export const VideoPlayer: React.FC<Props> = ({
   handleMediaLoad,
 }) => {
   useEffect(() => {
-    if (videoRef.current && isFinite(pauseTime) && pauseTime >= 0) {
-      videoRef.current.currentTime = millesecondsToSeconds(pauseTime);
+    const videoElement = videoRef.current;
+
+    if (videoElement && isFinite(pauseTime) && pauseTime >= 0) {
+      videoElement.currentTime = millesecondsToSeconds(pauseTime);
 
       const handleTimeUpdate = () => {
-        if (onTimeUpdate && videoRef.current) {
-          onTimeUpdate(Math.floor(videoRef.current.currentTime));
+        if (onTimeUpdate && videoElement) {
+          onTimeUpdate(Math.floor(videoElement.currentTime));
         }
       };
 
-      videoRef.current.addEventListener('timeupdate', handleTimeUpdate);
+      videoElement.addEventListener('timeupdate', handleTimeUpdate);
 
       return () => {
-        videoRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
+        videoElement.removeEventListener('timeupdate', handleTimeUpdate);
       };
     }
-  }, [pauseTime, onTimeUpdate]);
+  }, [pauseTime, onTimeUpdate, videoRef]);
 
   return (
     <video

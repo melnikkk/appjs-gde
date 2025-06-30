@@ -20,7 +20,7 @@ export const DefaultRecordingPlaceholder = () => {
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="border-muted/50 h-32 w-32 rounded-full border-2 border-dashed"></div>
+        <div className="border-muted/50 h-32 w-32 rounded-full border-2 border-dashed" />
       </div>
     </div>
   );

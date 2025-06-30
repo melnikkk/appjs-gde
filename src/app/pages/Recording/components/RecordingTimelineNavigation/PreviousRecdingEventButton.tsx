@@ -44,7 +44,7 @@ export const PreviousRecordingEventButton: React.FC<Props> = ({
       dispatch(setCurrentEventId(previousEvent.id));
       dispatch(setRecordingPauseTimestamp(pauseTimestamp));
     }
-  }, [dispatch, currentEventIndex, eventsAmount, trackerEvents]);
+  }, [dispatch, currentEventIndex, eventsAmount, trackerEvents, startPointTimestamp]);
 
   return (
     <Button

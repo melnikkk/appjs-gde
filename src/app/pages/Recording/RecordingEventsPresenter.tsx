@@ -71,6 +71,8 @@ export const RecordingEventsPresenter: React.FC<Props> = ({
         },
       }).unwrap();
     } catch (error) {
+      console.error('Failed to update event coordinates:', error);
+
       toast.error('Failed to update event coordinates');
     } finally {
       setLocalCoordinates(null);

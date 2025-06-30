@@ -5,13 +5,11 @@ import { selectRecordingPauseTimestamp } from '@/infrastructure/store/slices/edi
 import { selectCurrentEventId } from '@/infrastructure/store/slices/recordingEvents/selectors';
 
 interface Props extends React.PropsWithChildren {
-  startPointTimestamp: number;
   recordingDuration: number;
   onClick: (timeStamp: number) => void;
 }
 
 export const TimelineTracker: React.FC<Props> = ({
-  startPointTimestamp,
   recordingDuration,
   children,
   onClick,
@@ -37,7 +35,7 @@ export const TimelineTracker: React.FC<Props> = ({
         onClick(trackerTimestamp);
       }
     },
-    [onClick, trackRef, startPointTimestamp, recordingDuration],
+    [onClick, trackRef, recordingDuration],
   );
 
   return (
