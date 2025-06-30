@@ -40,7 +40,7 @@ export const TimelineTrackerEvent: React.FC<Props> = ({
       dispatch(setCurrentEventId(recordingEventId));
       dispatch(setRecordingPauseTimestamp(pauseTimestamp));
     },
-    [dispatch, recordingEventId, trackerEvent],
+    [dispatch, recordingEventId, pauseTimestamp],
   );
 
   return (

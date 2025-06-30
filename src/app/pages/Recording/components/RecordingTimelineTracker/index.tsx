@@ -37,7 +37,6 @@ export const RecordingTimelineTracker: React.FC<Props> = ({
   return (
     <div className="relative flex-1">
       <TimelineTracker
-        startPointTimestamp={startPointTimestamp}
         recordingDuration={recordingDuration}
         onClick={onTimelineTrackerClick}
       >

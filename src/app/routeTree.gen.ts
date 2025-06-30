@@ -1,6 +1,4 @@
-/* eslint-disable */
-
-// @ts-nocheck
+/* Auto-generated file - Modifications may be overwritten */
 
 // noinspection JSUnusedGlobalSymbols
 

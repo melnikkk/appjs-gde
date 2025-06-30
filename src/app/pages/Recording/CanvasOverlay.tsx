@@ -111,18 +111,20 @@ export const CanvasOverlay: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.on('mouseover', () => {
+    const currentGroup = groupRef.current;
+
+    if (currentGroup) {
+      currentGroup.on('mouseover', () => {
         document.body.style.cursor = 'grab';
       });
 
-      groupRef.current.on('mouseout', () => {
+      currentGroup.on('mouseout', () => {
         document.body.style.cursor = 'default';
       });
 
       return () => {
-        groupRef.current?.off('mouseover');
-        groupRef.current?.off('mouseout');
+        currentGroup.off('mouseover');
+        currentGroup.off('mouseout');
       };
     }
   }, []);
@@ -149,10 +151,10 @@ export const CanvasOverlay: React.FC<Props> = ({
       >
         <Layer>
           <Group
+            draggable
             ref={groupRef}
             x={position.x}
             y={position.y}
-            draggable={true}
             onDragMove={handleDragMove}
             onDragEnd={handleDragEnd}
           >
