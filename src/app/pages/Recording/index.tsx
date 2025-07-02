@@ -10,6 +10,9 @@ import { setCurrentRecordingId } from '@/infrastructure/store/slices/recordings/
 import { RecordingTimeline } from './components/RecordingTimeline';
 import { RecordingTimelineNavigation } from './components/RecordingTimelineNavigation';
 import { RecordingPlayer } from './RecordingPlayer';
+import { ErrorMessage } from '@/components/ui/error/error-message';
+import { ErrorBoundary } from '@/components/ui/error/error-boundary';
+import { useRtkQueryErrorHandler } from '@/hooks/error';
 
 export const RecordingPage = () => {
   // useWebSocketConnection();
@@ -20,7 +23,14 @@ export const RecordingPage = () => {
 
   const { id } = useParams({ strict: false });
 
-  const { data: recording, isLoading: isLoadingRecording } = useGetRecordingQuery(
+  const { error, isError, handleRtkQueryError, clearError } = useRtkQueryErrorHandler();
+
+  const {
+    data: recording,
+    isLoading: isLoadingRecording,
+    error: recordingError,
+    refetch: refetchRecording,
+  } = useGetRecordingQuery(
     {
       id: id as string,
     },
@@ -29,7 +39,11 @@ export const RecordingPage = () => {
     },
   );
 
-  const { isLoading: isLoadingEvents } = useGetEventsQuery(
+  const {
+    isLoading: isLoadingEvents,
+    error: eventsError,
+    refetch: refetchEvents,
+  } = useGetEventsQuery(
     {
       recordingId: id as string,
     },
@@ -41,6 +55,14 @@ export const RecordingPage = () => {
   const isLoading = isLoadingRecording || isLoadingEvents;
 
   useEffect(() => {
+    if (recordingError) {
+      handleRtkQueryError(recordingError);
+    } else if (eventsError) {
+      handleRtkQueryError(eventsError);
+    }
+  }, [recordingError, eventsError, handleRtkQueryError]);
+
+  useEffect(() => {
     if (id) {
       dispatch(setCurrentRecordingId(id));
     }
@@ -50,52 +72,98 @@ export const RecordingPage = () => {
     };
   }, [id, dispatch]);
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <div className="border-primary mx-auto h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
+          <p className="mt-4 text-lg">Loading recording...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    const handleRetry = () => {
+      clearError();
+
+      if (recordingError) {
+        refetchRecording();
+      }
+
+      if (eventsError) {
+        refetchEvents();
+      }
+    };
+
+    return (
+      <div className="flex h-full items-center justify-center p-4">
+        <ErrorMessage
+          title="Failed to load recording"
+          message={error?.message || 'There was a problem loading this recording.'}
+          onRetry={handleRetry}
+          className="max-w-lg"
+        />
+      </div>
+    );
+  }
+
   if (!recording) {
-    return null;
+    return (
+      <div className="flex h-full items-center justify-center p-4">
+        <ErrorMessage
+          title="Recording not found"
+          message="The recording you're looking for doesn't exist or has been removed."
+          className="max-w-lg"
+        />
+      </div>
+    );
   }
 
   return (
-    <div className="flex h-full">
-      <SidebarProvider
-        style={
-          {
-            '--sidebar-width': '350px',
-            '--sidebar-width-mobile': '300px',
-          } as React.CSSProperties
-        }
-        className="min-h-fit"
-      >
-        <div className="flex-1 px-3 pt-3">
-          <div className="rounded-lg border p-4">
-            <RecordingPlayer
-              recording={recording}
-              dimensions={dimensions}
-              videoRef={videoRef}
-              handleMediaLoad={handleMediaLoad}
-            />
+    <ErrorBoundary>
+      <div className="flex h-full">
+        <SidebarProvider
+          style={
+            {
+              '--sidebar-width': '350px',
+              '--sidebar-width-mobile': '300px',
+            } as React.CSSProperties
+          }
+          className="min-h-fit"
+        >
+          <div className="flex-1 px-3 pt-3">
+            <div className="rounded-lg border p-4">
+              <RecordingPlayer
+                recording={recording}
+                dimensions={dimensions}
+                videoRef={videoRef}
+                handleMediaLoad={handleMediaLoad}
+              />
 
-            <Separator className="my-4" />
+              <Separator className="my-4" />
 
-            <RecordingTimelineNavigation
-              startPointTimestamp={recording.startTime}
-              endPointTimestamp={recording.stopTime}
-              duration={recording.duration}
-              initialRecordingDimensions={recording.viewData}
-              currentRecordingDimensions={dimensions}
-            />
+              <RecordingTimelineNavigation
+                startPointTimestamp={recording.startTime}
+                endPointTimestamp={recording.stopTime}
+                duration={recording.duration}
+                initialRecordingDimensions={recording.viewData}
+                currentRecordingDimensions={dimensions}
+              />
+            </div>
           </div>
-        </div>
 
-        <Sidebar side="right" collapsible="none" className="border-l">
-          <SidebarContent>
-            <RecordingTimeline
-              recording={recording}
-              startPointTimestamp={recording.startTime}
-              isLoading={isLoading}
-            />
-          </SidebarContent>
-        </Sidebar>
-      </SidebarProvider>
-    </div>
+          <Sidebar side="right" collapsible="none" className="border-l">
+            <SidebarContent>
+              <RecordingTimeline
+                recording={recording}
+                startPointTimestamp={recording.startTime}
+                isLoading={isLoading}
+              />
+            </SidebarContent>
+          </Sidebar>
+        </SidebarProvider>
+      </div>
+    </ErrorBoundary>
   );
 };
