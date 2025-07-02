@@ -1,14 +1,14 @@
 {
   "extensions": [".js", ".jsx", ".ts", ".tsx"],
   "excludedFiles": [
-    "node_modules/**",
-    "dist/**",
-    "build/**",
-    "coverage/**",
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
     "src/app/routeTree.gen.ts",
-    "src/components/ui/**"
+    "src/shared/ui-kit"
   ],
-  "plugins": ["typescript", "react"],
+  "plugins": ["typescript", "react", "import"],
   "categories": {
     "correctness": "error",
     "suspicious": "error",
@@ -48,6 +48,98 @@
     "typescript/no-explicit-any": "warn",
     "typescript/no-unnecessary-type-constraint": "warn",
     "typescript/consistent-indexed-object-style": "warn",
+
+    // FSD layer boundary rules
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          {
+            "target": "./src/entities/**/*",
+            "from": "./src/{features,widgets,pages}/**/*",
+            "message": "Entities cannot import from upper layers (features, widgets, pages) in FSD"
+          },
+          {
+            "target": "./src/features/**/*",
+            "from": "./src/{widgets,pages}/**/*",
+            "message": "Features cannot import from upper layers (widgets, pages) in FSD"
+          },
+          {
+            "target": "./src/widgets/**/*",
+            "from": "./src/pages/**/*",
+            "message": "Widgets cannot import from upper layers (pages) in FSD"
+          },
+          {
+            "target": "./src/pages/**/*",
+            "from": "./src/app/**/*",
+            "message": "Pages cannot import from app layer directly in FSD"
+          },
+
+          {
+            "target": "./src/{entities,features,widgets,pages}/**/model/**/*",
+            "from": "./src/{entities,features,widgets,pages}/**/ui/**/*",
+            "message": "Model layer should not import from UI layer in FSD"
+          },
+          {
+            "target": "./src/{entities,features,widgets,pages}/**/lib/**/*",
+            "from": "./src/{entities,features,widgets,pages}/**/ui/**/*",
+            "message": "Lib layer should not import from UI layer in FSD"
+          },
+          {
+            "target": "./src/{entities,features,widgets,pages}/**/api/**/*",
+            "from": "./src/{entities,features,widgets,pages}/**/ui/**/*",
+            "message": "API layer should not import from UI layer in FSD"
+          },
+          {
+            "target": "./src/{entities,features,widgets,pages}/**/api/**/*",
+            "from": "./src/{entities,features,widgets,pages}/**/model/**/*",
+            "message": "API layer should not import from Model layer in FSD"
+          },
+
+          {
+            "target": "./src/shared/**/*",
+            "from": "./src/{entities,features,widgets,pages,app}/**/*",
+            "message": "Shared modules cannot import from other layers in FSD"
+          }
+        ]
+      }
+    ],
+
+    // FSD deprecated paths
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "@/infrastructure/store/slices/*",
+              "src/infrastructure/store/slices/*"
+            ],
+            "message": "Deprecated path. Use '@/entities/*/model' or '@/features/*/model' instead"
+          },
+          {
+            "group": ["@/app/pages/*", "src/app/pages/*"],
+            "message": "Deprecated path. Use '@/pages/*' instead"
+          },
+          {
+            "group": ["@/domain/*", "src/domain/*"],
+            "message": "Deprecated path. Use '@/entities/*/model/types' instead"
+          },
+          {
+            "group": ["@/components/ui/*", "src/components/ui/*"],
+            "message": "Deprecated path. Use '@/shared/ui-kit/*' instead"
+          },
+          {
+            "group": ["@/hooks/*", "src/hooks/*"],
+            "message": "Deprecated path. Use '@/shared/hooks/*' or specific slice hooks in FSD"
+          },
+          {
+            "group": ["@/app/shared/contexts/*", "src/app/shared/contexts/*"],
+            "message": "Deprecated path. Use '@/entities/*/model/contexts' or '@/shared/contexts/*' instead"
+          }
+        ]
+      }
+    ],
     "typescript/array-type": ["warn", { "default": "generic" }],
     "typescript/no-extraneous-class": ["warn", { "allowWithDecorator": true }],
     "typescript/no-inferrable-types": "warn",
@@ -79,7 +171,13 @@
     "sort-imports": "off",
     "sort-keys": "off",
     "no-magic-numbers": "off",
-    "typescript/consistent-type-imports": "off"
+    "typescript/consistent-type-imports": "off",
+    "import/prefer-default-export": "off",
+    "import/group-exports": "off",
+    "import/name-no-spaces": "off",
+    "import/max-dependencies": "off",
+    "import/exports-last": "off",
+    "max-params": "off"
   },
   "overrides": [
     {

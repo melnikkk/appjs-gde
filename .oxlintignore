@@ -1,0 +1,6 @@
+node_modules/**
+dist/**
+build/**
+coverage/**
+src/app/routeTree.gen.ts
+src/shared/ui-kit/**

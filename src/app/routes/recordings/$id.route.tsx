@@ -1,11 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { RecordingPage } from '@/app/pages/Recording';
+import { RecordingPage } from '@/pages/recording';
 
-export const Route = createFileRoute('/recordings/$id')({
-  component: RecordingPageWrapper,
-});
-
-function RecordingPageWrapper() {
+const RecordingPageWrapper = () => {
   return (
     <div
       className="h-full"
@@ -16,4 +12,8 @@ function RecordingPageWrapper() {
       <RecordingPage />
     </div>
   );
-}
+};
+
+export const Route = createFileRoute('/recordings/$id')({
+  component: RecordingPageWrapper,
+});
