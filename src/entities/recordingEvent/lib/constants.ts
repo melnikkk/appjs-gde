@@ -1,4 +1,4 @@
-import { Coordinates } from '@/entities/recordingEvent/model/types';
+import { Coordinates } from '@/shared/types';
 
 export const DEFAULT_RECORDING_EVENT_COORDINATES: Coordinates = {
   x: 50,
@@ -7,4 +7,5 @@ export const DEFAULT_RECORDING_EVENT_COORDINATES: Coordinates = {
 
 export enum RecordingEventType {
   CLICK = 'click',
+  URL_CHANGE = 'url_change',
 }

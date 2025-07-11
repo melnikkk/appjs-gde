@@ -1,8 +1,6 @@
 import { toast } from 'sonner';
-import { useState } from 'react';
-import { Dimensions } from '@/shared/types';
-import { Coordinates } from '@/entities/recordingEvent/model/types';
-import { scaleCoordinates } from '@/entities/recordingEvent/lib/utils';
+import { Coordinates, Dimensions } from '@/shared/types';
+import { scaleCoordinates } from '@/shared/lib/coordinate-utils';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import {
   selectCurrentEventId,
@@ -10,34 +8,23 @@ import {
 } from '@/entities/recordingEvent/model/selectors';
 import { selectCurrentRecordingId } from '@/entities/recording/model/selectors';
 import { useEditRecordingEventMutation } from '@/entities/recordingEvent/api/queries';
-import { CanvasOverlay } from '@/shared/components/canvas/CanvasOverlay';
+import { EventOverlay } from '@/shared/components/canvas/EventOverlay';
+import { createRecordingEvent } from '@/entities/recordingEvent';
 
 interface Props {
   initialDimensions: Dimensions;
-  coordinates: Coordinates;
   dimensions: Dimensions | null;
 }
 
 export const RecordingEventsPresenter: React.FC<Props> = ({
   dimensions,
   initialDimensions,
-  coordinates: initialCoordinates,
 }) => {
   const currentEventId = useAppSelector(selectCurrentEventId);
   const recordingId = useAppSelector(selectCurrentRecordingId);
   const recordingEvents = useAppSelector(selectRecordingEventsEntities);
 
-  const [localCoordinates, setLocalCoordinates] = useState<Coordinates | null>(null);
-
   const [triggerEditRecordingEvent] = useEditRecordingEventMutation();
-
-  const effectiveCoordinates = localCoordinates || initialCoordinates;
-
-  const scaledCoordinates = scaleCoordinates(
-    dimensions ?? initialDimensions,
-    initialDimensions,
-    effectiveCoordinates,
-  );
 
   const width = dimensions?.width || initialDimensions.width;
   const height = dimensions?.height || initialDimensions.height;
@@ -74,16 +61,23 @@ export const RecordingEventsPresenter: React.FC<Props> = ({
       console.error('Failed to update event coordinates:', error);
 
       toast.error('Failed to update event coordinates');
-    } finally {
-      setLocalCoordinates(null);
     }
   };
 
+  if (!currentEventId || !recordingEvents[currentEventId]) {
+    return null;
+  }
+
+  const currentEvent = recordingEvents[currentEventId];
+  const renderableEvent = createRecordingEvent(currentEvent);
+
   return (
-    <CanvasOverlay
-      coordinates={scaledCoordinates}
+    <EventOverlay
       width={width}
       height={height}
+      event={renderableEvent}
+      initialDimensions={initialDimensions}
+      currentDimensions={dimensions || initialDimensions}
       onPositionChangeEnd={onEventPositionChangeEnd}
     />
   );

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { RecordingPage } from '@/pages/recording';
+import { RecordingPage } from '@/pages/Recording';
 
 const RecordingPageWrapper = () => {
   return (

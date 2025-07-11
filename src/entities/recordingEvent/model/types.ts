@@ -34,12 +34,13 @@ interface ClickRecordingEventData {
     y: number;
   };
 }
-type RecordingEventData = ClickRecordingEventData;
 
-export interface Coordinates {
-  x: number;
-  y: number;
+interface UrlChangeRecordingEventData {
+  previousUrl: string;
+  newUrl: string;
 }
+
+type RecordingEventData = ClickRecordingEventData | UrlChangeRecordingEventData;
 
 export interface RecordingEvent {
   id: string;

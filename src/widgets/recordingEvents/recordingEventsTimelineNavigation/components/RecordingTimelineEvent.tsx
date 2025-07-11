@@ -1,4 +1,3 @@
-import { formatDuration } from '@/shared/lib/time-utils';
 import {
   AccordionItem,
   AccordionTrigger,
@@ -43,13 +42,8 @@ export const RecordingTimelineEvent: React.FC<Props> = ({
   const isFocused = currentEventId === id;
   const stepNumber = index + 1;
 
-  const eventTime = formatDuration(recordingEvent.timestamp - startPointTimestamp);
-
-  const hasCoordinates = Boolean(recordingEvent?.data?.coordinates);
-  const coordinatesInfo = `Clicked at coordinates (${hasCoordinates ? `${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y}` : 'coordinates unavailable'})`;
-
   const recordingEventTitle = `Step ${stepNumber}: ${recordingEvent.title ?? 'Click Event'}`;
-  const recordingEventDescription = recordingEvent.description ?? coordinatesInfo;
+  const recordingEventDescription = recordingEvent.description;
 
   const handleEventClick = () => {
     dispatch(setRecordingPauseTimestamp(recordingEvent.timestamp - startPointTimestamp));
@@ -60,6 +54,8 @@ export const RecordingTimelineEvent: React.FC<Props> = ({
   const fullScreenshotUrl = hasScreenshot
     ? `${import.meta.env.VITE_BACKEND_URL}${recordingEvent.screenshotUrl}`
     : undefined;
+
+  const shouldShowScreenshot = hasScreenshot && fullScreenshotUrl;
 
   return (
     <AccordionItem
@@ -83,24 +79,21 @@ export const RecordingTimelineEvent: React.FC<Props> = ({
               <h3 className="font-semibold">{recordingEventTitle}</h3>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-muted-foreground text-sm">{eventTime}</div>
+          <div className="flex items-center">
             <DeleteEventButton eventId={id} />
           </div>
         </div>
       </AccordionTrigger>
       <AccordionContent className="px-4 pt-0 pb-3">
         <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
-        {hasScreenshot ? (
-          fullScreenshotUrl ? (
-            <ScreenshotWithOverlay
-              initialDimensions={initialDimensions}
-              screenshotUrl={fullScreenshotUrl}
-              event={recordingEvent}
-              alt={`Screenshot for ${recordingEventTitle}`}
-              className="mt-4"
-            />
-          ) : null
+        {shouldShowScreenshot ? (
+          <ScreenshotWithOverlay
+            initialDimensions={initialDimensions}
+            screenshotUrl={fullScreenshotUrl}
+            event={recordingEvent}
+            alt={`Screenshot for ${recordingEventTitle}`}
+            className="mt-4"
+          />
         ) : null}
       </AccordionContent>
     </AccordionItem>
