@@ -6,10 +6,6 @@ export {
   useGenerateAiRecordingEventsContentMutation,
 } from './api/queries';
 
-export { setCurrentEventId } from './model/slice';
-
-export type { Coordinates } from './model/types';
-
 export {
   selectRecordingEventsFromCache,
   selectCurrentEventId,
@@ -24,5 +20,13 @@ export {
 } from './model/selectors';
 
 export { scaleCoordinates } from './lib/utils';
-
 export { DEFAULT_RECORDING_EVENT_COORDINATES, RecordingEventType } from './lib/constants';
+
+export { BaseRecordingEvent, type RenderConfig } from './model/base-event';
+export { ClickRecordingEvent, type ClickRecordingEventData } from './model/click-event';
+export {
+  UrlChangeRecordingEvent,
+  type UrlChangeRecordingEventData,
+} from './model/url-change-event';
+export { createRecordingEvent } from './model/recording-event-factory';
+export { setCurrentEventId } from './model/slice';

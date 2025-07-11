@@ -1,1 +1,1 @@
-export { CanvasOverlay } from './CanvasOverlay';
+export { EventOverlay } from './EventOverlay';

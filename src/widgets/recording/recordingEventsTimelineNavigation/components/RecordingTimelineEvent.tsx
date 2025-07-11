@@ -11,9 +11,9 @@ import {
   selectRecordingEventsEntities,
 } from '@/entities/recordingEvent/model/selectors';
 import { setCurrentEventId } from '@/entities/recordingEvent/model/slice';
-import { DeleteEventButton } from '../../../../features/recordingEvent/deleteRecordingEvent/components/DeleteRecoringEventButton';
-import { ScreenshotWithOverlay } from '../../../../pages/recording/components/ScreenshotWithOverlay';
+import { DeleteEventButton } from '@/features/recordingEvent/deleteRecordingEvent/components/DeleteRecoringEventButton';
 import { Dimensions } from '@/shared/types';
+import { ScreenshotWithOverlay } from '../../screenshotWithOverlay';
 
 interface Props {
   id: string;
@@ -44,11 +44,8 @@ export const RecordingTimelineEvent: React.FC<Props> = ({
 
   const eventTime = formatDuration(recordingEvent.timestamp - startPointTimestamp);
 
-  const hasCoordinates = Boolean(recordingEvent?.data?.coordinates);
-  const coordinatesInfo = `Clicked at coordinates (${hasCoordinates ? `${recordingEvent.data.coordinates.x}, ${recordingEvent.data.coordinates.y}` : 'coordinates unavailable'})`;
-
   const recordingEventTitle = `Step ${stepNumber}: ${recordingEvent.title ?? 'Click Event'}`;
-  const recordingEventDescription = recordingEvent.description ?? coordinatesInfo;
+  const recordingEventDescription = recordingEvent.description;
 
   const handleEventClick = () => {
     dispatch(setCurrentEventId(id));

@@ -19,7 +19,7 @@ export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) =>
   const recordingPauseTimestamp = useAppSelector(selectRecordingPauseTimestamp);
 
   const recordingSourceUrl = `${import.meta.env.VITE_BACKEND_URL}${recording?.sourceUrl}`;
-  console.log(dimensions, 'dimensions in RecordingPlayer');
+
   return (
     <div className="relative">
       <VideoPlayer
@@ -34,7 +34,6 @@ export const RecordingPlayer: React.FC<Props> = ({ recording, onTimeUpdate }) =>
       {selectedEvent ? (
         <RecordingEventsPresenter
           initialDimensions={recording.viewData}
-          coordinates={selectedEvent.data.coordinates}
           dimensions={dimensions}
         />
       ) : null}
