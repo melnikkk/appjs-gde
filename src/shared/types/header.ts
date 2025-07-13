@@ -1,10 +1,7 @@
 import { ReactNode } from 'react';
 
-export interface HeaderPortProps {
-  title: string;
-}
-
-export interface HeaderComponentProps extends HeaderPortProps {
+export interface HeaderComponentProps {
+  title?: string;
   children?: ReactNode;
 }
 

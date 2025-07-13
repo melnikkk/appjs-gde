@@ -7,7 +7,7 @@ export const useMediaDimensions = () => {
   const { mediaRef, isLoaded, handleMediaLoad } = useMediaLoad();
 
   const observedDimensions = useResizeObserver(mediaRef);
-  console.log('observedDimensions', observedDimensions);
+
   const [dimensions, setDimensions] = useState<Dimensions | null>(null);
 
   useEffect(() => {

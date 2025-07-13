@@ -3,12 +3,7 @@ import { RecordingPage } from '@/pages/Recording';
 
 const RecordingPageWrapper = () => {
   return (
-    <div
-      className="h-full"
-      data-header-title="Guide Editor"
-      data-can-save
-      data-can-export
-    >
+    <div className="h-full" data-can-save data-can-export>
       <RecordingPage />
     </div>
   );

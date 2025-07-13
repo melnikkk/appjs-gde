@@ -51,8 +51,7 @@ export const RecordingTimelineEvent: React.FC<Props> = ({
     dispatch(setCurrentEventId(id));
   };
 
-  const hasScreenshot = Boolean(recordingEvent.screenshotUrl);
-  const fullScreenshotUrl = hasScreenshot
+  const fullScreenshotUrl = recordingEvent.screenshotUrl
     ? `${import.meta.env.VITE_BACKEND_URL}${recordingEvent.screenshotUrl}`
     : undefined;
 
@@ -86,16 +85,14 @@ export const RecordingTimelineEvent: React.FC<Props> = ({
       </AccordionTrigger>
       <AccordionContent className="px-4 pt-0 pb-3">
         <p className="text-muted-foreground text-sm">{recordingEventDescription}</p>
-        {hasScreenshot ? (
-          fullScreenshotUrl ? (
-            <ScreenshotWithOverlay
-              initialDimensions={initialDimensions}
-              screenshotUrl={fullScreenshotUrl}
-              event={recordingEvent}
-              alt={`Screenshot for ${recordingEventTitle}`}
-              className="mt-4"
-            />
-          ) : null
+        {fullScreenshotUrl ? (
+          <ScreenshotWithOverlay
+            initialDimensions={initialDimensions}
+            screenshotUrl={fullScreenshotUrl}
+            event={recordingEvent}
+            alt={`Screenshot for ${recordingEventTitle}`}
+            className="mt-4"
+          />
         ) : null}
       </AccordionContent>
     </AccordionItem>

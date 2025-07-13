@@ -10,7 +10,7 @@ export const selectCurrentRecordingId = createSelector(
   (state) => state.currentRecordingId,
 );
 
-export const selectRecordingEventsFromCache = createSelector(
+export const selectRecordingFromCache = createSelector(
   (state: RootState) => state,
   selectCurrentRecordingId,
   (state, id): Recording | null => {
@@ -27,11 +27,11 @@ export const selectRecordingEventsFromCache = createSelector(
 );
 
 export const selectCurrentRecordingStartTimestamp = createSelector(
-  selectRecordingEventsFromCache,
+  selectRecordingFromCache,
   (recording) => recording?.startTime ?? null,
 );
 
 export const selectCurrentRecordingDuration = createSelector(
-  selectRecordingEventsFromCache,
+  selectRecordingFromCache,
   (recording) => recording?.duration ?? null,
 );
