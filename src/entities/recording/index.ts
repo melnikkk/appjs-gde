@@ -2,12 +2,13 @@ export {
   useGetRecordingsQuery,
   useGetRecordingQuery,
   useDeleteRecordingMutation,
+  useUpdateRecordingMutation,
   useExportAsStepByStepHTMLQuery,
 } from './api/queries';
 
 export {
   selectCurrentRecordingId,
-  selectRecordingEventsFromCache,
+  selectRecordingFromCache,
   selectCurrentRecordingStartTimestamp,
   selectCurrentRecordingDuration,
 } from './model/selectors';

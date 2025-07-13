@@ -4,6 +4,7 @@ import {
   RequestRecordingDto,
   Recording,
   Recordings,
+  UpdateRecordingDto,
 } from '../model/types';
 
 export const recordingsApiSlice = apiSlice.injectEndpoints({
@@ -27,6 +28,14 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [Tag.RECORDINGS],
     }),
+    updateRecording: builder.mutation<Recording, UpdateRecordingDto>({
+      query: ({ id, name }) => ({
+        url: `/recordings/${id}`,
+        method: 'PATCH',
+        body: { name },
+      }),
+      invalidatesTags: [Tag.RECORDING, Tag.RECORDINGS],
+    }),
     exportAsStepByStepHTML: builder.query<string, ExportAsStepByStepHTMLRequestDto>({
       query: ({ recordingId }) => ({
         url: `/recordings/${recordingId}/embed-code`,
@@ -43,5 +52,6 @@ export const {
   useGetRecordingsQuery,
   useGetRecordingQuery,
   useDeleteRecordingMutation,
+  useUpdateRecordingMutation,
   useExportAsStepByStepHTMLQuery,
 } = recordingsApiSlice;

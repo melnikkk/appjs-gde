@@ -5,6 +5,11 @@ export interface RequestRecordingDto {
   id: string;
 }
 
+export interface UpdateRecordingDto {
+  id: string;
+  name: string;
+}
+
 export interface RecordingsState {
   currentRecordingId: string | null;
 }
