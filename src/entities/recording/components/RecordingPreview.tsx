@@ -1,4 +1,5 @@
 import { Badge } from '@/shared/ui-kit/badge';
+import { AuthenticatedImage } from '@/shared/components/AuthenticatedImage';
 import { DefaultRecordingPlaceholder } from './DefaultRecordingPlaceholder';
 
 interface Props {
@@ -8,23 +9,20 @@ interface Props {
   DeleteButtonPort: React.ComponentType<{ id: string }>;
 }
 
-export const RecordingPreview: React.FC<Props> = ({ 
-  id, 
-  imageUrl, 
+export const RecordingPreview: React.FC<Props> = ({
+  id,
+  imageUrl,
   duration,
-  DeleteButtonPort 
+  DeleteButtonPort,
 }) => {
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
-      {imageUrl ? (
-        <img
-          src={imageUrl}
-          alt="Recording thumbnail"
-          className="h-full w-full rounded-lg object-cover"
-        />
-      ) : (
-        <DefaultRecordingPlaceholder />
-      )}
+      <AuthenticatedImage
+        thumbnailPath={imageUrl}
+        alt="Recording thumbnail"
+        className="h-full w-full rounded-lg object-cover"
+        fallback={<DefaultRecordingPlaceholder />}
+      />
 
       <DeleteButtonPort id={id} />
 

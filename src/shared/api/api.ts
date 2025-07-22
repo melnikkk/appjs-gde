@@ -1,9 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { TAG_TYPES } from './constants';
+import { clerkAuthBaseQuery } from '@/shared/auth/api';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
+  baseQuery: clerkAuthBaseQuery(),
   tagTypes: TAG_TYPES,
   endpoints: () => ({}),
 });

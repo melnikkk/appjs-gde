@@ -1,0 +1,1 @@
+export { AuthenticatedImage } from './AuthenticatedImage';

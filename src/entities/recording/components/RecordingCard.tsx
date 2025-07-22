@@ -29,10 +29,6 @@ export const RecordingCard: React.FC<Props> = ({
   const formattedDuration = formatDuration(duration);
   const formattedCreatedAt = formatDate(createdAt);
 
-  const recordingThumbnailUrl = thumbnailUrl
-    ? `${import.meta.env.VITE_BACKEND_URL}${thumbnailUrl}`
-    : null;
-
   const onRecordingCardClick = () => {
     setOpen(false);
   };
@@ -42,9 +38,9 @@ export const RecordingCard: React.FC<Props> = ({
       <Link to="/recordings/$id" params={{ id }} className="block h-full">
         <CardHeader className="p-0">
           <RecordingPreview
-            imageUrl={recordingThumbnailUrl}
-            duration={formattedDuration}
             id={id}
+            imageUrl={thumbnailUrl}
+            duration={formattedDuration}
             DeleteButtonPort={DeleteButtonPort}
           />
         </CardHeader>

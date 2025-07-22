@@ -36,6 +36,32 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [Tag.RECORDING, Tag.RECORDINGS],
     }),
+    getRecordingThumbnail: builder.query<string, { thumbnailPath: string }>({
+      query: ({ thumbnailPath }) => ({
+        url: thumbnailPath,
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+
+          return URL.createObjectURL(blob);
+        },
+      }),
+      onCacheEntryAdded: async (arg, { cacheEntryRemoved }) => {
+        await cacheEntryRemoved;
+
+        try {
+          const objectUrl = await cacheEntryRemoved.then(() => {});
+
+          if (
+            typeof objectUrl === 'string' &&
+            (objectUrl as string).startsWith('blob:')
+          ) {
+            URL.revokeObjectURL(objectUrl);
+          }
+        } catch (error) {
+          console.error('Error revoking object URL:', error);
+        }
+      },
+    }),
     exportAsStepByStepHTML: builder.query<string, ExportAsStepByStepHTMLRequestDto>({
       query: ({ recordingId }) => ({
         url: `/recordings/${recordingId}/embed-code`,
@@ -44,6 +70,28 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
           return await response.text();
         },
       }),
+    }),
+    getRecordingVideo: builder.query<string, { videoPath: string }>({
+      query: ({ videoPath }) => ({
+        url: videoPath,
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return URL.createObjectURL(blob);
+        },
+      }),
+      onCacheEntryAdded: async (_arg, { cacheEntryRemoved }) => {
+        await cacheEntryRemoved;
+
+        try {
+          const objectUrl = (await cacheEntryRemoved.then(() => {})) as string;
+
+          if (typeof objectUrl === 'string' && objectUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(objectUrl);
+          }
+        } catch (error) {
+          console.error('Error revoking object URL:', error);
+        }
+      },
     }),
   }),
 });
@@ -54,4 +102,6 @@ export const {
   useDeleteRecordingMutation,
   useUpdateRecordingMutation,
   useExportAsStepByStepHTMLQuery,
+  useGetRecordingThumbnailQuery,
+  useGetRecordingVideoQuery,
 } = recordingsApiSlice;

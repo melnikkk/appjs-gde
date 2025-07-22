@@ -2,6 +2,7 @@ import { RecordingEvent } from '@/entities/recordingEvent/model/types';
 import { useMediaDimensions } from '@/shared/hooks/useMedia/useMediaDimensions';
 import { RecordingEventsPresenter } from '@/widgets/recording/recordingPlayer';
 import { Dimensions } from '@/shared/types';
+import { AuthenticatedImage } from '@/shared/components/AuthenticatedImage';
 
 interface Props {
   screenshotUrl: string;
@@ -14,7 +15,6 @@ interface Props {
 
 export const ScreenshotWithOverlay: React.FC<Props> = ({
   screenshotUrl,
-  event,
   alt = 'Screenshot',
   maxHeight = 400,
   className = '',
@@ -24,9 +24,9 @@ export const ScreenshotWithOverlay: React.FC<Props> = ({
 
   return (
     <div className={`relative ${className}`}>
-      <img
+      <AuthenticatedImage
         ref={mediaRef as React.RefObject<HTMLImageElement>}
-        src={screenshotUrl}
+        thumbnailPath={screenshotUrl}
         alt={alt}
         className="h-auto w-full rounded-md border object-contain"
         style={{ maxHeight: `${maxHeight}px` }}
@@ -36,7 +36,6 @@ export const ScreenshotWithOverlay: React.FC<Props> = ({
       {dimensions && (
         <RecordingEventsPresenter
           dimensions={dimensions}
-          coordinates={event.data.coordinates}
           initialDimensions={initialDimensions}
         />
       )}

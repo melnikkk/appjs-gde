@@ -11,14 +11,22 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root';
+import { Route as AuthImport } from './routes/_auth';
 import { Route as SettingsRouteImport } from './routes/settings.route';
 import { Route as ProfileRouteImport } from './routes/profile.route';
 import { Route as GuidesRouteImport } from './routes/guides.route';
 import { Route as IndexRouteImport } from './routes/index.route';
 import { Route as RecordingsIndexRouteImport } from './routes/recordings/index.route';
 import { Route as RecordingsIdRouteImport } from './routes/recordings/$id.route';
+import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up.route';
+import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in.route';
 
 // Create/Update Routes
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const SettingsRouteRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -56,6 +64,18 @@ const RecordingsIdRouteRoute = RecordingsIdRouteImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const AuthSignUpRouteRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRoute,
+} as any);
+
+const AuthSignInRouteRoute = AuthSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => AuthRoute,
+} as any);
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -88,6 +108,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport;
       parentRoute: typeof rootRoute;
     };
+    '/_auth': {
+      id: '/_auth';
+      path: '';
+      fullPath: '';
+      preLoaderRoute: typeof AuthImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/_auth/sign-in': {
+      id: '/_auth/sign-in';
+      path: '/sign-in';
+      fullPath: '/sign-in';
+      preLoaderRoute: typeof AuthSignInRouteImport;
+      parentRoute: typeof AuthImport;
+    };
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up';
+      path: '/sign-up';
+      fullPath: '/sign-up';
+      preLoaderRoute: typeof AuthSignUpRouteImport;
+      parentRoute: typeof AuthImport;
+    };
     '/recordings/$id': {
       id: '/recordings/$id';
       path: '/recordings/$id';
@@ -107,11 +148,26 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthSignInRouteRoute: typeof AuthSignInRouteRoute;
+  AuthSignUpRouteRoute: typeof AuthSignUpRouteRoute;
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthSignInRouteRoute: AuthSignInRouteRoute,
+  AuthSignUpRouteRoute: AuthSignUpRouteRoute,
+};
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren);
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRouteRoute;
   '/guides': typeof GuidesRouteRoute;
   '/profile': typeof ProfileRouteRoute;
   '/settings': typeof SettingsRouteRoute;
+  '': typeof AuthRouteWithChildren;
+  '/sign-in': typeof AuthSignInRouteRoute;
+  '/sign-up': typeof AuthSignUpRouteRoute;
   '/recordings/$id': typeof RecordingsIdRouteRoute;
   '/recordings': typeof RecordingsIndexRouteRoute;
 }
@@ -121,6 +177,9 @@ export interface FileRoutesByTo {
   '/guides': typeof GuidesRouteRoute;
   '/profile': typeof ProfileRouteRoute;
   '/settings': typeof SettingsRouteRoute;
+  '': typeof AuthRouteWithChildren;
+  '/sign-in': typeof AuthSignInRouteRoute;
+  '/sign-up': typeof AuthSignUpRouteRoute;
   '/recordings/$id': typeof RecordingsIdRouteRoute;
   '/recordings': typeof RecordingsIndexRouteRoute;
 }
@@ -131,6 +190,9 @@ export interface FileRoutesById {
   '/guides': typeof GuidesRouteRoute;
   '/profile': typeof ProfileRouteRoute;
   '/settings': typeof SettingsRouteRoute;
+  '/_auth': typeof AuthRouteWithChildren;
+  '/_auth/sign-in': typeof AuthSignInRouteRoute;
+  '/_auth/sign-up': typeof AuthSignUpRouteRoute;
   '/recordings/$id': typeof RecordingsIdRouteRoute;
   '/recordings/': typeof RecordingsIndexRouteRoute;
 }
@@ -142,16 +204,31 @@ export interface FileRouteTypes {
     | '/guides'
     | '/profile'
     | '/settings'
+    | ''
+    | '/sign-in'
+    | '/sign-up'
     | '/recordings/$id'
     | '/recordings';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/guides' | '/profile' | '/settings' | '/recordings/$id' | '/recordings';
+  to:
+    | '/'
+    | '/guides'
+    | '/profile'
+    | '/settings'
+    | ''
+    | '/sign-in'
+    | '/sign-up'
+    | '/recordings/$id'
+    | '/recordings';
   id:
     | '__root__'
     | '/'
     | '/guides'
     | '/profile'
     | '/settings'
+    | '/_auth'
+    | '/_auth/sign-in'
+    | '/_auth/sign-up'
     | '/recordings/$id'
     | '/recordings/';
   fileRoutesById: FileRoutesById;
@@ -162,6 +239,7 @@ export interface RootRouteChildren {
   GuidesRouteRoute: typeof GuidesRouteRoute;
   ProfileRouteRoute: typeof ProfileRouteRoute;
   SettingsRouteRoute: typeof SettingsRouteRoute;
+  AuthRoute: typeof AuthRouteWithChildren;
   RecordingsIdRouteRoute: typeof RecordingsIdRouteRoute;
   RecordingsIndexRouteRoute: typeof RecordingsIndexRouteRoute;
 }
@@ -171,6 +249,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesRouteRoute: GuidesRouteRoute,
   ProfileRouteRoute: ProfileRouteRoute,
   SettingsRouteRoute: SettingsRouteRoute,
+  AuthRoute: AuthRouteWithChildren,
   RecordingsIdRouteRoute: RecordingsIdRouteRoute,
   RecordingsIndexRouteRoute: RecordingsIndexRouteRoute,
 };
@@ -189,6 +268,7 @@ export const routeTree = rootRoute
         "/guides",
         "/profile",
         "/settings",
+        "/_auth",
         "/recordings/$id",
         "/recordings/"
       ]
@@ -204,6 +284,21 @@ export const routeTree = rootRoute
     },
     "/settings": {
       "filePath": "settings.route.tsx"
+    },
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/sign-in",
+        "/_auth/sign-up"
+      ]
+    },
+    "/_auth/sign-in": {
+      "filePath": "_auth/sign-in.route.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/sign-up": {
+      "filePath": "_auth/sign-up.route.tsx",
+      "parent": "/_auth"
     },
     "/recordings/$id": {
       "filePath": "recordings/$id.route.tsx"
