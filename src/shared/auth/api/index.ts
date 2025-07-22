@@ -1,0 +1,1 @@
+export { clerkAuthBaseQuery } from './authBaseQuery';

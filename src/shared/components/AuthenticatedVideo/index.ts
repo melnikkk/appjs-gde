@@ -1,0 +1,1 @@
+export { AuthenticatedVideo } from './AuthenticatedVideo';

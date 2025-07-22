@@ -1,11 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { RecordingPage } from '@/pages/Recording';
+import { ProtectedRoute } from '@/shared/auth';
 
 const RecordingPageWrapper = () => {
   return (
-    <div className="h-full" data-can-save data-can-export>
-      <RecordingPage />
-    </div>
+    <ProtectedRoute>
+      <div className="h-full" data-can-save data-can-export>
+        <RecordingPage />
+      </div>
+    </ProtectedRoute>
   );
 };
 
