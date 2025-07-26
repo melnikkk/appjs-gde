@@ -8,7 +8,7 @@ export const Header: React.FC<HeaderComponentProps> = ({ children }) => {
     <header
       className={`fixed top-0 right-0 z-10 flex h-13 items-center border-b bg-white px-4 transition-all duration-200 ease-linear ${open ? 'md:left-[var(--sidebar-width)]' : 'md:left-[var(--sidebar-width-icon)]'} left-0`}
     >
-      {children}
+      <div className="flex w-full items-center">{children}</div>
     </header>
   );
 };
