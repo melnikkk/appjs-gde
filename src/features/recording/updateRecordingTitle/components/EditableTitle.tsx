@@ -69,10 +69,10 @@ export const EditableTitle: FC<Props> = ({ id, title, isLoading }) => {
   }
 
   return (
-    <div className="mr-4 flex max-w-xs items-center">
+    <div className="mr-4 flex items-center">
       {isEditing ? (
         <Input
-          className="h-9 font-semibold"
+          className="h-9 max-w-lg font-semibold"
           ref={inputRef}
           disabled={isUpdatingTitle}
           value={editedTitle}
@@ -82,10 +82,10 @@ export const EditableTitle: FC<Props> = ({ id, title, isLoading }) => {
         />
       ) : (
         <div
-          className="flex h-9 w-full cursor-pointer items-center rounded-md px-3 py-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="flex h-9 max-w-lg cursor-pointer items-center rounded-md px-3 py-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
           onClick={handleEdit}
         >
-          <span className="flex-1 font-semibold">{title}</span>
+          <span className="font-semibold">{title}</span>
         </div>
       )}
     </div>

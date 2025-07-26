@@ -8,6 +8,7 @@ import { Skeleton } from '@/shared/ui-kit/skeleton';
 import { useAppSelector } from '@/shared/hooks/useAppSelector';
 import { selectRecordingFromCache } from '@/entities/recording/model/selectors';
 import { DEFAULT_RECORDING_NAME } from '../lib/constants';
+import { AvatarDropdown, useAuth } from '@/shared/auth';
 
 export const RecordingHeader: React.FC<HeaderComponentProps> = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -18,6 +19,8 @@ export const RecordingHeader: React.FC<HeaderComponentProps> = () => {
   const onExportClick = () => {
     setIsDialogOpen(true);
   };
+
+  const { isSignedIn } = useAuth();
 
   return (
     <>
@@ -33,13 +36,15 @@ export const RecordingHeader: React.FC<HeaderComponentProps> = () => {
         )}
       </div>
 
-      <div>
+      <div className="flex items-center gap-4">
         <Button className="flex items-center gap-2" onClick={onExportClick}>
           <Download className="h-5 w-5" />
           Export as HTML
         </Button>
 
         <ExportAsHTMLDialog isOpen={isDialogOpen} onIsOpenChange={setIsDialogOpen} />
+
+        {isSignedIn && <AvatarDropdown />}
       </div>
     </>
   );
