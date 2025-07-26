@@ -9,14 +9,16 @@ export const SignUpPage = () => {
       <div className="flex h-screen items-center justify-center">
         <div className="w-full max-w-md p-6">
           <SignUp
-            routing="path"
-            path="/sign-up"
             signInUrl="/sign-in"
-            fallbackRedirectUrl={redirect}
             appearance={{
               layout: {
                 socialButtonsVariant: 'iconButton',
                 socialButtonsPlacement: 'bottom',
+              },
+              elements: {
+                formButtonPrimary:
+                  'bg-primary text-primary-foreground hover:bg-primary/90',
+                card: 'rounded-md shadow-md',
               },
             }}
           />
