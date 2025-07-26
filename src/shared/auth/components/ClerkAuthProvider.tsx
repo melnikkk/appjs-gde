@@ -7,7 +7,7 @@ export const ClerkAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <AuthStateManager />
       {children}
     </ClerkProvider>

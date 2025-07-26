@@ -45,7 +45,7 @@ export const recordingsApiSlice = apiSlice.injectEndpoints({
           return URL.createObjectURL(blob);
         },
       }),
-      onCacheEntryAdded: async (arg, { cacheEntryRemoved }) => {
+      onCacheEntryAdded: async (_arg, { cacheEntryRemoved }) => {
         await cacheEntryRemoved;
 
         try {

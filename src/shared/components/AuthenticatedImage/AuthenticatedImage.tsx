@@ -3,7 +3,7 @@ import { useGetAuthenticatedMediaQuery } from '@/shared/api';
 
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
   thumbnailPath: string | null;
-  ref: React.RefObject<HTMLImageElement>;
+  ref?: React.RefObject<HTMLImageElement>;
   fallback?: React.ReactNode;
 }
 
