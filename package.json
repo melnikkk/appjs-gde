@@ -9,7 +9,7 @@
     "lint": "oxlint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.35.3",
@@ -47,6 +47,8 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@tanstack/react-router-devtools": "^1.114.32",
     "@tanstack/router-cli": "^1.119.0",
     "@tanstack/router-plugin": "^1.114.32",
