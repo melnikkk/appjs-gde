@@ -1,8 +1,8 @@
+import { Button } from '@/shared/ui-kit/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui-kit/popover';
 import { useClerk, useUser } from '@clerk/clerk-react';
 import { useNavigate } from '@tanstack/react-router';
 import { LogOut } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui-kit/popover';
-import { Button } from '@/shared/ui-kit/button';
 
 export const AvatarDropdown: React.FC = () => {
   const { user } = useUser();
