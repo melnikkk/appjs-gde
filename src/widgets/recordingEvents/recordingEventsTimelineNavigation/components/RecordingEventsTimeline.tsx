@@ -70,7 +70,7 @@ export const RecordingTimeline: React.FC<Props> = ({
         <AddEventDialog />
       </div>
 
-      <ScrollArea className="h-[calc(100vh-180px)]">
+      <ScrollArea className="h-[calc(100vh-135px)]">
         <Accordion
           type="single"
           collapsible
