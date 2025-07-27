@@ -37,7 +37,7 @@ export const AvatarDropdown: React.FC = () => {
             <img
               src={user.imageUrl}
               alt={displayName || 'User avatar'}
-              className="h-full w-full cursor-pointer object-cover"
+              className="h-full w-full object-cover"
             />
           ) : (
             <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center text-sm font-medium">
