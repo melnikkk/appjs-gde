@@ -1,5 +1,5 @@
-import { useSidebar } from '@/shared/ui-kit/sidebar';
 import { HeaderComponentProps } from '@/shared/types/header';
+import { useSidebar } from '@/shared/ui-kit/sidebar';
 
 export const Header: React.FC<HeaderComponentProps> = ({ children }) => {
   const { open } = useSidebar();
