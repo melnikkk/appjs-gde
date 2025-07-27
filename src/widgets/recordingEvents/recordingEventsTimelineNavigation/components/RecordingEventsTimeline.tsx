@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
-import { Accordion } from '@/shared/ui-kit/accordion';
-import { useAppSelector } from '@/shared/hooks/useAppSelector';
+import { Recording } from '@/entities/recording/model/types';
 import {
   selectCurrentEventId,
   selectDoesRecordingEventExist,
   selectSortedEventIds,
 } from '@/entities/recordingEvent/model/selectors';
-import { Recording } from '@/entities/recording/model/types';
-import { ScrollArea } from '@/shared/ui-kit/scroll-area';
-import { RecordingTimelineEvent } from './RecordingTimelineEvent';
+import { AddEventDialog } from '@/features/recordingEvent/addOrEditRecordingEvent/components/AddRecordingEventDialog';
 import {
   MakeMagicButton,
   useGenerateAiContent,
 } from '@/features/recordingEvent/generateAiContent';
+import { useAppSelector } from '@/shared/hooks/useAppSelector';
+import { Accordion } from '@/shared/ui-kit/accordion';
+import { ScrollArea } from '@/shared/ui-kit/scroll-area';
+import { useEffect, useState } from 'react';
+import { RecordingTimelineEvent } from './RecordingTimelineEvent';
 import { RecordingTimelineEventSkeleton } from './RecordingTimelineEventSkeleton';
-import { AddEventDialog } from '@/features/recordingEvent/addOrEditRecordingEvent/components/AddRecordingEventDialog';
 
 interface Props {
   isLoading: boolean;
@@ -70,7 +70,7 @@ export const RecordingTimeline: React.FC<Props> = ({
         <AddEventDialog />
       </div>
 
-      <ScrollArea className="h-[calc(100vh-180px)]">
+      <ScrollArea className="h-[calc(100vh-135px)]">
         <Accordion
           type="single"
           collapsible
