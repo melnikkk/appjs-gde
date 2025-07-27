@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react-swc';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { tanstackRouter } from '@tanstack/router-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
@@ -9,11 +9,10 @@ const config = defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    TanStackRouterVite({
-      target: 'react',
-      autoCodeSplitting: true,
-      routesDirectory: 'src/app/routes',
+    tanstackRouter({
+      routeFileIgnorePattern: '**/*.spec.*',
       generatedRouteTree: './src/app/routeTree.gen.ts',
+      routesDirectory: './src/app/routes',
     }),
   ],
   resolve: {
