@@ -10,9 +10,9 @@ const config = defineConfig({
     react(),
     tailwindcss(),
     tanstackRouter({
-      routeFileIgnorePattern: '**/*.spec.*',
       generatedRouteTree: './src/app/routeTree.gen.ts',
       routesDirectory: './src/app/routes',
+      disableLogging: false,
     }),
   ],
   resolve: {
