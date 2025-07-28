@@ -27,7 +27,6 @@ export const RecordingCard: React.FC<Props> = ({
   const formattedCreatedAt = formatDate(createdAt);
 
   return (
-    // onClick={onRecordingCardClick}
     <Card className="group pt-0">
       <Link to="/recordings/$id" params={{ id }} className="block h-full">
         <CardHeader className="p-0">
