@@ -19,12 +19,6 @@ import { ErrorBoundary } from '@/shared/ui-kit/error/error-boundary';
 import { useRtkQueryErrorHandler } from '@/shared/hooks/useRtkQueryErrorHandler';
 
 export const RecordingPage = () => {
-  const { setOpen } = useSidebar();
-
-  useEffect(() => {
-    setOpen(false);
-  }, [setOpen]);
-
   // useWebSocketConnection();
   const dispatch = useAppDispatch();
 
@@ -78,6 +72,12 @@ export const RecordingPage = () => {
       dispatch(setCurrentRecordingId(null));
     };
   }, [id, dispatch]);
+
+  const { setOpen } = useSidebar();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [setOpen]);
 
   if (isLoading) {
     return (
