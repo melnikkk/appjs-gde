@@ -3,7 +3,12 @@ import { useParams } from '@tanstack/react-router';
 import { useGetRecordingQuery } from '@/entities/recording/api/queries';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { Separator } from '@/shared/ui-kit/separator';
-import { Sidebar, SidebarContent, SidebarProvider } from '@/shared/ui-kit/sidebar';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarProvider,
+  useSidebar,
+} from '@/shared/ui-kit/sidebar';
 import { useGetEventsQuery } from '@/entities/recordingEvent/api/queries';
 import { setCurrentRecordingId } from '@/entities/recording/model/slice';
 import { RecordingTimeline } from '@/widgets/recordingEvents/recordingEventsTimelineNavigation/components/RecordingEventsTimeline';
@@ -16,6 +21,8 @@ import { useRtkQueryErrorHandler } from '@/shared/hooks/useRtkQueryErrorHandler'
 export const RecordingPage = () => {
   // useWebSocketConnection();
   const dispatch = useAppDispatch();
+
+  const { setOpen } = useSidebar();
 
   const { id } = useParams({ strict: false });
 
@@ -67,6 +74,10 @@ export const RecordingPage = () => {
       dispatch(setCurrentRecordingId(null));
     };
   }, [id, dispatch]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [setOpen]);
 
   if (isLoading) {
     return (
