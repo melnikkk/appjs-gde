@@ -22,6 +22,8 @@ export const RecordingPage = () => {
   // useWebSocketConnection();
   const dispatch = useAppDispatch();
 
+  const { setOpen } = useSidebar();
+
   const { id } = useParams({ strict: false });
 
   const { error, isError, handleRtkQueryError, clearError } = useRtkQueryErrorHandler();
@@ -72,8 +74,6 @@ export const RecordingPage = () => {
       dispatch(setCurrentRecordingId(null));
     };
   }, [id, dispatch]);
-
-  const { setOpen } = useSidebar();
 
   useEffect(() => {
     setOpen(false);
